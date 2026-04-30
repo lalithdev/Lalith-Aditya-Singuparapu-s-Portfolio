@@ -1,132 +1,159 @@
-import { motion } from "framer-motion";
-import { ExternalLink } from "lucide-react";
-import { FaGithub } from "react-icons/fa";
+import { motion } from 'framer-motion';
+import { portfolioData } from '../../data/portfolio';
+import { FiArrowUpRight, FiGithub, FiExternalLink, FiServer, FiCpu, FiShield } from 'react-icons/fi';
+import Card3D from '../common/Card3D';
 
-const projects = [
-  {
-    title: "CertifyMe",
-    subtitle: "Certification Tracking Platform",
-    description:
-      "A production-level full-stack platform that helps students track certifications and allows administrators to monitor progress, approvals, reminders, and analytics efficiently.",
-    tech: [
-      "ReactJS",
-      "Spring Boot",
-      "PostgreSQL",
-      "REST APIs",
-      "Production Deployment",
-    ],
-    status: "Live Production Project",
-  },
-  {
-    title: "TrackYourProjects",
-    subtitle: "Project Tracking Platform",
-    description:
-      "A project submission and evaluation platform where students can submit projects and faculty can review, evaluate, and manage project progress using structured workflows.",
-    tech: [
-      "ReactJS",
-      "Node.js",
-      "Frontend Deployment",
-      "Workflow Management",
-    ],
-    status: "Frontend Live + Backend Expandable",
-  },
-  {
-    title: "AI + NLP Systems",
-    subtitle: "Intelligent Workflow Solutions",
-    description:
-      "Focused on building AI-assisted systems and NLP-driven workflows for scalable real-world problem solving, combining automation with full-stack architecture.",
-    tech: [
-      "AI Systems",
-      "NLP",
-      "Automation",
-      "Scalable Architecture",
-    ],
-    status: "Strategic Focus Area",
-  },
-];
+export default function Projects() {
+  const { flagshipProject, selectedWork } = portfolioData;
 
-function Projects() {
   return (
-    <section
-      id="projects"
-      className="py-24 px-6 md:px-10 border-t border-white/5"
-    >
-      <div className="max-w-7xl mx-auto">
+    <section id="projects" className="py-32 relative bg-[#020202] overflow-hidden">
+      
+      {/* Background Spatial Atmosphere */}
+      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-indigo-950/10 rounded-full blur-[180px] pointer-events-none" />
 
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7 }}
-          viewport={{ once: true }}
-          className="mb-14"
-        >
-          <p className="text-cyan-400 font-medium mb-3">
-            Featured Projects
-          </p>
+      <div className="max-w-[1400px] mx-auto px-6">
 
-          <h2 className="text-3xl md:text-5xl font-bold">
-            Real systems, real impact
-          </h2>
-        </motion.div>
+        {/* Cinematic Header */}
+        <div className="mb-32">
+          <motion.h2 
+            initial={{ opacity: 0, x: -50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            className="text-6xl md:text-8xl lg:text-[140px] font-bold tracking-tighter leading-[0.85] text-white"
+          >
+            PRODUCT <br />
+            <span className="text-zinc-800">ARCHITECTURE</span>
+          </motion.h2>
+        </div>
 
-        <div className="space-y-8">
-          {projects.map((project, index) => (
+        {/* FLAGSHIP PROJECT: THE ARCHITECTURAL CASE STUDY */}
+        <div className="mb-48">
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="grid lg:grid-cols-12 gap-12 items-start"
+          >
+            {/* Left: Metadata & Context (3 Columns) */}
+            <div className="lg:col-span-4 space-y-12 order-2 lg:order-1">
+              <div>
+                <span className="text-indigo-500 font-mono text-[10px] uppercase tracking-[0.4em] mb-4 block">System Context</span>
+                <h3 className="text-4xl font-bold text-white mb-6 tracking-tight">{flagshipProject.name}</h3>
+                <p className="text-zinc-400 text-lg leading-relaxed mb-8">
+                  {flagshipProject.description}
+                </p>
+                <div className="flex items-center gap-6">
+                  <a href={flagshipProject.github} target="_blank" rel="noreferrer" className="flex items-center gap-2 text-white hover:text-indigo-500 transition-colors group">
+                    <FiGithub className="w-5 h-5" />
+                    <span className="text-sm font-bold uppercase tracking-widest group-hover:underline">Repository</span>
+                  </a>
+                  <a href={flagshipProject.demo} target="_blank" rel="noreferrer" className="flex items-center gap-2 text-white hover:text-indigo-500 transition-colors group">
+                    <FiExternalLink className="w-5 h-5" />
+                    <span className="text-sm font-bold uppercase tracking-widest group-hover:underline">Live System</span>
+                  </a>
+                </div>
+              </div>
+
+              {/* Technical Metrics */}
+              <div className="p-8 rounded-3xl bg-zinc-900/10 border border-white/5 space-y-8">
+                {flagshipProject.metrics.map((metric, i) => (
+                  <div key={i} className="flex justify-between items-end border-b border-white/5 pb-4">
+                    <span className="text-zinc-500 text-[10px] font-mono uppercase tracking-widest">{metric.label}</span>
+                    <span className="text-lg font-bold text-white tracking-tighter">{metric.value}</span>
+                  </div>
+                ))}
+                <div className="pt-4">
+                  <div className="flex items-center gap-3 px-3 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20 w-max">
+                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                    <span className="text-emerald-500 text-[9px] font-bold uppercase tracking-widest">System Active</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Right: Exploded View Image & Features (8 Columns) */}
+            <div className="lg:col-span-8 order-1 lg:order-2">
+              <div className="relative group perspective-1000">
+                <Card3D>
+                  <div className="relative rounded-[3rem] overflow-hidden border border-white/10 bg-zinc-900 shadow-2xl">
+                    <img 
+                      src={flagshipProject.image} 
+                      alt={flagshipProject.name} 
+                      className="w-full h-auto object-cover scale-[1.02] group-hover:scale-100 transition-transform duration-1000"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60" />
+                  </div>
+                </Card3D>
+                
+                {/* Architecture Feature Tags */}
+                <div className="mt-12 grid md:grid-cols-2 gap-8">
+                  {flagshipProject.features.map((feature, i) => (
+                    <div key={i} className="flex gap-4">
+                      <div className="mt-1 w-5 h-5 flex-shrink-0 text-indigo-500">
+                        {i === 0 ? <FiServer /> : i === 1 ? <FiCpu /> : <FiShield />}
+                      </div>
+                      <p className="text-zinc-400 text-sm leading-relaxed">
+                        {feature}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* SELECTED WORK: THE GRID */}
+        <div className="grid md:grid-cols-2 gap-12 pt-24 border-t border-white/5">
+          {selectedWork.map((project, idx) => (
             <motion.div
-              key={project.title}
+              key={idx}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{
-                duration: 0.6,
-                delay: index * 0.1,
-              }}
               viewport={{ once: true }}
-              className="rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl p-8"
+              transition={{ delay: idx * 0.1 }}
+              className="group"
             >
-              <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8">
+              <div className="relative p-10 rounded-[2.5rem] bg-[#080808] border border-white/5 overflow-hidden transition-all duration-700 hover:border-indigo-500/30">
+                
+                {/* Background Glow */}
+                <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-950/10 rounded-full blur-[100px] opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
 
-                {/* Left */}
-                <div className="flex-1">
-                  <p className="text-cyan-400 text-sm font-medium mb-2">
-                    {project.status}
-                  </p>
+                <div className="relative z-10">
+                  <div className="flex justify-between items-start mb-12">
+                    <div className="p-4 rounded-2xl bg-zinc-900/50 border border-white/5 text-zinc-400 group-hover:text-indigo-400 group-hover:border-indigo-500/30 transition-colors">
+                      {project.icon}
+                    </div>
+                    <span className="text-indigo-600 font-mono text-[10px] uppercase tracking-[0.4em] mt-2">
+                      {project.category}
+                    </span>
+                  </div>
 
-                  <h3 className="text-3xl font-bold mb-2">
+                  <h4 className="text-3xl font-bold text-white mb-6 tracking-tight group-hover:text-indigo-500 transition-colors">
                     {project.title}
-                  </h3>
-
-                  <p className="text-xl text-gray-300 mb-4">
-                    {project.subtitle}
-                  </p>
-
-                  <p className="text-gray-400 leading-relaxed mb-6">
+                  </h4>
+                  <p className="text-zinc-500 leading-relaxed mb-10 max-w-sm group-hover:text-zinc-300 transition-colors">
                     {project.description}
                   </p>
 
-                  <div className="flex flex-wrap gap-3">
-                    {project.tech.map((item) => (
-                      <span
-                        key={item}
-                        className="px-4 py-2 rounded-xl border border-white/10 bg-white/5 text-sm text-gray-300"
-                      >
-                        {item}
+                  <div className="flex flex-wrap gap-3 mb-12">
+                    {project.tech.map((t, i) => (
+                      <span key={i} className="px-3 py-1 rounded-full bg-zinc-900 text-zinc-400 text-[10px] font-bold uppercase tracking-widest border border-white/5">
+                        {t}
                       </span>
                     ))}
                   </div>
+
+                  <motion.a 
+                    href="#"
+                    whileHover={{ x: 5 }}
+                    className="inline-flex items-center gap-3 text-white font-bold group/btn"
+                  >
+                    <span className="text-xs uppercase tracking-[0.3em] border-b border-indigo-600 pb-1">View Architecture</span>
+                    <FiArrowUpRight className="w-4 h-4 text-indigo-500 group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-transform" />
+                  </motion.a>
                 </div>
-
-                {/* Right */}
-                <div className="flex flex-col gap-4 min-w-[220px]">
-                  <button className="px-6 py-3 rounded-xl bg-cyan-500 hover:bg-cyan-400 transition text-black font-semibold flex items-center justify-center gap-2">
-                    Live Demo
-                    <ExternalLink size={18} />
-                  </button>
-
-                  <button className="px-6 py-3 rounded-xl border border-white/20 hover:border-cyan-400 transition flex items-center justify-center gap-2">
-                    GitHub
-                    <FaGithub size={18} />
-                  </button>
-                </div>
-
               </div>
             </motion.div>
           ))}
@@ -136,5 +163,3 @@ function Projects() {
     </section>
   );
 }
-
-export default Projects;

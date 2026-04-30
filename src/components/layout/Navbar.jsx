@@ -1,75 +1,65 @@
-import { Menu, X } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
-function Navbar() {
-  const [isOpen, setIsOpen] = useState(false);
+export default function Navbar() {
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 50);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const navLinks = [
-  { name: "About", id: "about" },
-  { name: "Skills", id: "skills" },
-  { name: "Projects", id: "projects" },
-  { name: "Experience", id: "experience" },
-  { name: "Contact", id: "contact" },
-  { name: "Projects", id: "projects" }
-];
+    { name: "About", href: "#about" },
+    { name: "Projects", href: "#projects" },
+    { name: "Ecosystem", href: "#skills" },
+    { name: "Experience", href: "#experience" }
+  ];
 
   return (
-    <header className="fixed top-0 left-0 w-full z-50 backdrop-blur-lg bg-white/5 border-b border-white/10">
-      <nav className="max-w-7xl mx-auto px-6 md:px-10 py-4 flex items-center justify-between">
+    <nav className={`fixed top-0 left-0 w-full z-[100] transition-all duration-500 ${scrolled ? 'py-4' : 'py-8'}`}>
+      <div className="max-w-[1400px] mx-auto px-6 flex items-center justify-between">
         
-        {/* Logo */}
-        <h1 className="text-xl md:text-2xl font-bold tracking-wide">
-          Lalith<span className="text-cyan-400">.</span>
-        </h1>
-
-        {/* Desktop Nav */}
-        <ul className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-300">
-          {navLinks.map((link) => (
-            <li
-                key={link.id}
-                className="hover:text-cyan-400 transition duration-300 cursor-pointer"
-                onClick={() =>
-                document.getElementById(link.id)?.scrollIntoView({
-                    behavior: "smooth",
-                })
-                }
-            >
-                {link.name}
-            </li>
-            ))}
-        </ul>
-
-        {/* Resume Button */}
-        <button className="hidden md:block px-5 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 transition font-medium text-black">
-          Resume
-        </button>
-
-        {/* Mobile Menu */}
-        <button
-          className="md:hidden"
-          onClick={() => setIsOpen(!isOpen)}
+        {/* Brand Identity */}
+        <motion.div 
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          className="flex items-center gap-2 group cursor-pointer"
         >
-          {isOpen ? <X size={28} /> : <Menu size={28} />}
-        </button>
-      </nav>
+          <div className="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white font-black text-xl shadow-elite group-hover:scale-110 transition-transform">
+            L
+          </div>
+          <div className="hidden sm:flex flex-col">
+            <span className="text-white font-bold text-sm tracking-tighter leading-none">LALITH ADITYA</span>
+            <span className="text-indigo-500 font-mono text-[9px] uppercase tracking-[0.2em] leading-none mt-1">Architect</span>
+          </div>
+        </motion.div>
 
-      {/* Mobile Dropdown */}
-      {isOpen && (
-        <div className="md:hidden bg-[#111827] border-t border-white/10 px-6 py-4">
-          <ul className="space-y-4 text-gray-300">
+        {/* Minimalist Navigation */}
+        <div className="flex items-center gap-10">
+          <div className="hidden md:flex items-center gap-10">
             {navLinks.map((link) => (
-              <li
-                key={link}
-                className="hover:text-cyan-400 transition cursor-pointer"
+              <a 
+                key={link.name}
+                href={link.href}
+                className="text-zinc-500 hover:text-white font-bold text-[10px] uppercase tracking-[0.3em] transition-colors"
               >
-                {link}
-              </li>
+                {link.name}
+              </a>
             ))}
-          </ul>
+          </div>
+
+          {/* Action CTA */}
+          <a 
+            href="#contact"
+            className="px-6 py-2.5 rounded-full bg-white/5 border border-white/10 text-white font-bold text-[10px] uppercase tracking-[0.2em] hover:bg-white/10 transition-all shadow-elite"
+          >
+            Connect
+          </a>
         </div>
-      )}
-    </header>
+
+      </div>
+    </nav>
   );
 }
-
-export default Navbar;

@@ -1,28 +1,34 @@
-import Navbar from "./components/layout/Navbar";
-import Hero from "./components/sections/Hero";
-import About from "./components/sections/About";
-import Skills from "./components/sections/Skills";
-import Projects from "./components/sections/Projects";
-import Experience from "./components/sections/Experience";
-import Certifications from "./components/sections/Certifications";
-import Achievements from "./components/sections/Achievements";
-import Contact from "./components/sections/Contact";
-import Footer from "./components/layout/Footer";
+import Navbar from './components/layout/Navbar';
+import Hero from './components/sections/Hero';
+import About from './components/sections/About';
+import Projects from './components/sections/Projects';
+import StackEcosystem from './components/sections/StackEcosystem';
+import Experience from './components/sections/Experience';
+import Education from './components/sections/Education';
+import Certifications from './components/sections/Certifications';
+import Contact from './components/sections/Contact';
+import Footer from './components/sections/Footer';
+import CustomCursor from './components/layout/CustomCursor';
 
 function App() {
   return (
-    <main className="bg-[#0B0F19] text-white min-h-screen">
+    <div className="bg-[#050505] min-h-screen text-zinc-200 font-sans selection:bg-indigo-500/30">
       <Navbar />
-      <Hero />
-      <About />
-      <Skills />
-      <Projects />
-      <Experience />
-      <Certifications />
-      <Achievements />
-      <Contact />
+      <CustomCursor />
+      
+      <main>
+        <Hero />
+        <About />
+        <Education />
+        <StackEcosystem />
+        <Projects />
+        <Certifications />
+        <Experience />
+        <Contact />
+      </main>
+
       <Footer />
-    </main>
+    </div>
   );
 }
 
