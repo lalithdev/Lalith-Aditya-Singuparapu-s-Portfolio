@@ -7,10 +7,10 @@ export default function Projects() {
   const { flagshipProject, selectedWork } = portfolioData;
 
   return (
-    <section id="projects" className="py-32 relative bg-[#020202] overflow-hidden">
+    <section id="projects" className="py-32 relative bg-transparent overflow-hidden">
       
       {/* Background Spatial Atmosphere */}
-      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-indigo-950/10 rounded-full blur-[180px] pointer-events-none" />
+      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-violet-900/10 rounded-full blur-[180px] pointer-events-none" />
 
       <div className="max-w-[1400px] mx-auto px-6">
 
@@ -38,17 +38,17 @@ export default function Projects() {
             {/* Left: Metadata & Context (3 Columns) */}
             <div className="lg:col-span-4 space-y-12 order-2 lg:order-1">
               <div>
-                <span className="text-indigo-500 font-mono text-[10px] uppercase tracking-[0.4em] mb-4 block">System Context</span>
+                <span className="text-cyan-400 font-mono text-[10px] uppercase tracking-[0.4em] mb-4 block">System Context</span>
                 <h3 className="text-4xl font-bold text-white mb-6 tracking-tight">{flagshipProject.name}</h3>
                 <p className="text-zinc-400 text-lg leading-relaxed mb-8">
                   {flagshipProject.description}
                 </p>
                 <div className="flex items-center gap-6">
-                  <a href={flagshipProject.github} target="_blank" rel="noreferrer" className="flex items-center gap-2 text-white hover:text-indigo-500 transition-colors group">
+                  <a href={flagshipProject.github} target="_blank" rel="noreferrer" className="flex items-center gap-2 text-white hover:text-pink-500 transition-colors group">
                     <FiGithub className="w-5 h-5" />
                     <span className="text-sm font-bold uppercase tracking-widest group-hover:underline">Repository</span>
                   </a>
-                  <a href={flagshipProject.demo} target="_blank" rel="noreferrer" className="flex items-center gap-2 text-white hover:text-indigo-500 transition-colors group">
+                  <a href={flagshipProject.demo} target="_blank" rel="noreferrer" className="flex items-center gap-2 text-white hover:text-cyan-400 transition-colors group">
                     <FiExternalLink className="w-5 h-5" />
                     <span className="text-sm font-bold uppercase tracking-widest group-hover:underline">Live System</span>
                   </a>
@@ -90,7 +90,7 @@ export default function Projects() {
                 <div className="mt-12 grid md:grid-cols-2 gap-8">
                   {flagshipProject.features.map((feature, i) => (
                     <div key={i} className="flex gap-4">
-                      <div className="mt-1 w-5 h-5 flex-shrink-0 text-indigo-500">
+                      <div className="mt-1 w-5 h-5 flex-shrink-0 text-violet-500">
                         {i === 0 ? <FiServer /> : i === 1 ? <FiCpu /> : <FiShield />}
                       </div>
                       <p className="text-zinc-400 text-sm leading-relaxed">
@@ -115,22 +115,22 @@ export default function Projects() {
               transition={{ delay: idx * 0.1 }}
               className="group"
             >
-              <div className="relative p-10 rounded-[2.5rem] bg-[#080808] border border-white/5 overflow-hidden transition-all duration-700 hover:border-indigo-500/30">
+              <div className="relative p-10 rounded-[2.5rem] bg-[#050505] border border-white/5 overflow-hidden transition-all duration-700 hover:border-pink-500/30">
                 
                 {/* Background Glow */}
-                <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-950/10 rounded-full blur-[100px] opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                <div className="absolute top-0 right-0 w-64 h-64 bg-pink-900/10 rounded-full blur-[100px] opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
 
                 <div className="relative z-10">
                   <div className="flex justify-between items-start mb-12">
-                    <div className="p-4 rounded-2xl bg-zinc-900/50 border border-white/5 text-zinc-400 group-hover:text-indigo-400 group-hover:border-indigo-500/30 transition-colors">
+                    <div className="p-4 rounded-2xl bg-zinc-900/50 border border-white/5 text-zinc-400 group-hover:text-cyan-400 group-hover:border-cyan-500/30 transition-colors">
                       {project.icon}
                     </div>
-                    <span className="text-indigo-600 font-mono text-[10px] uppercase tracking-[0.4em] mt-2">
+                    <span className="text-violet-500 font-mono text-[10px] uppercase tracking-[0.4em] mt-2">
                       {project.category}
                     </span>
                   </div>
 
-                  <h4 className="text-3xl font-bold text-white mb-6 tracking-tight group-hover:text-indigo-500 transition-colors">
+                  <h4 className="text-3xl font-bold text-white mb-6 tracking-tight group-hover:text-pink-500 transition-colors">
                     {project.title}
                   </h4>
                   <p className="text-zinc-500 leading-relaxed mb-10 max-w-sm group-hover:text-zinc-300 transition-colors">
@@ -150,8 +150,8 @@ export default function Projects() {
                     whileHover={{ x: 5 }}
                     className="inline-flex items-center gap-3 text-white font-bold group/btn"
                   >
-                    <span className="text-xs uppercase tracking-[0.3em] border-b border-indigo-600 pb-1">View Architecture</span>
-                    <FiArrowUpRight className="w-4 h-4 text-indigo-500 group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-transform" />
+                    <span className="text-xs uppercase tracking-[0.3em] border-b border-cyan-400 pb-1">View Architecture</span>
+                    <FiArrowUpRight className="w-4 h-4 text-cyan-400 group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1 transition-transform" />
                   </motion.a>
                 </div>
               </div>

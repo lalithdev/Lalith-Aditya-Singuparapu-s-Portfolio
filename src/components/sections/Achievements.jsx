@@ -10,13 +10,22 @@ const achievements = [
 function Achievements() {
   return (
     <section
-      className="py-24 px-6 md:px-10 border-t border-white/5"
+      id="achievements"
+      className="py-24 px-6 md:px-10 border-t border-white/5 bg-transparent"
     >
       <div className="max-w-7xl mx-auto">
-        <p className="text-cyan-400 font-medium mb-3">Achievements</p>
-        <h2 className="text-3xl md:text-5xl font-bold mb-14">
-          Beyond academics
-        </h2>
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7 }}
+          viewport={{ once: true }}
+          className="mb-14"
+        >
+          <span className="section-label">Achievements</span>
+          <h2 className="section-heading">
+            Beyond academics
+          </h2>
+        </motion.div>
 
         <div className="grid md:grid-cols-2 gap-6">
           {achievements.map((item, index) => (
@@ -26,7 +35,7 @@ function Achievements() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
               viewport={{ once: true }}
-              className="rounded-2xl border border-white/10 bg-white/5 p-6"
+              className="rounded-2xl border border-white/[0.06] bg-white/[0.02] backdrop-blur-xl p-6 hover:border-pink-500/30 transition-colors text-white font-medium"
             >
               {item}
             </motion.div>

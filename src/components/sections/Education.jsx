@@ -21,7 +21,7 @@ export default function Education() {
     <section id="education" ref={containerRef} className="py-32 relative bg-[#050505] overflow-hidden">
       
       {/* Background Spatial Ambience */}
-      <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-indigo-950/10 rounded-full blur-[150px] pointer-events-none" />
+      <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-cyan-900/10 rounded-full blur-[150px] pointer-events-none" />
 
       <div className="max-w-[1200px] mx-auto px-6 relative">
         
@@ -34,7 +34,7 @@ export default function Education() {
             className="text-5xl md:text-7xl font-bold tracking-tighter"
           >
             <span className="text-white opacity-20 uppercase block text-sm tracking-[1em] mb-4 text-center">Development</span>
-            <span className="text-white">Academic</span> <span className="text-indigo-800">Timeline</span>
+            <span className="text-white">Academic</span> <span className="text-cyan-400">Timeline</span>
           </motion.h2>
         </div>
 
@@ -44,7 +44,7 @@ export default function Education() {
           <div className="absolute left-8 md:left-1/2 top-4 bottom-4 w-[2px] bg-white/5 md:-translate-x-1/2" />
           <motion.div 
             style={{ scaleY, originY: 0 }}
-            className="absolute left-8 md:left-1/2 top-4 bottom-4 w-[2px] bg-gradient-to-b from-indigo-600 to-indigo-900 md:-translate-x-1/2 z-10" 
+            className="absolute left-8 md:left-1/2 top-4 bottom-4 w-[2px] bg-gradient-to-b from-pink-500 to-violet-500 md:-translate-x-1/2 z-10" 
           />
 
           <div className="space-y-24 md:space-y-32">
@@ -60,7 +60,7 @@ export default function Education() {
                     whileInView={{ scale: 1 }}
                     viewport={{ once: true }}
                     transition={{ type: "spring", stiffness: 200, damping: 20 }}
-                    className="absolute left-[25px] md:left-1/2 w-4 h-4 rounded-full bg-black border-2 border-indigo-600 z-20 md:-translate-x-1/2 shadow-[0_0_15px_rgba(99,102,241,0.5)]" 
+                    className="absolute left-[25px] md:left-1/2 w-4 h-4 rounded-full bg-black border-2 border-pink-500 z-20 md:-translate-x-1/2 shadow-[0_0_15px_rgba(236,72,153,0.5)]" 
                   />
 
                   {/* Content Container */}
@@ -78,13 +78,13 @@ export default function Education() {
                       </div>
 
                       {/* Info Card */}
-                      <div className="relative p-8 rounded-[2rem] bg-[#0c0c0c] border border-white/5 group-hover:border-indigo-900/30 transition-colors shadow-2xl">
-                        <div className={`absolute top-1/2 ${isEven ? '-right-2' : '-left-2'} -translate-y-1/2 w-4 h-4 bg-[#0c0c0c] border-t border-l border-white/5 rotate-45 hidden md:block group-hover:border-indigo-900/30 transition-colors`} />
+                      <div className="relative p-8 rounded-[2rem] bg-[#050505] border border-white/5 group-hover:border-violet-500/30 transition-colors shadow-2xl">
+                        <div className={`absolute top-1/2 ${isEven ? '-right-2' : '-left-2'} -translate-y-1/2 w-4 h-4 bg-[#050505] border-t border-l border-white/5 rotate-45 hidden md:block group-hover:border-violet-500/30 transition-colors`} />
                         
                         <h3 className="text-2xl md:text-3xl font-bold text-white mb-3 tracking-tight leading-tight">
                           {item.degree}
                         </h3>
-                        <p className="text-indigo-900 font-bold text-sm tracking-[0.2em] uppercase mb-4">
+                        <p className="text-violet-400 font-bold text-sm tracking-[0.2em] uppercase mb-4">
                           {item.institution}
                         </p>
                         
@@ -107,7 +107,7 @@ export default function Education() {
           </div>
 
           {/* Terminal Node */}
-          <div className="absolute left-[31px] md:left-1/2 -bottom-2 w-2.5 h-2.5 rounded-full bg-indigo-600 md:-translate-x-1/2 shadow-[0_0_10px_rgba(99,102,241,0.8)]" />
+          <div className="absolute left-[31px] md:left-1/2 -bottom-2 w-2.5 h-2.5 rounded-full bg-cyan-400 md:-translate-x-1/2 shadow-[0_0_10px_rgba(34,211,238,0.8)]" />
         </div>
 
       </div>

@@ -4,13 +4,13 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="py-8 border-t border-zinc-900 bg-[#050505]">
+    <footer className="py-8 border-t border-zinc-900 bg-transparent">
       <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
         
         <div className="flex items-center gap-2">
           <div className="text-xl font-bold tracking-tighter">
             <span className="text-zinc-100">L</span>
-            <span className="text-indigo-600">A</span>
+            <span className="text-pink-500">A</span>
           </div>
           <span className="text-zinc-600">© {currentYear}</span>
         </div>

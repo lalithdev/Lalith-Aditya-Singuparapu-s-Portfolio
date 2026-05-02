@@ -15,10 +15,10 @@ export default function Contact() {
   };
 
   return (
-    <section id="contact" className="py-48 relative bg-[#020202]">
+    <section id="contact" className="py-48 relative bg-transparent">
       
       {/* Background Atmosphere */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(circle_at_center,rgba(99,102,241,0.03)_0%,transparent_70%)] pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[radial-gradient(circle_at_center,rgba(236,72,153,0.05)_0%,transparent_70%)] pointer-events-none" />
 
       <div className="max-w-[1400px] mx-auto px-6 relative z-10">
         
@@ -30,7 +30,7 @@ export default function Contact() {
             viewport={{ once: true }}
             className="mb-8"
           >
-            <span className="text-indigo-500 font-mono text-[10px] uppercase tracking-[0.6em]">Initialize Protocol</span>
+            <span className="text-cyan-400 font-mono text-[10px] uppercase tracking-[0.6em]">Initialize Protocol</span>
           </motion.div>
           
           <motion.h2 
@@ -48,7 +48,7 @@ export default function Contact() {
             <Magnetic>
               <button 
                 onClick={copyToClipboard}
-                className="group relative flex items-center gap-4 bg-indigo-600 text-white px-12 py-5 rounded-full font-bold text-lg transition-all hover:bg-indigo-700 shadow-[0_20px_50px_rgba(99,102,241,0.3)]"
+                className="group relative flex items-center gap-4 bg-gradient-to-r from-pink-500 to-violet-500 text-white px-12 py-5 rounded-full font-bold text-lg transition-all hover:from-pink-600 hover:to-violet-600 shadow-[0_20px_50px_rgba(236,72,153,0.3)]"
               >
                 <span>{copied ? "IDENTITY COPIED" : "ESTABLISH CONNECTION"}</span>
                 {copied ? <FiCheck className="w-5 h-5" /> : <FiMail className="w-5 h-5" />}
@@ -56,7 +56,7 @@ export default function Contact() {
             </Magnetic>
             
             <div className="flex items-center gap-3">
-              <div className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse" />
+              <div className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
               <span className="text-zinc-500 font-mono text-[10px] uppercase tracking-[0.3em]">Direct Access: <span className="text-white">{email}</span></span>
             </div>
           </div>
@@ -67,7 +67,7 @@ export default function Contact() {
           
           <div className="lg:col-span-4 space-y-10">
             <div className="flex items-center gap-4 text-zinc-400">
-              <FiMapPin className="w-5 h-5 text-indigo-500" />
+              <FiMapPin className="w-5 h-5 text-pink-500" />
               <span className="text-sm font-medium tracking-tight">{portfolioData.personal.location}</span>
             </div>
             <p className="text-zinc-500 text-sm leading-relaxed max-w-xs">
@@ -92,7 +92,7 @@ export default function Contact() {
                     className="flex items-center gap-2 text-zinc-400 hover:text-white transition-colors group"
                   >
                     <span className="text-sm font-bold uppercase tracking-widest">{link.name}</span>
-                    <FiArrowUpRight className="w-3 h-3 text-zinc-600 group-hover:text-indigo-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
+                    <FiArrowUpRight className="w-3 h-3 text-zinc-600 group-hover:text-cyan-400 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all" />
                   </a>
                 </li>
               ))}
