@@ -1,108 +1,159 @@
 import { motion } from 'framer-motion';
 import { portfolioData } from '../../data/portfolio';
-import { FiCpu, FiLayers, FiZap } from 'react-icons/fi';
+import { FiCpu, FiLayers } from 'react-icons/fi';
+
+const EXPO = [0.16, 1, 0.3, 1];
 
 export default function Skills() {
   const { skills } = portfolioData;
 
   const categories = [
     {
-      id: "cognitive",
-      label: "Cognitive Stack",
-      sublabel: "Engineering Logic & AI",
+      id: 'cognitive',
+      label: 'Cognitive Stack',
+      sublabel: 'Engineering Logic & AI',
       icon: <FiCpu />,
+      accentColor: '#60a5fa',
       items: [
-        ...skills.frontend.map(s => ({ ...s, layer: "Client" })),
-        ...skills.cloudAndTools.map(s => ({ ...s, layer: "System" }))
-      ]
+        ...skills.frontend.map(s => ({ ...s, layer: 'Client' })),
+        ...skills.cloudAndTools.map(s => ({ ...s, layer: 'System' })),
+      ],
     },
     {
-      id: "execution",
-      label: "Execution Stack",
-      sublabel: "Distributed Architecture",
+      id: 'execution',
+      label: 'Execution Stack',
+      sublabel: 'Distributed Architecture',
       icon: <FiLayers />,
+      accentColor: '#818cf8',
       items: [
-        ...skills.backend.map(s => ({ ...s, layer: "Server" })),
-        ...skills.database.map(s => ({ ...s, layer: "Data" }))
-      ]
-    }
+        ...skills.backend.map(s => ({ ...s, layer: 'Server' })),
+        ...skills.database.map(s => ({ ...s, layer: 'Data' })),
+      ],
+    },
   ];
 
   return (
-    <section id="skills" className="py-32 relative bg-transparent overflow-hidden">
-      
-      {/* Background Spatial Grid */}
-      <div className="absolute inset-0 bg-grid-pattern opacity-5 pointer-events-none" />
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(139,92,246,0.05)_0%,transparent_70%)] pointer-events-none" />
+    <section id="skills" className="section-padding relative overflow-hidden">
+      {/* Grid + orbs */}
+      <div className="absolute inset-0 bg-grid pointer-events-none" />
+      <div className="glow-orb w-[500px] h-[500px] right-[-10%] top-[20%] opacity-15"
+        style={{ background: 'radial-gradient(circle, rgba(139,92,246,0.35) 0%, transparent 70%)' }} />
 
       <div className="max-w-7xl mx-auto px-6 relative z-10">
-        
+
         {/* Header */}
-        <div className="mb-24">
-          <motion.div 
+        <div className="mb-20">
+          <motion.div
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             className="flex items-center gap-3 mb-6"
           >
-            <div className="w-10 h-px bg-violet-600" />
-            <span className="text-violet-500 font-bold text-xs tracking-[0.5em] uppercase">Skills & Tech Stack</span>
+            <div className="w-10 h-px" style={{ background: 'linear-gradient(90deg, #818cf8, #06b6d4)' }} />
+            <span className="section-eyebrow">Skills & Tech Stack</span>
           </motion.div>
-          
-          <h2 className="text-5xl md:text-7xl font-bold text-white tracking-tighter leading-[0.9]">
+
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, ease: EXPO }}
+            className="font-display font-black tracking-tighter leading-[0.9]"
+            style={{ fontSize: 'clamp(3rem, 6vw, 5.5rem)', color: '#e8f0ff' }}
+          >
             Technical <br />
-            <span className="text-zinc-800 text-6xl md:text-8xl">Expertise</span>
-          </h2>
+            <span className="text-gradient">Expertise</span>
+          </motion.h2>
         </div>
 
-        {/* System Map Grid */}
-        <div className="grid lg:grid-cols-2 gap-12 relative">
-          
-          {/* Central Connection Line (Desktop) */}
-          <div className="hidden lg:block absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-violet-500/20 to-transparent -translate-x-1/2" />
+        {/* Grid */}
+        <div className="grid lg:grid-cols-2 gap-10 relative">
+          {/* Centre line */}
+          <div className="hidden lg:block absolute left-1/2 top-0 bottom-0 w-px -translate-x-1/2 pointer-events-none"
+            style={{ background: 'linear-gradient(to bottom, transparent, rgba(99,102,241,0.18), transparent)' }} />
 
           {categories.map((cat, idx) => (
             <motion.div
-              key={idx}
+              key={cat.id}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: idx * 0.2 }}
-              className="relative space-y-12"
+              transition={{ delay: idx * 0.15, duration: 0.8, ease: EXPO }}
+              className="space-y-8"
             >
-              {/* Category Header */}
-              <div className="flex items-center gap-6">
-                <div className="w-16 h-16 rounded-2xl bg-violet-950/20 border border-violet-500/20 flex items-center justify-center text-violet-500 text-2xl shadow-elite">
+              {/* Category header */}
+              <div className="flex items-center gap-5">
+                <div
+                  className="w-14 h-14 rounded-2xl flex items-center justify-center text-xl shrink-0"
+                  style={{
+                    background: 'rgba(8,16,40,0.70)',
+                    border: `1px solid ${cat.accentColor}30`,
+                    color: cat.accentColor,
+                    boxShadow: `0 0 20px ${cat.accentColor}15`,
+                  }}
+                >
                   {cat.icon}
                 </div>
                 <div>
-                  <h3 className="text-2xl font-bold text-white tracking-tight">{cat.label}</h3>
-                  <p className="text-zinc-500 font-mono text-[10px] uppercase tracking-widest">{cat.sublabel}</p>
+                  <h3 className="font-display font-bold text-xl tracking-tight" style={{ color: '#e8f0ff' }}>
+                    {cat.label}
+                  </h3>
+                  <p className="font-mono text-[9px] uppercase tracking-widest mt-0.5" style={{ color: '#2a3a5a' }}>
+                    {cat.sublabel}
+                  </p>
                 </div>
               </div>
 
-              {/* Skills List (Architectural View) */}
-              <div className="space-y-4">
+              {/* Skill pills */}
+              <div className="space-y-3">
                 {cat.items.map((skill, sIdx) => (
-                  <motion.div 
+                  <motion.div
                     key={sIdx}
-                    whileHover={{ x: 10 }}
-                    className="group relative p-6 rounded-2xl bg-[#050505] border border-white/5 flex items-center justify-between hover:border-violet-500/30 transition-all duration-500"
+                    whileHover={{ x: 6 }}
+                    transition={{ duration: 0.2 }}
+                    className="group relative p-5 rounded-xl flex items-center justify-between transition-all duration-400"
+                    style={{
+                      background: 'rgba(8,16,40,0.55)',
+                      border: '1px solid rgba(59,130,246,0.09)',
+                      borderTop: '1px solid rgba(100,160,255,0.12)',
+                      backdropFilter: 'blur(12px)',
+                    }}
                   >
-                    <div className="flex items-center gap-6">
-                      <div className="w-10 h-10 rounded-xl bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-500 group-hover:text-violet-500 group-hover:border-violet-500/50 transition-colors">
+                    {/* Hover glow */}
+                    <div
+                      className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-400 pointer-events-none"
+                      style={{ background: `linear-gradient(135deg, ${cat.accentColor}08 0%, transparent 60%)` }}
+                    />
+
+                    <div className="flex items-center gap-4 relative z-10">
+                      <div
+                        className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0 transition-colors duration-300"
+                        style={{
+                          background: 'rgba(6,10,24,0.80)',
+                          border: '1px solid rgba(59,130,246,0.14)',
+                          color: '#4a5a80',
+                        }}
+                      >
                         {skill.icon}
                       </div>
                       <div>
-                        <h4 className="text-zinc-100 font-bold tracking-tight">{skill.name}</h4>
-                        <span className="text-[9px] font-mono text-zinc-600 uppercase tracking-widest">{skill.layer} Layer</span>
+                        <h4 className="font-body font-semibold text-sm tracking-tight" style={{ color: '#c7d9ff' }}>
+                          {skill.name}
+                        </h4>
+                        <span className="font-mono text-[8px] uppercase tracking-widest" style={{ color: '#2a3a5a' }}>
+                          {skill.layer} Layer
+                        </span>
                       </div>
                     </div>
-                    
-                    {/* Status Indicator */}
-                    <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/5 border border-violet-500/10">
-                      <div className="w-1 h-1 rounded-full bg-violet-500" />
-                      <span className="text-[8px] font-mono text-violet-400 uppercase tracking-widest">Optimized</span>
+
+                    <div
+                      className="flex items-center gap-1.5 px-3 py-1 rounded-full relative z-10"
+                      style={{ background: `${cat.accentColor}10`, border: `1px solid ${cat.accentColor}20` }}
+                    >
+                      <div className="w-1 h-1 rounded-full animate-pulse-orb" style={{ background: cat.accentColor }} />
+                      <span className="font-mono text-[8px] uppercase tracking-widest" style={{ color: cat.accentColor }}>
+                        Optimized
+                      </span>
                     </div>
                   </motion.div>
                 ))}
@@ -111,24 +162,23 @@ export default function Skills() {
           ))}
         </div>
 
-        {/* Global Architecture Footer */}
-        <motion.div 
+        {/* Footer strip */}
+        <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          className="mt-24 pt-12 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-8"
+          className="mt-20 pt-10 flex flex-col md:flex-row items-center justify-between gap-8"
+          style={{ borderTop: '1px solid rgba(59,130,246,0.10)' }}
         >
-          <div className="flex items-center gap-6">
-            <div className="p-3 rounded-xl bg-zinc-900 border border-white/5">
-              <FiZap className="w-5 h-5 text-violet-500" />
-            </div>
-            <p className="text-zinc-500 text-sm max-w-sm leading-relaxed">
-              Every system is designed for <span className="text-white">maximum throughput</span> and <span className="text-white">low-latency execution</span> across distributed environments.
-            </p>
-          </div>
-          <div className="flex gap-4">
-            <div className="px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-zinc-400 text-[10px] font-bold uppercase tracking-widest">CI/CD Ready</div>
-            <div className="px-4 py-2 rounded-lg bg-white/5 border border-white/10 text-zinc-400 text-[10px] font-bold uppercase tracking-widest">Scalable Design</div>
+          <p className="font-body text-sm max-w-sm leading-relaxed" style={{ color: '#4a5a80' }}>
+            Every system is designed for{' '}
+            <span style={{ color: '#93c5fd' }}>maximum throughput</span> and{' '}
+            <span style={{ color: '#93c5fd' }}>low-latency execution</span> across distributed environments.
+          </p>
+          <div className="flex gap-3">
+            {['CI/CD Ready', 'Scalable Design'].map(tag => (
+              <span key={tag} className="tech-tag">{tag}</span>
+            ))}
           </div>
         </motion.div>
 

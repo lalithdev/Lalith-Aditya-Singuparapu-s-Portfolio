@@ -2,55 +2,94 @@ import { motion } from 'framer-motion';
 import { portfolioData } from '../../data/portfolio';
 import { FiShield, FiArrowUpRight } from 'react-icons/fi';
 
+const EXPO = [0.16, 1, 0.3, 1];
+
 export default function Certifications() {
   const { certifications } = portfolioData;
 
   return (
-    <section id="certifications" className="py-32 relative bg-transparent">
-      <div className="max-w-7xl mx-auto px-6">
-        
+    <section id="certifications" className="section-padding relative overflow-hidden">
+      {/* Orb */}
+      <div className="glow-orb w-[500px] h-[500px] left-[-10%] top-[10%] opacity-15"
+        style={{ background: 'radial-gradient(circle, rgba(6,182,212,0.3) 0%, transparent 70%)' }} />
+
+      <div className="max-w-7xl mx-auto px-6 relative z-10">
+
         {/* Header */}
-        <div className="mb-20">
-          <motion.div 
+        <div className="mb-16">
+          <motion.div
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             className="flex items-center gap-3 mb-6"
           >
-            <FiShield className="w-5 h-5 text-cyan-400" />
-            <span className="text-cyan-400 font-bold text-xs tracking-[0.5em] uppercase">Trust Architecture</span>
+            <FiShield className="w-4 h-4" style={{ color: '#22d3ee' }} />
+            <span className="section-eyebrow">Trust Architecture</span>
           </motion.div>
-          <h2 className="text-4xl md:text-5xl font-bold text-white tracking-tighter">
+
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, ease: EXPO }}
+            className="font-display font-black tracking-tighter"
+            style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', color: '#e8f0ff', lineHeight: 1.0 }}
+          >
             Enterprise <br />
-            <span className="text-zinc-800">Validation</span>
-          </h2>
+            <span className="text-gradient">Validation</span>
+          </motion.h2>
         </div>
 
-        {/* Validation Gallery */}
-        <div className="grid md:grid-cols-2 gap-8">
+        {/* Cards */}
+        <div className="grid md:grid-cols-2 gap-6">
           {certifications.map((cert, idx) => (
             <motion.div
               key={idx}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: idx * 0.1 }}
-              className="group relative p-8 rounded-3xl bg-[#050505] border border-white/5 flex items-center justify-between hover:border-violet-500/30 transition-all duration-700 overflow-hidden"
+              transition={{ delay: idx * 0.12, duration: 0.7, ease: EXPO }}
+              className="group relative p-7 rounded-2xl flex items-center justify-between overflow-hidden transition-all duration-500"
+              style={{
+                background: 'linear-gradient(135deg, rgba(14,24,55,0.70) 0%, rgba(8,15,38,0.60) 100%)',
+                border: '1px solid rgba(59,130,246,0.10)',
+                borderTop: '1px solid rgba(100,160,255,0.16)',
+                backdropFilter: 'blur(20px)',
+              }}
             >
-              <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-violet-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-              
-              <div className="relative z-10 flex items-center gap-6">
-                <div className="w-14 h-14 rounded-2xl bg-zinc-900 border border-white/5 flex items-center justify-center text-violet-500 text-xl shadow-elite group-hover:scale-110 transition-transform">
+              {/* Hover gradient */}
+              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-2xl"
+                style={{ background: 'linear-gradient(135deg, rgba(6,182,212,0.06) 0%, transparent 60%)' }} />
+
+              <div className="relative z-10 flex items-center gap-5">
+                <div
+                  className="w-13 h-13 w-[3.25rem] h-[3.25rem] rounded-xl flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-110"
+                  style={{
+                    background: 'rgba(6,10,24,0.80)',
+                    border: '1px solid rgba(6,182,212,0.20)',
+                    boxShadow: '0 0 20px rgba(6,182,212,0.08)',
+                  }}
+                >
                   {cert.icon}
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-white tracking-tight group-hover:text-cyan-400 transition-colors">{cert.title}</h3>
-                  <span className="text-zinc-600 font-mono text-[9px] uppercase tracking-widest">{cert.issuer}</span>
+                  <h3
+                    className="font-display font-bold text-base tracking-tight mb-1 transition-colors duration-300 group-hover:text-gradient"
+                    style={{ color: '#c7d9ff' }}
+                  >
+                    {cert.title}
+                  </h3>
+                  <span className="font-mono text-[9px] uppercase tracking-widest" style={{ color: '#2a3a5a' }}>
+                    {cert.issuer}
+                  </span>
                 </div>
               </div>
 
-              <div className="relative z-10 text-zinc-700 group-hover:text-cyan-400 transition-colors">
-                <FiArrowUpRight className="w-6 h-6" />
+              <div
+                className="relative z-10 transition-colors duration-300 group-hover:text-cyan-400"
+                style={{ color: '#2a3a5a' }}
+              >
+                <FiArrowUpRight className="w-5 h-5" />
               </div>
             </motion.div>
           ))}

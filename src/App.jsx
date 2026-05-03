@@ -13,10 +13,10 @@ import CustomCursor from './components/layout/CustomCursor';
 
 function App() {
   return (
-    <div className="bg-[#000000] min-h-screen text-zinc-200 font-sans selection:bg-pink-500/30">
+    <div style={{ backgroundColor: '#03050a', minHeight: '100vh', color: '#e8f0ff' }}>
       <Navbar />
       <CustomCursor />
-      
+
       <main>
         <Hero />
         <About />

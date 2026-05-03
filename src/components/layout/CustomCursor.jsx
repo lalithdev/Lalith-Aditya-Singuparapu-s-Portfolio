@@ -19,9 +19,9 @@ export default function CustomCursor() {
     const handleHover = (e) => {
       const target = e.target;
       if (
-        target.tagName === 'A' || 
-        target.tagName === 'BUTTON' || 
-        target.closest('a') || 
+        target.tagName === 'A' ||
+        target.tagName === 'BUTTON' ||
+        target.closest('a') ||
         target.closest('button') ||
         target.classList.contains('group')
       ) {
@@ -33,7 +33,6 @@ export default function CustomCursor() {
 
     window.addEventListener('mousemove', moveCursor);
     window.addEventListener('mouseover', handleHover);
-
     return () => {
       window.removeEventListener('mousemove', moveCursor);
       window.removeEventListener('mouseover', handleHover);
@@ -41,24 +40,38 @@ export default function CustomCursor() {
   }, []);
 
   return (
-    <motion.div
-      style={{
-        translateX: cursorXSpring,
-        translateY: cursorYSpring,
-        left: -12,
-        top: -12,
-      }}
-      animate={{
-        scale: isHovered ? 2.5 : 1,
-        backgroundColor: isHovered ? "rgba(99, 102, 241, 0.3)" : "rgba(99, 102, 241, 1)",
-        border: isHovered ? "1px solid rgba(255, 255, 255, 0.2)" : "0px solid transparent",
-      }}
-      className="fixed w-6 h-6 rounded-full pointer-events-none z-[9999] hidden md:block mix-blend-difference"
-    >
-      <motion.div 
-        animate={{ scale: isHovered ? 0.2 : 0 }}
-        className="absolute inset-0 m-auto w-1 h-1 bg-white rounded-full"
-      />
-    </motion.div>
+      <motion.div
+        style={{
+          translateX: cursorXSpring,
+          translateY: cursorYSpring,
+          left: -16,
+          top: -16,
+          overflow: 'hidden',
+        }}
+        animate={{
+          scale: isHovered ? 2.5 : 1,
+          backgroundColor: isHovered ? 'rgba(168, 85, 247, 0.15)' : '#a855f7',
+          boxShadow: isHovered 
+            ? '0 0 30px rgba(168, 85, 247, 0.5)' 
+            : '0 0 10px rgba(168, 85, 247, 0.2)',
+        }}
+        transition={{ type: 'spring', damping: 25, stiffness: 300, mass: 0.5 }}
+        className="fixed w-8 h-8 rounded-full pointer-events-none z-[9999] hidden md:block mix-blend-difference"
+      >
+        <div className="absolute inset-0 rounded-full border border-white/20" />
+        
+        {/* Shine effect */}
+        <motion.div
+          animate={{
+            x: [-40, 80],
+          }}
+          transition={{
+            duration: 2.5,
+            repeat: Infinity,
+            ease: "linear",
+          }}
+          className="absolute inset-0 w-1/2 h-full bg-gradient-to-r from-transparent via-white/30 to-transparent skew-x-12"
+        />
+      </motion.div>
   );
 }

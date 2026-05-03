@@ -52,7 +52,7 @@ export default function Card3D({children, className = ""}) {
                 style={{
                     background: useTransform(
                         [mouseX, mouseY],
-                        ([mx, my]) => `radial-gradient(600px circle at ${mx}px ${my}px, rgba(153,27,27,0.15), transparent 40%)`
+                        ([mx, my]) => `radial-gradient(600px circle at ${mx}px ${my}px, rgba(59,130,246,0.12), transparent 40%)`
                     )
                 }}
                 className="absolute inset-0 z-10 pointer-events-none rounded-[2rem]"

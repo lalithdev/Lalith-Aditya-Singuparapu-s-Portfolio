@@ -2,127 +2,171 @@ import { motion } from 'framer-motion';
 import { portfolioData } from '../../data/portfolio';
 import { FiArrowRight, FiShield, FiTrendingUp, FiSettings } from 'react-icons/fi';
 
+const EXPO = [0.16, 1, 0.3, 1];
+
 export default function About() {
   const { about } = portfolioData;
 
-  const philosophy = [
-    { text: "Build for scale.", icon: <FiTrendingUp /> },
-    { text: "Design for trust.", icon: <FiShield /> },
-    { text: "Engineer for clarity.", icon: <FiSettings /> }
+  const quickPoints = [
+    { text: 'I enjoy building useful products from simple ideas.', icon: <FiTrendingUp /> },
+    { text: 'I focus on clean code, clarity, and consistency.', icon: <FiShield /> },
+    { text: 'I improve by shipping, debugging, and iterating.', icon: <FiSettings /> },
+  ];
+
+  const currentlyDoing = [
+    'Exploring AI in Natural Language Processing.',
+    'Building a Patient Appointment System with a focus on usability and reliability.',
+    'Developing CertifyMe as a production-ready Enterprise application.',
+    'Strengthening my full stack development skills through continuous hands-on practice.',
   ];
 
   return (
-    <section id="about" className="py-48 relative bg-transparent overflow-hidden">
-      
-      {/* Background Ambience */}
-      <div className="absolute left-0 top-1/4 w-[800px] h-[800px] bg-pink-900/10 rounded-full blur-[200px] pointer-events-none" />
+    <section
+      id="about"
+      className="relative overflow-hidden py-16 lg:py-10 lg:min-h-[calc(100svh-88px)]"
+      style={{ scrollMarginTop: '110px', perspective: '1400px' }}
+    >
+      {/* Background orbs */}
+      <div className="glow-orb w-[700px] h-[700px] left-[-15%] top-[10%] opacity-20"
+        style={{ background: 'radial-gradient(circle, rgba(59,130,246,0.3) 0%, transparent 70%)' }} />
+      <div className="glow-orb w-[400px] h-[400px] right-[5%] bottom-[10%] opacity-15"
+        style={{ background: 'radial-gradient(circle, rgba(139,92,246,0.35) 0%, transparent 70%)' }} />
 
-      <div className="max-w-[1400px] mx-auto px-6 relative z-10">
-        
-        {/* Section Tag */}
-        <motion.div 
+      {/* Grid background */}
+      <div className="absolute inset-0 bg-grid opacity-100 pointer-events-none" />
+
+      <motion.div
+        initial={{ opacity: 0, y: 80, rotateX: 12, rotateY: -4, scale: 0.96 }}
+        whileInView={{ opacity: 1, y: 0, rotateX: 0, rotateY: 0, scale: 1 }}
+        viewport={{ once: false, amount: 0.35 }}
+        transition={{ duration: 0.95, ease: EXPO }}
+        className="max-w-[1400px] mx-auto px-6 relative z-10 w-full pt-4"
+        style={{ transformStyle: 'preserve-3d' }}
+      >
+
+        {/* Section eyebrow */}
+        <motion.div
           initial={{ opacity: 0, x: -20 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
-          className="flex items-center gap-3 mb-24"
+          className="flex items-center gap-3 mb-10 lg:mb-12"
         >
-          <div className="w-10 h-px bg-pink-500" />
-          <span className="text-pink-500 font-bold text-xs tracking-[0.5em] uppercase">Identity Architecture</span>
+          <div className="w-10 h-px" style={{ background: 'linear-gradient(90deg, #3b82f6, #8b5cf6)' }} />
+          <span className="section-eyebrow">About Me</span>
         </motion.div>
 
-        {/* ASYMMETRICAL STORYTELLING GRID */}
-        <div className="grid lg:grid-cols-12 gap-16 lg:gap-24 items-start">
-          
-          {/* LEFT: THE PHILOSOPHY (Col 5) */}
-          <div className="lg:col-span-5 space-y-20 order-2 lg:order-1">
-            <div className="space-y-12">
-              <h3 className="text-zinc-600 font-mono text-[10px] uppercase tracking-[0.4em]">Core Philosophy</h3>
-              <div className="space-y-8">
-                {philosophy.map((item, idx) => (
-                  <motion.div 
+        <div className="grid lg:grid-cols-12 gap-10 lg:gap-12 items-start">
+
+          {/* LEFT: Student snapshot */}
+          <div className="lg:col-span-5 space-y-8 lg:space-y-10 order-1 lg:order-2">
+            <div className="space-y-6">
+              <span className="font-mono text-[10px] uppercase tracking-[0.4em]" style={{ color: '#2a3a5a' }}>
+                Personal Profile
+              </span>
+              <div className="space-y-4">
+                {quickPoints.map((item, idx) => (
+                  <motion.div
                     key={idx}
                     initial={{ opacity: 0, x: -20 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
-                    transition={{ delay: idx * 0.1 }}
-                    className="flex items-center gap-6 group"
+                    transition={{ delay: idx * 0.12, ease: EXPO, duration: 0.7 }}
+                    className="flex items-center gap-5 group"
                   >
-                    <div className="w-12 h-12 rounded-xl bg-[#050505] border border-white/5 flex items-center justify-center text-cyan-400 group-hover:border-cyan-400/50 transition-colors shadow-elite">
+                    <div
+                      className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-all duration-300 group-hover:scale-110"
+                      style={{
+                        background: 'rgba(8,16,40,0.70)',
+                        border: '1px solid rgba(59,130,246,0.18)',
+                        color: '#60a5fa',
+                        boxShadow: '0 4px 16px rgba(0,0,0,0.4)',
+                      }}
+                    >
                       {item.icon}
                     </div>
-                    <span className="text-2xl font-bold text-white tracking-tight">{item.text}</span>
+                    <span
+                      className="font-display font-bold text-lg lg:text-xl tracking-tight transition-colors duration-300"
+                      style={{ color: '#c7d9ff' }}
+                    >
+                      {item.text}
+                    </span>
                   </motion.div>
                 ))}
               </div>
             </div>
 
-            {/* System Metrics Stat Box */}
-            <div className="p-10 rounded-[2.5rem] bg-[#050505] border border-white/5 space-y-10 shadow-elite relative overflow-hidden group">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-violet-500/5 rounded-full blur-3xl group-hover:bg-violet-500/10 transition-colors" />
-              {about.stats.map((stat, idx) => (
-                <div key={idx} className="relative z-10">
-                  <span className="text-zinc-500 text-[10px] font-mono uppercase tracking-[0.3em] block mb-2">{stat.label}</span>
-                  <div className="text-6xl font-bold text-white tracking-tighter group-hover:text-pink-500 transition-colors">
-                    {stat.value}
-                  </div>
-                </div>
-              ))}
+            <div
+              className="rounded-xl p-4"
+              style={{
+                background: 'rgba(10,18,40,0.55)',
+                border: '1px solid rgba(59,130,246,0.14)',
+                borderTop: '1px solid rgba(100,160,255,0.22)',
+              }}
+            >
+              <span className="font-mono text-[9px] uppercase tracking-[0.34em] block mb-3" style={{ color: '#2a3a5a' }}>
+                Currently
+              </span>
+              <ul className="space-y-2 m-0 pl-5">
+                {currentlyDoing.map((item) => (
+                  <li key={item} className="font-body text-sm leading-relaxed" style={{ color: '#9fb2d9' }}>
+                    {item}
+                  </li>
+                ))}
+              </ul>
             </div>
           </div>
 
-          {/* RIGHT: THE NARRATIVE (Col 7) */}
-          <div className="lg:col-span-7 space-y-16 order-1 lg:order-2">
-            <motion.h2 
+          {/* RIGHT: Narrative */}
+          <div className="lg:col-span-7 space-y-7 lg:space-y-8 order-2 lg:order-1">
+            <motion.h2
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-5xl md:text-7xl lg:text-8xl font-bold text-white leading-[0.9] tracking-tighter"
+              transition={{ duration: 0.9, ease: EXPO }}
+              className="font-display font-black tracking-tighter leading-[0.92]"
+              style={{ fontSize: 'clamp(2.3rem, 5vw, 4.4rem)', color: '#e8f0ff' }}
             >
-              Architecting <br />
-              <span className="text-zinc-800">Future-Proof</span> <br />
-              Systems
+              Learning, Building,
+              <br />
+              <span className="text-gradient">and Growing Daily</span>
             </motion.h2>
 
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: 0.2 }}
-              className="space-y-10"
+              transition={{ delay: 0.2, duration: 0.9, ease: EXPO }}
+              className="space-y-6"
             >
-              <p className="text-zinc-400 text-xl md:text-2xl leading-relaxed max-w-2xl font-medium">
+              <p className="font-body leading-relaxed max-w-2xl" style={{ fontSize: 'clamp(1rem, 1.4vw, 1.15rem)', color: '#7a8fbb' }}>
                 {about.description}
               </p>
-              
-              <div className="pt-6">
-                <motion.a 
+
+              <div className="pt-4">
+                <motion.a
                   href="#contact"
-                  whileHover={{ x: 10 }}
-                  className="inline-flex items-center gap-6 text-white font-bold group"
+                  whileHover={{ x: 8 }}
+                  className="inline-flex items-center gap-5 font-display font-bold group no-underline"
+                  style={{ color: '#e8f0ff' }}
                 >
-                  <span className="text-sm tracking-[0.3em] uppercase border-b border-pink-500 pb-2">Initialize Connection</span>
-                  <FiArrowRight className="w-6 h-6 text-pink-500 group-hover:translate-x-2 transition-transform" />
+                  <span
+                    className="text-sm tracking-[0.28em] uppercase pb-2"
+                    style={{ borderBottom: '1px solid #3b82f6' }}
+                  >
+                    Let's Connect
+                  </span>
+                  <FiArrowRight
+                    className="w-5 h-5 group-hover:translate-x-2 transition-transform"
+                    style={{ color: '#3b82f6' }}
+                  />
                 </motion.a>
               </div>
             </motion.div>
 
-            {/* Credibility Roll */}
-            <div className="pt-16 border-t border-white/5">
-              <span className="text-zinc-600 font-mono text-[10px] uppercase tracking-[0.4em] mb-10 block">Trusted Architecture Context</span>
-              <div className="flex flex-wrap gap-x-16 gap-y-8">
-                {about.previouslyWorkedOn.map((company, idx) => (
-                  <div key={idx} className="flex flex-col gap-1 group">
-                    <span className="text-white font-bold text-lg tracking-tight group-hover:text-cyan-400 transition-colors uppercase">{company.name}</span>
-                    <span className="text-zinc-600 text-[10px] font-mono uppercase tracking-widest">{company.role}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
           </div>
 
         </div>
-
-      </div>
+      </motion.div>
     </section>
   );
 }

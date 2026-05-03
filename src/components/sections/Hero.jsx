@@ -1,59 +1,87 @@
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { motion, useMotionValue, useSpring, useTransform, AnimatePresence } from 'framer-motion';
 import { portfolioData } from '../../data/portfolio';
 import { FaGithub, FaLinkedin } from 'react-icons/fa';
-import { FiArrowUpRight, FiTerminal, FiCpu, FiLayers, FiDatabase, FiCloud } from 'react-icons/fi';
-import { useEffect, useRef, useState } from 'react';
+import { FiArrowUpRight, FiTerminal, FiCpu, FiCode, FiServer, FiDatabase, FiCloud } from 'react-icons/fi';
+import { useRef, useState } from 'react';
 import Magnetic from '../common/Magnetic';
 
-// ─── Precision easing curves ─────────────────────────────────────────────────
-const EASE_OUT_EXPO = [0.16, 1, 0.3, 1];
+const EXPO = [0.16, 1, 0.3, 1];
 
-// ─── Animations ──────────────────────────────────────────────────────────────
 const fadeUp = {
-  hidden: { opacity: 0, y: 20, filter: 'blur(4px)' },
-  show: {
-    opacity: 1,
-    y: 0,
-    filter: 'blur(0px)',
-    transition: { duration: 1, ease: EASE_OUT_EXPO },
-  },
+  hidden: { opacity: 0, y: 28, filter: 'blur(6px)' },
+  show: { opacity: 1, y: 0, filter: 'blur(0px)', transition: { duration: 0.9, ease: EXPO } },
 };
 
-const staggerContainer = {
+const stagger = {
   hidden: { opacity: 0 },
-  show: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.1 } },
+  show: { opacity: 1, transition: { staggerChildren: 0.12, delayChildren: 0.05 } },
 };
+
+const TERMINAL_LINES = [
+  { prefix: '❯', cmd: 'node certify-me --env=prod', delay: 0 },
+  { prefix: '✓', cmd: 'Infrastructure: LIVE',      color: '#22d3ee', delay: 0.5 },
+  { prefix: '✓', cmd: 'AI Engine: ONLINE',          color: '#818cf8', delay: 1.0 },
+  { prefix: '●', cmd: 'Awaiting next build…',       color: '#3b82f6', delay: 1.5 },
+];
+
+const ORBIT_SKILLS = [
+  { icon: <FiCode />,     label: 'React',       color: '#60a5fa', angle: 0   },
+  { icon: <FiServer />,   label: 'Spring Boot', color: '#818cf8', angle: 72  },
+  { icon: <FiDatabase />, label: 'PostgreSQL',  color: '#22d3ee', angle: 144 },
+  { icon: <FiCloud />,    label: 'OCI / AWS',   color: '#34d399', angle: 216 },
+  { icon: <FiCpu />,      label: 'AI / NLP',    color: '#fb923c', angle: 288 },
+];
+
+function OrbitBadge({ icon, label, color, angle, radius = 130 }) {
+  const rad = (angle * Math.PI) / 180;
+  const x = Math.cos(rad) * radius;
+  const y = Math.sin(rad) * radius;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ delay: 0.8 + angle / 360, duration: 0.5, ease: EXPO }}
+      className="absolute flex flex-col items-center gap-1"
+      style={{ left: `calc(50% + ${x}px)`, top: `calc(50% + ${y}px)`, transform: 'translate(-50%, -50%)' }}
+    >
+      <div
+        className="w-9 h-9 rounded-xl flex items-center justify-center text-sm"
+        style={{
+          background: 'rgba(6,10,24,0.90)',
+          border: `1px solid ${color}35`,
+          color,
+          backdropFilter: 'blur(12px)',
+          boxShadow: `0 0 16px ${color}20`,
+        }}
+      >
+        {icon}
+      </div>
+      <span className="font-mono text-[7px] uppercase tracking-widest whitespace-nowrap" style={{ color: '#2a3a5a' }}>
+        {label}
+      </span>
+    </motion.div>
+  );
+}
 
 export default function Hero() {
+  const heroRef = useRef(null);
+  const [cursorPos, setCursorPos] = useState({ x: -200, y: -200 });
+  const [hovering, setHovering] = useState(false);
+  const [windowState, setWindowState] = useState('normal'); // normal, minimized, focused, closed
+
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
-  
-  // Spring config for blueprint depth
-  const springCfg = { damping: 40, stiffness: 80, mass: 1 };
-  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [15, -15]), springCfg);
-  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-15, 15]), springCfg);
-
-  const heroRef = useRef(null);
-  const [cursorPos, setCursorPos] = useState({ x: -100, y: -100 });
-  const [isHovering, setIsHovering] = useState(false);
+  const springCfg = { damping: 35, stiffness: 70, mass: 1 };
+  const rotateX = useSpring(useTransform(mouseY, [-0.5, 0.5], [8, -8]), springCfg);
+  const rotateY = useSpring(useTransform(mouseX, [-0.5, 0.5], [-8, 8]), springCfg);
 
   const handleMouseMove = (e) => {
     if (!heroRef.current) return;
-    const rect = heroRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    
-    setCursorPos({ x, y });
-    
-    // Normalized coordinates for 3D tilt
-    mouseX.set(x / rect.width - 0.5);
-    mouseY.set(y / rect.height - 0.5);
-  };
-  
-  const handleMouseLeave = () => { 
-    mouseX.set(0); 
-    mouseY.set(0); 
-    setIsHovering(false);
+    const r = heroRef.current.getBoundingClientRect();
+    setCursorPos({ x: e.clientX - r.left, y: e.clientY - r.top });
+    mouseX.set((e.clientX - r.left) / r.width - 0.5);
+    mouseY.set((e.clientY - r.top) / r.height - 0.5);
   };
 
   return (
@@ -61,227 +89,389 @@ export default function Hero() {
       id="hero"
       ref={heroRef}
       onMouseMove={handleMouseMove}
-      onMouseEnter={() => setIsHovering(true)}
-      onMouseLeave={handleMouseLeave}
-      className="relative min-h-[100svh] flex flex-col justify-center overflow-hidden bg-transparent"
-      style={{ paddingTop: '8rem', paddingBottom: '6rem' }}
+      onMouseEnter={() => setHovering(true)}
+      onMouseLeave={() => { mouseX.set(0); mouseY.set(0); setHovering(false); }}
+      className="relative min-h-[100svh] flex flex-col justify-center overflow-hidden"
+      style={{ paddingTop: '8rem', paddingBottom: '5rem' }}
     >
-      {/* ── Soft Mouse-Follow Glow ── */}
+      {/* ── Background Orbs ── */}
+      <div className="glow-orb w-[700px] h-[700px] top-[-20%] left-[-15%] opacity-25"
+        style={{ background: 'radial-gradient(circle, rgba(59,130,246,0.38) 0%, transparent 70%)' }} />
+      <div className="glow-orb w-[500px] h-[500px] top-[5%] right-[-10%] opacity-18"
+        style={{ background: 'radial-gradient(circle, rgba(139,92,246,0.40) 0%, transparent 70%)' }} />
+      <div className="glow-orb w-[400px] h-[400px] bottom-[0%] left-[35%] opacity-15"
+        style={{ background: 'radial-gradient(circle, rgba(6,182,212,0.30) 0%, transparent 70%)' }} />
+
+      {/* ── Mouse-follow glow ── */}
       <motion.div
-        animate={{
-          x: cursorPos.x - 200,
-          y: cursorPos.y - 200,
-          opacity: isHovering ? 1 : 0
-        }}
+        animate={{ x: cursorPos.x - 180, y: cursorPos.y - 180, opacity: hovering ? 1 : 0 }}
         transition={{ type: 'tween', ease: 'backOut', duration: 0.5 }}
-        className="absolute pointer-events-none z-0 w-[400px] h-[400px] rounded-full blur-[100px]"
-        style={{
-          background: 'radial-gradient(circle, rgba(236, 72, 153, 0.15) 0%, transparent 70%)'
-        }}
+        className="absolute pointer-events-none z-0 w-[360px] h-[360px] rounded-full"
+        style={{ background: 'radial-gradient(circle, rgba(59,130,246,0.10) 0%, transparent 70%)', filter: 'blur(60px)' }}
       />
 
-      {/* ── Metadata Rail (Left Edge) ── */}
-      <div className="hidden xl:flex absolute left-8 top-0 bottom-0 z-20 flex-col items-center justify-center opacity-40">
-        <div className="w-px h-32 bg-gradient-to-b from-transparent to-zinc-500 mb-6" />
-        <span 
-          className="font-mono text-[9px] text-zinc-400 tracking-[0.3em] uppercase rotate-180 whitespace-nowrap"
-          style={{ writingMode: 'vertical-rl' }}
+      {/* ── Side rail ── */}
+      <div className="hidden xl:flex absolute left-7 top-0 bottom-0 z-20 flex-col items-center justify-center">
+        <div className="w-px h-28 bg-gradient-to-b from-transparent via-blue-500/30 to-transparent" />
+        <span
+          className="section-eyebrow my-5"
+          style={{ writingMode: 'vertical-rl', transform: 'rotate(180deg)', letterSpacing: '0.28em' }}
         >
-          Available for Elite Internships • India • Building Since 2025 • Production Systems • AI + Full Stack
+          Available · India · Building Since 2025 · AI + Full Stack
         </span>
-        <div className="w-px h-32 bg-gradient-to-t from-transparent to-zinc-500 mt-6" />
+        <div className="w-px h-28 bg-gradient-to-b from-transparent via-blue-500/30 to-transparent" />
       </div>
 
+      {/* ── Main Grid ── */}
       <div className="relative z-10 w-full max-w-[1400px] mx-auto px-6 xl:pl-24">
-        <div className="grid lg:grid-cols-12 gap-12 lg:gap-8 items-center">
-          
-          {/* ─────────── LEFT COLUMN: Typography & Authority ─────────── */}
+        <div className="grid lg:grid-cols-12 gap-16 lg:gap-10 items-center">
+
+          {/* ─── LEFT: Content ─── */}
           <motion.div
-            variants={staggerContainer}
+            variants={stagger}
             initial="hidden"
             animate="show"
             className="lg:col-span-7 flex flex-col items-start relative z-20"
           >
-            {/* Live Build Layer */}
-            <motion.div variants={fadeUp} className="mb-10 w-full max-w-sm">
-              <div className="flex flex-col gap-2 p-4 rounded-xl bg-[#050505] border border-white/[0.04] shadow-[0_10px_30px_-10px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.02)] relative overflow-hidden">
-                <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-pink-500 to-violet-500" />
-                <div className="flex items-center justify-between mb-1">
-                  <span className="font-mono text-[10px] text-zinc-500 uppercase tracking-widest flex items-center gap-2">
-                    <span className="w-1.5 h-1.5 rounded-full bg-pink-500 animate-pulse" />
-                    Currently Building
-                  </span>
-                </div>
-                <div className="font-mono text-[11px] text-zinc-300 space-y-1.5 leading-relaxed">
-                  <p className="flex items-start gap-2">
-                    <span className="text-pink-500">{'>'}</span> CertifyMe Production Infrastructure
-                  </p>
-                  <p className="flex items-start gap-2">
-                    <span className="text-violet-400">{'>'}</span> AI Workflow Systems
-                  </p>
-                  <p className="flex items-start gap-2 text-zinc-500">
-                    <span className="text-zinc-600">{'>'}</span> NLP-driven Process Automation
-                  </p>
-                </div>
+            <motion.div variants={fadeUp} className="mb-8">
+              <div className="badge">
+                <span className="dot-live" />
+                Open for Internship Opportunities
               </div>
             </motion.div>
 
-            {/* Huge Founder Typography */}
-            <motion.div variants={fadeUp} className="mb-6 w-full">
-              <h1 className="font-sans font-black tracking-tighter leading-[0.85] text-white flex flex-col gap-2" style={{ fontSize: 'clamp(3rem, 7.5vw, 6.5rem)' }}>
-                <span className="text-white drop-shadow-2xl">Lalith Aditya</span>
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-400 to-cyan-400">Singuparapu.</span>
+            <motion.div variants={fadeUp} className="mb-5">
+              <h1
+                className="font-display font-black tracking-tighter leading-[0.88]"
+                style={{ fontSize: 'clamp(2.8rem, 7vw, 6rem)' }}
+              >
+                <span style={{ color: '#e8f0ff' }}>Lalith Aditya</span>
+                <br />
+                <span className="text-gradient">Singuparapu.</span>
               </h1>
             </motion.div>
 
-            <motion.h2 variants={fadeUp} className="text-[#e2e8f0] font-semibold tracking-tight mb-4" style={{ fontSize: 'clamp(1.2rem, 2.5vw, 1.75rem)' }}>
-              AI Full Stack Developer
-            </motion.h2>
+            <motion.div variants={fadeUp} className="flex items-center gap-3 mb-5">
+              <div className="w-8 h-px" style={{ background: 'linear-gradient(90deg, #3b82f6, #8b5cf6)' }} />
+              <span
+                className="font-display font-semibold tracking-tight"
+                style={{ fontSize: 'clamp(1.1rem, 2.2vw, 1.55rem)', color: '#c7d9ff' }}
+              >
+                AI Full Stack Architect
+              </span>
+            </motion.div>
 
-            {/* Signature Statement */}
-            <motion.p variants={fadeUp} className="text-zinc-400 font-medium leading-relaxed mb-10 max-w-[500px]" style={{ fontSize: 'clamp(1rem, 1.5vw, 1.15rem)' }}>
-              I design <span className="text-white">intelligent systems</span> where product, engineering, and AI converge.
+            <motion.p
+              variants={fadeUp}
+              className="font-body leading-relaxed mb-10 max-w-[500px]"
+              style={{ fontSize: 'clamp(0.95rem, 1.4vw, 1.1rem)', color: '#7a8fbb' }}
+            >
+              I design{' '}
+              <span style={{ color: '#93c5fd', fontWeight: 500 }}>intelligent systems</span>{' '}
+              where product, engineering, and AI converge — from distributed backends to AI-native interfaces.
             </motion.p>
 
-            {/* CTAs */}
-            <motion.div variants={fadeUp} className="flex flex-wrap items-center gap-6 mb-12">
+            <motion.div variants={fadeUp} className="flex flex-wrap items-center gap-4 mb-12">
               <Magnetic>
-                <motion.a
-                  href="#contact"
-                  className="relative group inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-white text-black font-bold text-xs uppercase tracking-[0.15em] transition-transform overflow-hidden shadow-[0_0_40px_rgba(236,72,153,0.2)]"
-                >
-                  <span className="relative z-10 flex items-center gap-2">
-                    Let's Build Systems
-                    <FiArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                  </span>
-                  <div className="absolute inset-0 bg-gradient-to-r from-white via-zinc-200 to-white opacity-0 group-hover:opacity-100 transition-opacity" />
-                </motion.a>
+                <a href="#contact" className="btn-primary">
+                  Let's Build Together
+                  <FiArrowUpRight className="w-4 h-4" />
+                </a>
               </Magnetic>
-
-              <div className="flex items-center gap-5 px-5 py-3 rounded-full border border-white/[0.04] bg-[#050505]/80 backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.02)]">
+              <Magnetic>
+                <a href="#projects" className="btn-ghost">View Projects</a>
+              </Magnetic>
+              <div className="flex items-center gap-2">
                 {[
                   { icon: <FaLinkedin />, href: portfolioData.personal.linkedin, label: 'LinkedIn' },
-                  { icon: <FaGithub />, href: portfolioData.personal.github, label: 'GitHub' },
+                  { icon: <FaGithub />,   href: portfolioData.personal.github,   label: 'GitHub' },
                 ].map(({ icon, href, label }) => (
-                  <motion.a
-                    key={label}
-                    href={href}
-                    target="_blank"
-                    rel="noreferrer"
-                    aria-label={label}
-                    whileHover={{ color: '#ec4899' }}
-                    className="text-zinc-500 text-lg hover:text-white transition-colors"
-                  >
+                  <motion.a key={label} href={href} target="_blank" rel="noreferrer"
+                    aria-label={label} className="btn-icon" whileHover={{ scale: 1.1 }}>
                     {icon}
                   </motion.a>
                 ))}
               </div>
             </motion.div>
 
-            {/* Trust Signal Strip */}
-            <motion.div variants={fadeUp} className="flex flex-wrap items-center gap-y-3 gap-x-4 w-full pt-6 border-t border-white/[0.04]">
+            <motion.div
+              variants={fadeUp}
+              className="flex flex-wrap items-center gap-y-2 gap-x-5 pt-6 w-full"
+              style={{ borderTop: '1px solid rgba(59,130,246,0.10)' }}
+            >
               {[
-                'Production Deployed',
-                'OCI GenAI Certified',
-                '9.09 CGPA',
-                'Full Stack + AI Systems',
-                'Hackathon Builder'
-              ].map((signal, idx) => (
-                <div key={idx} className="flex items-center gap-3">
-                  <span className="font-mono text-[9px] text-zinc-500 uppercase tracking-widest">{signal}</span>
-                  {idx !== 4 && <span className="w-1 h-1 rounded-full bg-zinc-800" />}
+                { label: 'Production Deployed',     color: '#22d3ee' },
+                { label: 'OCI GenAI Certified',     color: '#818cf8' },
+                { label: '9.09 CGPA',               color: '#60a5fa' },
+                { label: 'Full Stack + AI Systems',  color: '#34d399' },
+                { label: 'Hackathon Builder',        color: '#fb923c' },
+              ].map(({ label, color }, i, arr) => (
+                <div key={label} className="flex items-center gap-3">
+                  <span className="font-mono text-[9px] uppercase tracking-[0.28em]" style={{ color: '#4a5a80' }}>
+                    {label}
+                  </span>
+                  {i < arr.length - 1 && (
+                    <span className="w-1 h-1 rounded-full" style={{ background: color, opacity: 0.5 }} />
+                  )}
                 </div>
               ))}
             </motion.div>
           </motion.div>
 
-          {/* ─────────── RIGHT COLUMN: Isometric Blueprint ─────────── */}
-          <div className="lg:col-span-5 h-[500px] xl:h-[650px] relative w-full perspective-1000 hidden lg:block">
+          {/* ─── RIGHT: Visual Column ─── */}
+          <div
+            className="lg:col-span-5 relative hidden lg:flex flex-col gap-5 items-end lg:pl-8 z-10"
+            style={{ perspective: '1200px' }}
+          >
+            {/* ── Identity Card (Now with Full iOS Window Logic) ── */}
             <motion.div
-              className="w-full h-full relative flex items-center justify-center"
-              style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+              drag
+              dragConstraints={heroRef}
+              dragMomentum={true}
+              initial={{ opacity: 0, y: 40, x: 48, scale: 0.93 }}
+              animate={{ 
+                opacity: windowState === 'closed' ? 0 : 1,
+                scale: windowState === 'minimized' ? 0.35 : windowState === 'focused' ? 1.15 : 1,
+                pointerEvents: windowState === 'closed' ? 'none' : 'auto',
+                y: windowState === 'closed' ? 100 : 0,
+                x: windowState === 'closed' ? 72 : 0,
+              }}
+              whileDrag={{ scale: windowState === 'focused' ? 1.2 : 1.05, zIndex: 100, cursor: 'grabbing' }}
+              transition={{ duration: 0.6, ease: EXPO }}
+              style={{ rotateX, rotateY, transformStyle: 'preserve-3d' }}
+              className="relative w-full max-w-[340px] mx-auto cursor-grab active:cursor-grabbing z-0"
             >
-              {/* Backglow */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] rounded-full bg-[radial-gradient(circle,rgba(236,72,153,0.1)_0%,transparent_60%)] blur-2xl" />
-
-              {/* Layer 3: Data / Cloud Base */}
-              <motion.div 
-                animate={{ y: [0, -10, 0] }}
-                transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
-                className="absolute w-[280px] h-[280px] border border-pink-500/20 bg-[#050505]/60 backdrop-blur-md rounded-2xl flex items-center justify-center shadow-[0_20px_40px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.05)]"
-                style={{ transform: 'rotateX(55deg) rotateZ(-45deg) translateZ(-60px)' }}
-              >
-                <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.01)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.01)_1px,transparent_1px)] bg-[size:20px_20px] rounded-2xl" />
-                <FiDatabase className="w-8 h-8 text-pink-500/60" />
-                <div className="absolute bottom-4 left-4 font-mono text-[10px] text-pink-500/60 uppercase tracking-widest">Data Layer</div>
-              </motion.div>
-
-              {/* Layer 2: Intelligence Core / Neural Network */}
-              <motion.div 
-                animate={{ y: [0, -15, 0] }}
-                transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut', delay: 0.2 }}
-                className="absolute w-[280px] h-[280px] border border-white/[0.08] bg-[#0A0A0A]/70 backdrop-blur-md rounded-2xl flex items-center justify-center shadow-[0_30px_50px_rgba(0,0,0,0.8),inset_0_1px_0_rgba(255,255,255,0.08)]"
-                style={{ transform: 'rotateX(55deg) rotateZ(-45deg) translateZ(30px)' }}
-              >
-                <div className="relative w-32 h-32 flex items-center justify-center">
-                  <motion.div animate={{ rotateZ: 360 }} transition={{ duration: 20, repeat: Infinity, ease: 'linear' }} className="absolute inset-0 border border-dashed border-cyan-400/30 rounded-full" />
-                  <motion.div animate={{ rotateZ: -360 }} transition={{ duration: 15, repeat: Infinity, ease: 'linear' }} className="absolute inset-4 border border-violet-500/40 rounded-full" />
-                  <div className="w-8 h-8 rounded-full bg-violet-500 blur-[8px] absolute" />
-                  <FiCpu className="w-6 h-6 text-white relative z-10" />
-                </div>
-                <div className="absolute top-4 right-4 flex gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-                  <span className="font-mono text-[8px] text-cyan-400 uppercase tracking-widest">AI Engine Ops</span>
-                </div>
-              </motion.div>
-
-              {/* Layer 1: Client Edge */}
-              <motion.div 
-                animate={{ y: [0, -8, 0] }}
-                transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut', delay: 0.4 }}
-                className="absolute w-[280px] h-[280px] border border-white/[0.12] bg-[#000000]/40 backdrop-blur-xl rounded-2xl flex flex-col p-6 shadow-[0_40px_60px_rgba(0,0,0,0.9),inset_0_1px_0_rgba(255,255,255,0.15)]"
-                style={{ transform: 'rotateX(55deg) rotateZ(-45deg) translateZ(120px)' }}
-              >
-                <div className="flex items-center justify-between border-b border-white/[0.05] pb-3 mb-4">
-                  <div className="flex items-center gap-2">
-                    <FiLayers className="w-4 h-4 text-white" />
-                    <span className="font-mono text-[10px] text-white uppercase tracking-widest">Client Edge</span>
-                  </div>
-                  <div className="flex gap-1.5">
-                    <div className="w-2 h-2 rounded-full bg-zinc-700" />
-                    <div className="w-2 h-2 rounded-full bg-zinc-700" />
-                  </div>
-                </div>
-                <div className="flex-1 flex flex-col gap-3">
-                  <div className="w-full h-8 rounded bg-white/[0.02] border border-white/[0.05] relative overflow-hidden">
-                    <motion.div animate={{ x: ['-100%', '200%'] }} transition={{ duration: 2, repeat: Infinity, ease: 'linear' }} className="absolute top-0 bottom-0 w-1/3 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-                  </div>
-                  <div className="w-3/4 h-8 rounded bg-white/[0.02] border border-white/[0.05]" />
-                  <div className="w-1/2 h-8 rounded bg-white/[0.02] border border-white/[0.05]" />
-                </div>
-              </motion.div>
-
-              {/* Vertical Connection Lines */}
-              <div className="absolute w-px h-[180px] bg-gradient-to-b from-cyan-400 to-violet-500 opacity-50" style={{ transform: 'translateZ(30px)' }} />
-              <div className="absolute w-px h-[180px] bg-gradient-to-b from-pink-500 to-transparent opacity-30 -ml-16 mt-16" style={{ transform: 'translateZ(30px)' }} />
-              <div className="absolute w-px h-[180px] bg-gradient-to-b from-violet-500 to-transparent opacity-30 ml-16 -mt-16" style={{ transform: 'translateZ(30px)' }} />
-
-              {/* Cyan Data Pulses */}
-              <motion.div 
-                animate={{ y: [-90, 90], opacity: [0, 1, 0] }}
-                transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
-                className="absolute w-1 h-8 rounded-full bg-cyan-400 blur-[2px]" 
-                style={{ transform: 'translateZ(30px)' }} 
+              {/* Card glow */}
+              <div
+                className="absolute -inset-6 rounded-3xl blur-2xl opacity-30"
+                style={{ background: 'radial-gradient(circle at 50% 50%, rgba(59,130,246,0.55) 0%, rgba(139,92,246,0.30) 50%, transparent 80%)' }}
               />
 
-            </motion.div>
-          </div>
+              {/* Card body */}
+              <div
+                className="relative rounded-2xl overflow-hidden"
+                style={{
+                  background: 'linear-gradient(145deg, rgba(10,20,48,0.90) 0%, rgba(6,12,30,0.85) 100%)',
+                  border: '1px solid rgba(80,140,255,0.18)',
+                  borderTop: '1px solid rgba(150,200,255,0.20)',
+                  backdropFilter: 'blur(28px)',
+                  boxShadow: '0 0 0 1px rgba(255,255,255,0.03), 0 30px 80px -20px rgba(0,0,0,0.85), inset 0 1px 0 rgba(255,255,255,0.08)',
+                }}
+              >
+                {/* Chrome bar with iOS-style functioning dots */}
+                <div
+                  className="flex items-center gap-2 px-4 py-3"
+                  style={{ borderBottom: '1px solid rgba(59,130,246,0.10)', background: 'rgba(4,8,22,0.70)' }}
+                >
+                  <div className="flex gap-1.5">
+                    <button 
+                      onClick={(e) => { e.stopPropagation(); setWindowState('closed'); }}
+                      className="w-2.5 h-2.5 rounded-full transition-all hover:scale-125 hover:brightness-125" 
+                      style={{ background: '#ff5f57', border: 'none', cursor: 'pointer' }} 
+                      title="Close"
+                    />
+                    <button 
+                      onClick={(e) => { e.stopPropagation(); setWindowState(windowState === 'minimized' ? 'normal' : 'minimized'); }}
+                      className="w-2.5 h-2.5 rounded-full transition-all hover:scale-125 hover:brightness-125" 
+                      style={{ background: '#ffbd2e', border: 'none', cursor: 'pointer' }} 
+                      title="Minimize"
+                    />
+                    <button 
+                      onClick={(e) => { e.stopPropagation(); setWindowState(windowState === 'focused' ? 'normal' : 'focused'); }}
+                      className="w-2.5 h-2.5 rounded-full transition-all hover:scale-125 hover:brightness-125" 
+                      style={{ background: '#28c840', border: 'none', cursor: 'pointer' }} 
+                      title="Fullscreen"
+                    />
+                  </div>
+                  <span className="font-mono text-[9px] ml-2 tracking-widest uppercase" style={{ color: '#2a3a5a' }}>
+                    {windowState === 'minimized' ? 'minimized.dev' : 'lalith-aditya.dev'}
+                  </span>
+                </div>
 
+                {/* Avatar orbit stage */}
+                <div className="relative flex items-center justify-center" style={{ height: '300px' }}>
+                  {/* Animated rings */}
+                  <motion.div
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
+                    className="absolute rounded-full"
+                    style={{
+                      width: '260px', height: '260px',
+                      border: '1px dashed rgba(59,130,246,0.18)',
+                    }}
+                  />
+                  <motion.div
+                    animate={{ rotate: -360 }}
+                    transition={{ duration: 15, repeat: Infinity, ease: 'linear' }}
+                    className="absolute rounded-full"
+                    style={{
+                      width: '200px', height: '200px',
+                      border: '1px solid rgba(139,92,246,0.14)',
+                    }}
+                  />
+
+                  {/* Orbit skill badges */}
+                  {ORBIT_SKILLS.map((skill) => (
+                    <OrbitBadge key={skill.label} {...skill} radius={128} />
+                  ))}
+
+                  {/* Central avatar */}
+                  <motion.div
+                    animate={{ y: [0, -6, 0] }}
+                    transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+                    className="relative z-10 flex flex-col items-center gap-2"
+                  >
+                    {/* Avatar circle */}
+                    <div
+                      className="relative flex items-center justify-center"
+                      style={{
+                        width: '80px', height: '80px', borderRadius: '50%',
+                        background: 'linear-gradient(135deg, rgba(59,130,246,0.30) 0%, rgba(139,92,246,0.30) 100%)',
+                        border: '2px solid rgba(100,160,255,0.30)',
+                        boxShadow: '0 0 30px rgba(59,130,246,0.30), inset 0 1px 0 rgba(255,255,255,0.12)',
+                      }}
+                    >
+                      {/* Pulse ring */}
+                      <motion.div
+                        animate={{ scale: [1, 1.35], opacity: [0.4, 0] }}
+                        transition={{ duration: 2, repeat: Infinity, ease: 'easeOut' }}
+                        className="absolute inset-0 rounded-full"
+                        style={{ border: '2px solid rgba(59,130,246,0.50)' }}
+                      />
+                      <span
+                        className="font-display font-black select-none"
+                        style={{ fontSize: '1.8rem', color: '#e8f0ff', letterSpacing: '-0.04em' }}
+                      >
+                        LA
+                      </span>
+                    </div>
+                  </motion.div>
+                </div>
+
+                {/* Name chip at bottom */}
+                <div
+                  className="flex items-center justify-between px-5 py-4"
+                  style={{ borderTop: '1px solid rgba(59,130,246,0.10)', background: 'rgba(4,8,22,0.50)' }}
+                >
+                  <div>
+                    <p className="font-display font-bold text-sm" style={{ color: '#e8f0ff', letterSpacing: '-0.01em' }}>
+                      Lalith Aditya
+                    </p>
+                    <p className="font-mono text-[9px] uppercase tracking-widest mt-0.5" style={{ color: '#3b82f6' }}>
+                      AI Full Stack Architect
+                    </p>
+                  </div>
+                  <div className="badge">
+                    <span className="dot-live" />
+                    Active
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* ── Terminal Widget ── */}
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.85, ease: EXPO, delay: 0.45 }}
+              className="w-full max-w-[340px] mx-auto rounded-xl overflow-hidden"
+              style={{
+                background: 'rgba(3,5,14,0.88)',
+                border: '1px solid rgba(59,130,246,0.14)',
+                backdropFilter: 'blur(20px)',
+                boxShadow: '0 20px 50px -10px rgba(0,0,0,0.7)',
+              }}
+            >
+              <div
+                className="flex items-center gap-2 px-4 py-2.5"
+                style={{ borderBottom: '1px solid rgba(59,130,246,0.08)', background: 'rgba(4,8,20,0.70)' }}
+              >
+                <FiTerminal className="w-3 h-3" style={{ color: '#3b82f6' }} />
+                <span className="font-mono text-[9px] tracking-widest uppercase" style={{ color: '#2a3a5a' }}>
+                  build.sh — zsh
+                </span>
+                <div className="ml-auto flex gap-1">
+                  {['#60a5fa', '#818cf8', '#22d3ee'].map((c, i) => (
+                    <span key={i} className="w-1.5 h-1.5 rounded-full" style={{ background: c, opacity: 0.5 }} />
+                  ))}
+                </div>
+              </div>
+
+              <div className="px-4 py-4 space-y-2.5">
+                {TERMINAL_LINES.map(({ prefix, cmd, color, delay }, i) => (
+                  <motion.p
+                    key={i}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.7 + delay, duration: 0.4, ease: 'easeOut' }}
+                    className="font-mono text-[11px] flex items-center gap-2"
+                  >
+                    <span style={{ color: color ?? '#2a3a5a', minWidth: '0.75rem' }}>{prefix}</span>
+                    <span style={{ color: color ? '#c7d9ff' : '#3a4a6a' }}>{cmd}</span>
+                    {i === TERMINAL_LINES.length - 1 && (
+                      <span className="animate-blink" style={{ color: '#3b82f6' }}>▋</span>
+                    )}
+                  </motion.p>
+                ))}
+              </div>
+            </motion.div>
+
+            {/* ── Stats Row ── */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease: EXPO, delay: 0.65 }}
+              className="w-full max-w-[340px] mx-auto grid grid-cols-3 gap-3"
+            >
+              {[
+                { value: '9.09', label: 'CGPA',      color: '#60a5fa' },
+                { value: '2+',   label: 'Projects',  color: '#818cf8' },
+                { value: 'OCI',  label: 'Certified', color: '#22d3ee' },
+              ].map(({ value, label, color }) => (
+                <div
+                  key={label}
+                  className="rounded-xl py-3 px-2 text-center"
+                  style={{
+                    background: 'rgba(8,16,40,0.65)',
+                    border: '1px solid rgba(59,130,246,0.12)',
+                    borderTop: `2px solid ${color}`,
+                    backdropFilter: 'blur(12px)',
+                  }}
+                >
+                  <p className="font-display font-black text-xl leading-none mb-1" style={{ color }}>{value}</p>
+                  <p className="font-mono text-[8px] uppercase tracking-widest" style={{ color: '#3a4a6a' }}>{label}</p>
+                </div>
+              ))}
+            </motion.div>
+
+          </div>
         </div>
+
+        {/* ── Recovery Button (Visible when closed) ── */}
+        <AnimatePresence>
+          {windowState === 'closed' && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              className="absolute bottom-32 right-12 z-50"
+            >
+              <button
+                onClick={() => setWindowState('normal')}
+                className="flex items-center gap-3 px-6 py-3 rounded-full backdrop-blur-xl border border-blue-500/30 bg-blue-900/10 text-blue-400 font-display font-bold text-xs uppercase tracking-widest hover:bg-blue-900/20 transition-all shadow-[0_0_20px_rgba(59,130,246,0.2)]"
+              >
+                <span className="dot-live" />
+                Materialize Identity
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 
-      <div className="absolute bottom-0 left-0 w-full h-40 pointer-events-none z-10"
-        style={{ background: 'linear-gradient(to top, #000000, transparent)' }}
+      {/* ── Bottom fade ── */}
+      <div
+        className="absolute bottom-0 left-0 w-full h-32 pointer-events-none z-10"
+        style={{ background: 'linear-gradient(to top, #03050a 0%, transparent 100%)' }}
       />
     </section>
   );

@@ -22,7 +22,7 @@ export const portfolioData = {
   },
 
   about: {
-    description: "I engineer high-performance systems that bridge the gap between complex AI models and scalable web architectures. My expertise spans from designing distributed backend services with Spring Boot to crafting high-fidelity interactive interfaces with React. I focus on system reliability, architectural clarity, and the seamless integration of NLP-driven automation into production workflows.",
+    description: "I'm a CSE student who enjoys building practical full stack and AI projects that solve real problems. Most of my work is with React, Spring Boot, and PostgreSQL, and I learn best by shipping features, fixing bugs, and improving performance through hands-on project experience.",
     stats: [
       { value: "99.9%", label: "Stability Focus" },
       { value: "High", label: "System Throughput" }
@@ -43,11 +43,18 @@ export const portfolioData = {
       description: "Focusing on Software Architecture, Distributed Systems, and AI. Developing the technical foundation to build enterprise-grade software."
     },
     {
-      degree: "Pre-Engineering / Intermediate",
+      degree: "Intermediate",
       institution: "Board of Intermediate Education",
       period: "2022-2024",
-      achievements: ["Mathematics Excellence", "Analytical Honors"],
-      description: "Advanced study in Mathematics and Physics, establishing the analytical rigor required for computer science."
+      achievements: ["88.6%", "Science Stream"],
+      description: "Focused on Mathematics, Physics, and Chemistry, building a strong analytical foundation for engineering."
+    },
+    {
+      degree: "Secondary Education (10th)",
+      institution: "Ravindra Bharathi Public School",
+      period: "2021-2022",
+      achievements: ["90% Grade"],
+      description: "Completed matriculation with a focus on core scientific and mathematical principles."
     }
   ],
 
