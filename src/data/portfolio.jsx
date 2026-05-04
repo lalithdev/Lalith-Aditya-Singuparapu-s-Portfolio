@@ -108,7 +108,7 @@ export const portfolioData = {
 
   selectedWork: [
     {
-      title: "Distributed Project Portal",
+      title: "Project Management Portal",
       description: "Engineered a centralized portal for large-scale academic project submission and evaluation. Scaled the system to handle multi-stage workflows and automated teacher-student interactions.",
       tech: ["Node.js", "React", "PostgreSQL"],
       tags: ["System Design", "Backend Architecture"],
