@@ -23,7 +23,7 @@ export default function Education() {
     <section
       id="education"
       ref={containerRef}
-      className="section-padding relative overflow-hidden bg-black"
+      className="editorial-section relative overflow-hidden"
     >
       {/* Background Grid */}
       <div className="absolute inset-0 bg-grid opacity-10 pointer-events-none" />
@@ -37,7 +37,7 @@ export default function Education() {
             whileInView={{ opacity: 1, y: 0 }}
             className="font-mono text-[10px] uppercase tracking-[0.5em] text-[#4a5a80] mb-6"
           >
-            Development
+            Education
           </motion.p>
           <motion.h2
             initial={{ opacity: 0, y: 30 }}

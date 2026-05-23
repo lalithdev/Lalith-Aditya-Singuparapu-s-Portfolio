@@ -1,11 +1,21 @@
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { portfolioData } from '../../data/portfolio';
 import { FiArrowRight, FiShield, FiTrendingUp, FiSettings } from 'react-icons/fi';
+import { useRef } from 'react';
 
 const EXPO = [0.16, 1, 0.3, 1];
 
 export default function About() {
   const { about } = portfolioData;
+  const containerRef = useRef(null);
+  
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start end', 'end start'],
+  });
+
+  // Parallax effect - grid moves slower than content
+  const gridY = useTransform(scrollYProgress, [0, 1], [20, -20]);
 
   const quickPoints = [
     { text: 'I enjoy building useful products from simple ideas.', icon: <FiTrendingUp /> },
@@ -22,37 +32,55 @@ export default function About() {
 
   return (
     <section
+      ref={containerRef}
       id="about"
-      className="relative overflow-hidden py-16 lg:py-10 lg:min-h-[calc(100svh-88px)]"
-      style={{ scrollMarginTop: '110px', perspective: '1400px' }}
+      className="editorial-section relative overflow-hidden"
+      style={{
+        perspective: '1400px',
+        background: '#000000',
+        position: 'relative',
+      }}
     >
-      {/* Background orbs */}
-      <div className="glow-orb w-[700px] h-[700px] left-[-15%] top-[10%] opacity-20"
-        style={{ background: 'radial-gradient(circle, rgba(59,130,246,0.3) 0%, transparent 70%)' }} />
-      <div className="glow-orb w-[400px] h-[400px] right-[5%] bottom-[10%] opacity-15"
-        style={{ background: 'radial-gradient(circle, rgba(139,92,246,0.35) 0%, transparent 70%)' }} />
+      {/* Background orbs - minimal blue glow in corners */}
+      <div className="glow-orb w-[700px] h-[700px] left-[-15%] top-[10%] opacity-[0.16]"
+        style={{ background: 'radial-gradient(circle, rgba(59,130,246,0.35) 0%, transparent 70%)' }} />
+      <div className="glow-orb w-[400px] h-[400px] right-[5%] bottom-[10%] opacity-[0.12]"
+        style={{ background: 'radial-gradient(circle, rgba(59,130,246,0.28) 0%, transparent 70%)' }} />
 
-      {/* Grid background */}
-      <div className="absolute inset-0 bg-grid opacity-100 pointer-events-none" />
+      {/* Grid background with parallax depth - subtle blue grid */}
+      <motion.div 
+        style={{ y: gridY }}
+        className="absolute inset-0 pointer-events-none"
+      >
+        <div 
+          className="absolute inset-0 opacity-[0.05]"
+          style={{
+            backgroundImage: `linear-gradient(to right, rgba(59,130,246,0.18) 1px, transparent 1px), linear-gradient(to bottom, rgba(59,130,246,0.18) 1px, transparent 1px)`,
+            backgroundSize: '56px 56px',
+            maskImage: 'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.4) 15%, rgba(0,0,0,0.8) 50%, rgba(0,0,0,0.4) 85%, transparent 100%)',
+          }}
+        />
+      </motion.div>
 
       <motion.div
-        initial={{ opacity: 0, y: 80, rotateX: 12, rotateY: -4, scale: 0.96 }}
+        initial={{ opacity: 0, y: 70, rotateX: 10, rotateY: -3, scale: 0.985 }}
         whileInView={{ opacity: 1, y: 0, rotateX: 0, rotateY: 0, scale: 1 }}
-        viewport={{ once: false, amount: 0.35 }}
-        transition={{ duration: 0.95, ease: EXPO }}
-        className="max-w-[1400px] mx-auto px-6 relative z-10 w-full pt-4"
+        viewport={{ once: false, amount: 0.32 }}
+        transition={{ duration: 1.05, ease: EXPO }}
+        className="editorial-container max-w-[1400px] relative z-10 w-full"
         style={{ transformStyle: 'preserve-3d' }}
       >
 
         {/* Section eyebrow */}
         <motion.div
-          initial={{ opacity: 0, x: -20 }}
+          initial={{ opacity: 0, x: -18 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
-          className="flex items-center gap-3 mb-10 lg:mb-12"
+          transition={{ duration: 0.75, ease: EXPO }}
+          className="flex items-center gap-3 mb-8 lg:mb-10"
         >
-          <div className="w-10 h-px" style={{ background: 'linear-gradient(90deg, #3b82f6, #8b5cf6)' }} />
-          <span className="section-eyebrow">About Me</span>
+          <div className="w-10 h-px" style={{ background: 'linear-gradient(90deg, #60a5fa, #a78bfa)' }} />
+          <span className="section-eyebrow" style={{ color: '#93c5fd' }}>About Me</span>
         </motion.div>
 
         <div className="grid lg:grid-cols-12 gap-10 lg:gap-12 items-start">
@@ -60,7 +88,7 @@ export default function About() {
           {/* LEFT: Student snapshot */}
           <div className="lg:col-span-5 space-y-8 lg:space-y-10 order-1 lg:order-2">
             <div className="space-y-6">
-              <span className="font-mono text-[10px] uppercase tracking-[0.4em]" style={{ color: '#2a3a5a' }}>
+              <span className="font-mono text-[10px] uppercase tracking-[0.4em]" style={{ color: '#94a3b8' }}>
                 Personal Profile
               </span>
               <div className="space-y-4">
@@ -76,17 +104,17 @@ export default function About() {
                     <div
                       className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-all duration-300 group-hover:scale-110"
                       style={{
-                        background: 'rgba(8,16,40,0.70)',
-                        border: '1px solid rgba(59,130,246,0.18)',
+                        background: 'rgba(59, 130, 246, 0.15)',
+                        border: '1px solid rgba(59, 130, 246, 0.3)',
                         color: '#60a5fa',
-                        boxShadow: '0 4px 16px rgba(0,0,0,0.4)',
+                        boxShadow: '0 4px 12px rgba(36, 71, 255, 0.15)',
                       }}
                     >
                       {item.icon}
                     </div>
                     <span
                       className="font-display font-bold text-lg lg:text-xl tracking-tight transition-colors duration-300"
-                      style={{ color: '#c7d9ff' }}
+                      style={{ color: '#f0f4f8' }}
                     >
                       {item.text}
                     </span>
@@ -98,17 +126,17 @@ export default function About() {
             <div
               className="rounded-xl p-4"
               style={{
-                background: 'rgba(10,18,40,0.55)',
-                border: '1px solid rgba(59,130,246,0.14)',
-                borderTop: '1px solid rgba(100,160,255,0.22)',
+                background: 'rgba(59, 130, 246, 0.08)',
+                border: '1px solid rgba(59, 130, 246, 0.25)',
+                boxShadow: '0 4px 20px rgba(36, 71, 255, 0.1)',
               }}
             >
-              <span className="font-mono text-[9px] uppercase tracking-[0.34em] block mb-3" style={{ color: '#2a3a5a' }}>
+              <span className="font-mono text-[9px] uppercase tracking-[0.34em] block mb-3" style={{ color: '#93c5fd' }}>
                 Currently
               </span>
               <ul className="space-y-2 m-0 pl-5">
                 {currentlyDoing.map((item) => (
-                  <li key={item} className="font-body text-sm leading-relaxed" style={{ color: '#9fb2d9' }}>
+                  <li key={item} className="font-body text-sm leading-relaxed" style={{ color: '#cbd5e1' }}>
                     {item}
                   </li>
                 ))}
@@ -124,11 +152,16 @@ export default function About() {
               viewport={{ once: true }}
               transition={{ duration: 0.9, ease: EXPO }}
               className="font-display font-black tracking-tighter leading-[0.92]"
-              style={{ fontSize: 'clamp(2.3rem, 5vw, 4.4rem)', color: '#e8f0ff' }}
+              style={{ fontSize: 'clamp(2.3rem, 5vw, 4.4rem)', color: '#f0f4f8' }}
             >
               Learning, Building,
               <br />
-              <span className="text-gradient">and Growing Daily</span>
+              <span style={{ 
+                background: 'linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text'
+              }}>and Growing Daily</span>
             </motion.h2>
 
             <motion.div
@@ -138,7 +171,7 @@ export default function About() {
               transition={{ delay: 0.2, duration: 0.9, ease: EXPO }}
               className="space-y-6"
             >
-              <p className="font-body leading-relaxed max-w-2xl" style={{ fontSize: 'clamp(1rem, 1.4vw, 1.15rem)', color: '#7a8fbb' }}>
+              <p className="font-body leading-relaxed max-w-2xl" style={{ fontSize: 'clamp(1rem, 1.4vw, 1.15rem)', color: '#cbd5e1' }}>
                 {about.description}
               </p>
 
@@ -147,17 +180,17 @@ export default function About() {
                   href="#contact"
                   whileHover={{ x: 8 }}
                   className="inline-flex items-center gap-5 font-display font-bold group no-underline"
-                  style={{ color: '#e8f0ff' }}
+                  style={{ color: '#93c5fd' }}
                 >
                   <span
                     className="text-sm tracking-[0.28em] uppercase pb-2"
-                    style={{ borderBottom: '1px solid #3b82f6' }}
+                    style={{ borderBottom: '1px solid #60a5fa' }}
                   >
                     Let's Connect
                   </span>
                   <FiArrowRight
                     className="w-5 h-5 group-hover:translate-x-2 transition-transform"
-                    style={{ color: '#3b82f6' }}
+                    style={{ color: '#60a5fa' }}
                   />
                 </motion.a>
               </div>

@@ -1,261 +1,599 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { useEffect, useState, useRef, useCallback } from 'react';
-import { FiArrowUpRight, FiGithub, FiExternalLink, FiServer, FiCpu, FiShield, FiLayout, FiDatabase, FiCloud, FiZap } from 'react-icons/fi';
+import { useState, useCallback } from 'react';
+
+import {
+  FiArrowUpRight,
+  FiGithub,
+  FiExternalLink,
+  FiServer,
+  FiCpu,
+  FiShield,
+  FiLayout,
+  FiDatabase,
+  FiCloud,
+  FiZap,
+  FiX,
+} from 'react-icons/fi';
+
 import certifyMeImg from '../../assets/images/certifymeprojectimage.png';
+import portfolioImg from '../../assets/images/portfolioimage.png';
 import manageProjectImg from '../../assets/images/manageyourprojectprojectimage.png';
 
 const EXPO = [0.16, 1, 0.3, 1];
-const AUTO_INTERVAL = 4000; // Slightly slower for larger cards
 
 const PROJECTS = [
   {
     num: '01',
     category: 'System Architecture',
-    title: 'CertifyMe: Enterprise Tracking System',
-    tech: 'React, Spring Boot, Hibernate, PostgreSQL and Tailwind CSS',
+    title: 'CertifyMe: Certification Tracking Platform',
+    tech: 'Spring Boot, ReactJS, PostgreSQL, REST APIs',
+    period: 'Feb 2026 – Present',
     image: certifyMeImg,
     url: 'https://certifymeonline.vercel.app/',
-    github: 'https://github.com/lalithdev',
-    accent: '#3b82f6',
-    context: 'Architected a scalable certification tracking platform for enterprise-level academic monitoring. Engineered a robust backend using Spring Boot and Hibernate, supported by a high-performance React-driven management layer.',
+    github: 'https://github.com/lalithdev/CertifyMe-Certification-Tracking-Platform.git',
+    accent: '#2447FF',
+    highlights: [
+      'Production-ready platform for 4000+ students with certification workflows and approval pipelines.',
+      'RBAC for students, faculty, and admins with real-time status updates.',
+    ],
+    context:
+      'Built and deployed a production-ready full-stack platform supporting certification workflows and approval pipelines for 4000+ students.',
     metrics: [
       { label: 'Status', value: 'Live' },
-      { label: 'Scale', value: 'Enterprise' },
-      { label: 'Role', value: 'Lead Architect' }
+      { label: 'Scale', value: '4000+ Users' },
+      { label: 'Role', value: 'Full Stack' },
     ],
     features: [
-      { text: 'Architected real-time tracking workflows for thousands of concurrent users.', icon: <FiServer /> },
-      { text: 'Engineered automated certification verification systems reducing manual load by 70%.', icon: <FiCpu /> },
-      { text: 'Designed a distributed database schema for multi-tenant administrative monitoring.', icon: <FiDatabase /> },
-      { text: 'Implemented enterprise-grade security protocols for data integrity.', icon: <FiShield /> }
-    ]
+      {
+        text: 'Role-based access control for students, faculty, and administrators with secure validation and approval tracking.',
+        icon: <FiShield />,
+      },
+      {
+        text: 'Real-time certification status updates across the full approval pipeline.',
+        icon: <FiServer />,
+      },
+      {
+        text: 'Optimized PostgreSQL queries, reporting pipelines, and dashboard performance via indexing and query tuning.',
+        icon: <FiDatabase />,
+      },
+      {
+        text: 'Efficient database workflows for high-volume academic certification monitoring.',
+        icon: <FiCpu />,
+      },
+    ],
   },
+
   {
     num: '02',
+    category: 'Full Stack SaaS',
+    title: 'BookMyCare: Patient Appointment Booking System',
+    tech: 'Spring Boot, PostgreSQL, ReactJS, REST APIs',
+    period: '2026 – Present',
+    image: null,
+    url: '#',
+    github: 'https://github.com/lalithdev/BookMyCare-Patient-Appointment-Booking-System.git',
+    accent: '#2447FF',
+    highlights: [
+      'Scalable appointment system with patient registration, scheduling, and secure role-based workflows.',
+      'Production-oriented Spring Boot + PostgreSQL backend with auth and optimized relationships.',
+    ],
+    context:
+      'Built a scalable full-stack patient appointment system with patient registration, doctor/admin modules, appointment scheduling, and secure role-based workflows.',
+    metrics: [
+      { label: 'Status', value: 'In Development' },
+      { label: 'Stack', value: 'Full Stack' },
+      { label: 'Role', value: 'Architect' },
+    ],
+    features: [
+      {
+        text: 'Patient registration, doctor/admin modules, and structured appointment scheduling.',
+        icon: <FiServer />,
+      },
+      {
+        text: 'Authentication, authorization, and optimized PostgreSQL database relationships.',
+        icon: <FiShield />,
+      },
+      {
+        text: 'Appointment booking logic and admin workflows via REST APIs.',
+        icon: <FiDatabase />,
+      },
+      {
+        text: 'Conflict-free scheduling focused on real-world hospital management.',
+        icon: <FiZap />,
+      },
+    ],
+  },
+
+  {
+    num: '03',
     category: 'Platform Engineering',
-    title: 'Distributed Project Portal',
-    tech: 'Node.js, React and PostgreSQL',
+    title: 'ManageYourProject: Project Management Portal',
+    tech: 'Node.js, ReactJS, PostgreSQL, REST APIs',
+    period: 'Nov 2025 – Present',
     image: manageProjectImg,
     url: 'https://manageyourproject.vercel.app',
-    github: 'https://github.com/lalithdev',
-    accent: '#818cf8',
-    context: 'Engineered a centralized portal for large-scale academic project submission and evaluation. Scaled the system to handle multi-stage workflows and automated teacher-student interactions.',
+    github: 'https://github.com/lalithdev/FEDF-P35-PROJECT-MANAGEMENT-PORTAL.git',
+    accent: '#2447FF',
+    highlights: [
+      'Scalable submission and evaluation platform with end-to-end workflow automation.',
+      'Backend APIs for submissions, mentor reviews, faculty approvals, and tracking.',
+    ],
+    context:
+      'Built a scalable project submission and evaluation platform for students and faculty with end-to-end workflow automation and structured approval pipelines.',
     metrics: [
       { label: 'Status', value: 'Production' },
       { label: 'Scale', value: 'Academic' },
-      { label: 'Role', value: 'Full Stack Engineer' }
+      { label: 'Role', value: 'Full Stack' },
     ],
     features: [
-      { text: 'Built complex multi-role authentication and authorization workflows.', icon: <FiShield /> },
-      { text: 'Optimized PostgreSQL queries for high-volume project submissions.', icon: <FiDatabase /> },
-      { text: 'Designed a seamless React interface for document management.', icon: <FiLayout /> },
-      { text: 'Integrated automated notification systems for workflow updates.', icon: <FiCloud /> }
-    ]
+      {
+        text: 'Project submission, mentor reviews, faculty approvals, and evaluation tracking.',
+        icon: <FiLayout />,
+      },
+      {
+        text: 'Academic workflow management through structured REST APIs.',
+        icon: <FiServer />,
+      },
+      {
+        text: 'Normalized PostgreSQL schema for reliable project data modeling.',
+        icon: <FiDatabase />,
+      },
+      {
+        text: 'Optimized backend request handling for faster tracking and reporting.',
+        icon: <FiCloud />,
+      },
+    ],
   },
+
   {
-    num: '03',
+    num: '04',
     category: 'Identity Design',
-    title: 'Personal Brand Architecture',
-    tech: 'React, Framer Motion, TailwindCSS and Vite',
-    image: null,
+    title: 'Professional Portfolio',
+    tech: 'React, Framer Motion, Tailwind, Vite',
+    period: '2025 – Present',
+    image: portfolioImg,
     url: 'https://lalithdevportfolio.vercel.app',
     github: 'https://github.com/lalithdev',
-    accent: '#22d3ee',
-    context: 'Designed a world-class, 3D interactive portfolio focusing on spatial UI and cinematic storytelling. Engineered with modern React architecture for extreme performance and luxury perception.',
+    accent: '#2447FF',
+    highlights: [
+      'Interactive portfolio with spatial UI, motion design, and performance-focused React architecture.',
+      'Custom design system with cinematic sections for projects, skills, and certifications.',
+    ],
+    context:
+      'Designed and engineered a high-performance personal portfolio with spatial UI, Framer Motion animations, and a cohesive dark-theme design system.',
     metrics: [
       { label: 'Status', value: 'Live' },
-      { label: 'Scale', value: 'Global' },
-      { label: 'Role', value: 'UI Architect' }
+      { label: 'Deploy', value: 'Vercel' },
+      { label: 'Role', value: 'UI Architect' },
     ],
     features: [
-      { text: 'Implemented custom WebGL/Canvas background systems.', icon: <FiCpu /> },
-      { text: 'Engineered complex Framer Motion animation orchestration.', icon: <FiLayout /> },
-      { text: 'Optimized asset loading for sub-second visual rendering.', icon: <FiZap /> },
-      { text: 'Crafted a custom design system for consistent luxury aesthetic.', icon: <FiShield /> }
-    ]
+      {
+        text: 'Custom animated backgrounds and scroll-driven section layouts.',
+        icon: <FiCpu />,
+      },
+      {
+        text: 'Framer Motion orchestration for smooth page transitions and micro-interactions.',
+        icon: <FiLayout />,
+      },
+      {
+        text: 'Optimized asset loading for fast first paint and smooth navigation.',
+        icon: <FiZap />,
+      },
+      {
+        text: 'Responsive layouts for projects, skills, and certification showcases.',
+        icon: <FiShield />,
+      },
+    ],
   },
 ];
 
-function ProjectCard({ project, isActive, onKnowMore }) {
+function splitProjectTitle(title) {
+  const [primary, secondary] = title.split(/:\s+/, 2);
+
+  return {
+    primary: primary?.trim() || title,
+    secondary: secondary?.trim() || '',
+  };
+}
+
+/* ─── PROJECT CARD ─────────────────────────────────────────── */
+
+function ProjectRow({
+  project,
+  onKnowMore,
+  isActive,
+}) {
   const [imgHovered, setImgHovered] = useState(false);
 
   return (
-    <motion.div
-      className="shrink-0 relative flex flex-col group"
-      style={{
-        width: '420px',
-        height: '640px', // Increased height
-        borderRadius: '32px',
-        overflow: 'hidden',
-        background: 'linear-gradient(160deg, rgba(8,16,40,0.98) 0%, rgba(5,10,25,0.95) 100%)',
-        border: '1px solid rgba(59,130,246,0.12)',
-        borderTop: `1px solid ${project.accent}25`,
-        backdropFilter: 'blur(32px)',
-        boxShadow: isActive
-          ? `0 30px 80px rgba(0,0,0,0.80), 0 0 60px ${project.accent}15, inset 0 1px 0 rgba(255,255,255,0.08)`
-          : '0 12px 40px rgba(0,0,0,0.60), inset 0 1px 0 rgba(255,255,255,0.04)',
-        transition: 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
-        transform: isActive ? 'scale(1)' : 'scale(0.95)',
-        opacity: isActive ? 1 : 0.6,
+    <motion.article
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{
+        duration: 0.7,
+        ease: EXPO,
       }}
-      whileHover={{
-        y: -20, // Slightly more lift
-        scale: isActive ? 1.02 : 0.98,
-        boxShadow: `0 40px 100px rgba(0,0,0,0.90), 0 0 80px ${project.accent}25`,
-        filter: 'brightness(1.1)', // Light up on hover
+      className="
+        group
+        relative
+        overflow-hidden
+        rounded-[28px]
+        border
+        border-white/[0.06]
+        bg-[#050816]
+        p-6
+        md:p-7
+        flex
+        flex-col
+        h-full
+        transition-transform
+        duration-500
+        hover:-translate-y-2
+      "
+      style={{
+        background: `
+          linear-gradient(
+            180deg,
+            rgba(11,16,45,0.98) 0%,
+            rgba(7,10,30,0.98) 45%,
+            rgba(3,5,18,1) 100%
+          )
+        `,
+        boxShadow: `
+          0 0 0 1px rgba(36,71,255,0.08),
+          0 30px 80px rgba(0,0,0,0.55),
+          0 0 120px rgba(36,71,255,0.08)
+        `,
       }}
     >
-      {/* ── Top Header ── */}
-      <div className="flex items-start justify-between px-8 pt-10 pb-4">
-        <div className="relative">
-          <div
-            className="absolute w-8 h-8 rounded-full blur-xl"
-            style={{ background: project.accent, opacity: 0.6, top: '-8px', left: '8px' }}
-          />
-          <span
-            className="font-display font-black relative"
-            style={{ fontSize: '4.5rem', letterSpacing: '-0.05em', lineHeight: 1, color: 'rgba(232,240,255,0.95)' }}
-          >
-            {project.num}
-          </span>
-        </div>
+      {/* Inner glow overlay */}
+      <div
+        className="
+          absolute
+          inset-0
+          opacity-40
+          pointer-events-none
+          rounded-[28px]
+        "
+        style={{
+          background: `
+            radial-gradient(
+              circle at top left,
+              rgba(80,120,255,0.18),
+              transparent 40%
+            )
+          `,
+        }}
+      />
+
+      {/* Background number watermark */}
+      <div
+        className="
+          absolute
+          -top-4
+          left-4
+          pointer-events-none
+          select-none
+          opacity-20
+        "
+      >
+        <span className="font-display font-black text-8xl md:text-[120px] leading-none text-transparent"
+              style={{ WebkitTextStroke: '2px rgba(255,255,255,0.3)' }}>
+          {project.num}
+        </span>
+      </div>
+
+      {/* Header: Number + Badge */}
+      <div className="relative z-10 flex items-start justify-between mb-6">
+        <span className="font-display font-black text-5xl md:text-6xl tracking-tighter text-white">
+          {project.num}
+        </span>
+
         <div
-          className="px-4 py-1.5 rounded-full backdrop-blur-xl border border-white/5 mt-3"
+          className="
+            px-4
+            py-2
+            rounded-full
+            border
+            border-[#00e5ff]/30
+            text-[10px]
+            uppercase
+            tracking-[0.3em]
+            font-mono
+            text-[#00e5ff]
+            bg-[#00e5ff]/5
+          "
+        >
+          WEB
+        </div>
+      </div>
+
+      {/* Content area */}
+      <div className="relative z-10 flex flex-col flex-1">
+        {(() => {
+          const { primary, secondary } = splitProjectTitle(project.title);
+
+          return (
+            <h3
+              className="
+                max-w-[420px]
+                font-display
+                text-[22px]
+                md:text-[24px]
+                leading-[1.1]
+                font-bold
+                tracking-tight
+                text-white
+                mb-4
+              "
+            >
+              <span className="block">{primary}</span>
+              {secondary ? (
+                <span className="block mt-1 text-[18px] md:text-[20px] text-white/85 leading-[1.15]">
+                  {secondary}
+                </span>
+              ) : null}
+            </h3>
+          );
+        })()}
+
+        <div className="mb-4">
+          <p
+            className="
+              font-mono
+              text-[10px]
+              uppercase
+              tracking-[0.35em]
+              mb-3
+            "
+            style={{
+              color: 'var(--color-accent)',
+            }}
+          >
+            TECHSTACK USED
+          </p>
+
+          <p className="editorial-body text-sm leading-[1.8]">
+            {project.tech}
+          </p>
+        </div>
+
+        <p
+          className="
+            font-mono
+            text-[10px]
+            uppercase
+            tracking-[0.35em]
+            mb-5
+          "
           style={{
-            background: 'rgba(255, 255, 255, 0.03)',
-            boxShadow: 'inset 0 0 10px rgba(255,255,255,0.02)'
+            color: 'var(--color-accent)',
           }}
         >
-          <span
-            className="font-display font-bold text-[10px] uppercase tracking-[0.3em]"
-            style={{ color: project.accent, opacity: 0.9 }}
-          >
-            WEB
-          </span>
-        </div>
-      </div>
+          {project.period}
+        </p>
 
-      {/* ── Title & Content ── */}
-      <div className="px-8 pb-6">
-        <h3
-          className="font-display font-black leading-[1.1] mb-5"
-          style={{ fontSize: '1.75rem', color: '#e8f0ff', letterSpacing: '-0.03em' }}
-        >
-          {project.title}
-        </h3>
-
-        <div className="space-y-4">
-          <div>
-            <p className="font-mono text-[10px] uppercase tracking-[0.4em] mb-2" style={{ color: 'rgba(122,143,187,0.4)' }}>
-              Techstack used
-            </p>
-            <p className="font-body text-[14px] leading-relaxed" style={{ color: 'rgba(122,143,187,0.8)' }}>
-              {project.tech}
-            </p>
-          </div>
-        </div>
-      </div>
-
-      {/* ── Screenshot container ── */}
-      <div
-        className="mx-8 mt-auto rounded-2xl overflow-hidden relative cursor-pointer group/img"
-        style={{ height: '220px', border: '1px solid rgba(59,130,246,0.1)' }}
-        onMouseEnter={() => setImgHovered(true)}
-        onMouseLeave={() => setImgHovered(false)}
-        onClick={() => project.url && window.open(project.url, '_blank', 'noreferrer')}
-      >
-        {project.image ? (
-          <motion.img
-            src={project.image}
-            alt={project.title}
-            className="w-full h-full object-cover object-top"
-            animate={{ scale: imgHovered ? 1.08 : 1 }}
-            transition={{ duration: 0.6, ease: EXPO }}
-          />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center bg-slate-900/40">
-            <span className="font-display font-black text-5xl opacity-20" style={{ color: project.accent }}>LA</span>
-          </div>
-        )}
-
-        {/* Advanced Dual Redirect Portal */}
-        <AnimatePresence>
-          {imgHovered && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="absolute inset-0 flex items-center justify-center bg-blue-950/40 backdrop-blur-[6px] z-30"
+        <ul className="space-y-3 mb-6">
+          {project.highlights.map((line) => (
+            <li
+              key={line}
+              className="
+                editorial-body
+                text-sm
+                pl-5
+                relative
+                leading-[1.7]
+              "
             >
-              <div className="flex gap-4">
-                {/* GitHub Access */}
-                <motion.a
+              <span
+                className="
+                  absolute
+                  left-0
+                  top-[0.72em]
+                  w-[6px]
+                  h-[6px]
+                  rounded-full
+                  bg-[#36d7ff]
+                "
+              />
+
+              {line}
+            </li>
+          ))}
+        </ul>
+
+        {/* Image — desktop screenshot frame */}
+        <div
+          className="
+            relative
+            mt-auto
+            overflow-hidden
+            rounded-[18px]
+            border
+            border-white/[0.06]
+            cursor-pointer
+            group/img
+          "
+          style={{ aspectRatio: '16 / 9' }}
+          onMouseEnter={() => setImgHovered(true)}
+          onMouseLeave={() => setImgHovered(false)}
+          onClick={() =>
+            project.url &&
+            project.url !== '#' &&
+            window.open(project.url, '_blank', 'noreferrer')
+          }
+        >
+          {project.image ? (
+            <motion.img
+              src={project.image}
+              alt={project.title}
+              className="
+                w-full
+                h-full
+                object-cover
+                object-top
+                grayscale-[20%]
+                group-hover/img:grayscale-0
+                transition-all
+                duration-700
+              "
+              animate={{
+                scale: imgHovered ? 1.04 : 1,
+              }}
+              transition={{
+                duration: 0.7,
+                ease: EXPO,
+              }}
+            />
+          ) : (
+            <div
+              className="
+                w-full
+                h-full
+                flex
+                items-center
+                justify-center
+              "
+              style={{
+                background: '#0a0a0a',
+              }}
+            >
+              <span className="editorial-num-bg opacity-40">
+                LA
+              </span>
+            </div>
+          )}
+
+          <AnimatePresence>
+            {imgHovered && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="
+                  absolute
+                  inset-0
+                  flex
+                  items-center
+                  justify-center
+                  gap-4
+                "
+                style={{
+                  background: 'rgba(5,5,5,0.55)',
+                }}
+              >
+                <a
                   href={project.github}
                   target="_blank"
                   rel="noreferrer"
-                  initial={{ x: -20, opacity: 0 }}
-                  animate={{ x: 0, opacity: 1 }}
-                  transition={{ delay: 0.1, duration: 0.4, ease: EXPO }}
-                  className="group/icon relative w-16 h-16 rounded-2xl flex items-center justify-center overflow-hidden"
-                  style={{
-                    background: 'rgba(232,240,255,0.05)',
-                    border: '1px solid rgba(255,255,255,0.1)',
-                    backdropFilter: 'blur(12px)',
-                  }}
+                  className="
+                    w-12
+                    h-12
+                    flex
+                    items-center
+                    justify-center
+                    border
+                    border-white/15
+                    backdrop-blur-md
+                    bg-white/[0.04]
+                    rounded-full
+                  "
                   onClick={(e) => e.stopPropagation()}
                 >
-                  <div className="absolute inset-0 bg-white opacity-0 group-hover/icon:opacity-100 transition-opacity duration-300" />
-                  <FiGithub className="w-6 h-6 text-white group-hover/icon:text-black transition-colors relative z-10" />
-                </motion.a>
+                  <FiGithub className="w-5 h-5 text-white" />
+                </a>
 
-                {/* Live System Access */}
-                <motion.a
-                  href={project.url}
-                  target="_blank"
-                  rel="noreferrer"
-                  initial={{ x: 20, opacity: 0 }}
-                  animate={{ x: 0, opacity: 1 }}
-                  transition={{ delay: 0.1, duration: 0.4, ease: EXPO }}
-                  className="group/icon relative w-16 h-16 rounded-2xl flex items-center justify-center overflow-hidden"
-                  style={{
-                    background: 'rgba(232,240,255,0.05)',
-                    border: '1px solid rgba(255,255,255,0.1)',
-                    backdropFilter: 'blur(12px)',
-                  }}
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <div className="absolute inset-0 bg-white opacity-0 group-hover/icon:opacity-100 transition-opacity duration-300" />
-                  <FiExternalLink className="w-6 h-6 text-white group-hover/icon:text-black transition-colors relative z-10" />
-                </motion.a>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
+                {project.url !== '#' && (
+                  <a
+                    href={project.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="
+                      w-12
+                      h-12
+                      flex
+                      items-center
+                      justify-center
+                      border
+                      border-white/15
+                      backdrop-blur-md
+                      bg-white/[0.04]
+                      rounded-full
+                    "
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <FiExternalLink className="w-5 h-5 text-white" />
+                  </a>
+                )}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
 
-      {/* ── Know More Button — Now triggers on hover/click ── */}
-      <div className="px-8 py-8 flex justify-center">
-        <button
-          onClick={onKnowMore}
-          onMouseEnter={onKnowMore} // Trigger detail view on hover as requested
-          className="group/km flex items-center gap-3 font-display font-bold text-[10px] uppercase tracking-[0.4em] transition-all duration-300"
-          style={{ color: project.accent }}
-        >
-          <span className="relative">
-            Know More
-            <span className="absolute -bottom-1 left-0 w-0 h-px bg-current transition-all duration-300 group-hover/km:w-full" />
-          </span>
-          <motion.div
-            animate={{ x: [0, 5, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+        {/* Know More — below the image */}
+        <div className="pt-5">
+          <button
+            type="button"
+            onClick={onKnowMore}
+            className="
+              group/km
+              inline-flex
+              items-center
+              gap-3
+              font-display
+              font-bold
+              text-[10px]
+              uppercase
+              tracking-[0.4em]
+              transition-colors
+            "
+            style={{
+              color: 'var(--color-accent)',
+            }}
           >
-            <FiArrowUpRight className="w-4 h-4" />
-          </motion.div>
-        </button>
+            <span className="relative">
+              {isActive ? 'Close' : 'Know More'}
+
+              <span
+                className="
+                  absolute
+                  -bottom-1
+                  left-0
+                  w-0
+                  h-px
+                  bg-current
+                  transition-all
+                  duration-300
+                  group-hover/km:w-full
+                "
+              />
+            </span>
+
+            <motion.span
+              animate={{
+                x: [0, 5, 0],
+              }}
+              transition={{
+                duration: 1.5,
+                repeat: Infinity,
+                ease: 'easeInOut',
+              }}
+            >
+              {isActive ? (
+                <FiX className="w-4 h-4" />
+              ) : (
+                <FiArrowUpRight className="w-4 h-4" />
+              )}
+            </motion.span>
+          </button>
+        </div>
       </div>
-    </motion.div>
+    </motion.article>
   );
 }
+
+/* ─── DETAIL VIEW ──────────────────────────────────────────── */
 
 function DetailView({ project }) {
   if (!project) return null;
@@ -266,78 +604,200 @@ function DetailView({ project }) {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 50 }}
       transition={{ duration: 0.8, ease: EXPO }}
-      className="mt-24 grid lg:grid-cols-12 gap-12 items-start"
+      className="
+        mt-24
+        rounded-[36px]
+        border
+        border-white/[0.06]
+        p-8
+        md:p-12
+        bg-[#050816]
+        grid
+        lg:grid-cols-12
+        gap-12
+        lg:gap-16
+        items-start
+      "
+      style={{
+        background:
+          'linear-gradient(180deg, rgba(10,15,40,0.98) 0%, rgba(3,6,20,1) 100%)',
+        boxShadow:
+          '0 10px 40px rgba(0,0,0,0.35)',
+      }}
     >
-      {/* Left Metadata */}
-      <div className="lg:col-span-4 space-y-12">
+      <div className="lg:col-span-4 space-y-10">
         <div>
-          <span className="font-mono text-[10px] uppercase tracking-[0.4em] mb-4 block" style={{ color: project.accent }}>
+          <span className="editorial-eyebrow block mb-4">
             System Context
           </span>
-          <h2 className="font-display font-black text-4xl mb-6 tracking-tighter" style={{ color: '#e8f0ff', lineHeight: 0.9 }}>
+
+          <h2 className="editorial-heading editorial-heading-md mb-3">
             {project.title}
           </h2>
-          <p className="font-body text-base leading-relaxed" style={{ color: 'rgba(122,143,187,0.7)' }}>
+
+          <p
+            className="
+              font-mono
+              text-[10px]
+              uppercase
+              tracking-widest
+              mb-6
+            "
+            style={{
+              color: 'var(--color-accent)',
+            }}
+          >
+            {project.period}
+          </p>
+
+          <p className="editorial-body text-base">
             {project.context}
           </p>
         </div>
 
-        {/* Action Buttons */}
-        <div className="flex flex-wrap gap-6 pt-4">
-          <a href={project.github} target="_blank" rel="noreferrer" className="flex items-center gap-2 font-display font-black text-[10px] uppercase tracking-[0.3em] group" style={{ color: '#c7d9ff' }}>
-            <FiGithub className="w-4 h-4 group-hover:text-blue-400 transition-colors" />
-            <span className="border-b border-transparent group-hover:border-blue-400/50 transition-all">Repository</span>
+        <div className="flex flex-wrap gap-6">
+          <a
+            href={project.github}
+            target="_blank"
+            rel="noreferrer"
+            className="
+              editorial-link
+              inline-flex
+              items-center
+              gap-2
+            "
+          >
+            <FiGithub className="w-4 h-4" />
+            Repository
           </a>
-          <a href={project.url} target="_blank" rel="noreferrer" className="flex items-center gap-2 font-display font-black text-[10px] uppercase tracking-[0.3em] group" style={{ color: '#c7d9ff' }}>
-            <FiExternalLink className="w-4 h-4 group-hover:text-cyan-400 transition-colors" />
-            <span className="border-b border-transparent group-hover:border-cyan-400/50 transition-all">Live System</span>
-          </a>
+
+          {project.url !== '#' && (
+            <a
+              href={project.url}
+              target="_blank"
+              rel="noreferrer"
+              className="
+                editorial-link
+                inline-flex
+                items-center
+                gap-2
+              "
+            >
+              <FiExternalLink className="w-4 h-4" />
+              Live System
+            </a>
+          )}
         </div>
 
-        {/* Metrics Card */}
-        <div
-          className="p-8 rounded-3xl space-y-8"
-          style={{
-            background: 'rgba(8,16,40,0.60)',
-            border: '1px solid rgba(59,130,246,0.12)',
-            backdropFilter: 'blur(20px)',
-          }}
-        >
+        <div className="editorial-panel p-8 space-y-6">
           {project.metrics.map((m, i) => (
-            <div key={i} className="flex justify-between items-end pb-4 border-b border-blue-900/20">
-              <span className="font-mono text-[10px] uppercase tracking-widest" style={{ color: 'rgba(122,143,187,0.4)' }}>{m.label}</span>
-              <span className="font-display font-black text-lg" style={{ color: '#e8f0ff' }}>{m.value}</span>
+            <div
+              key={i}
+              className="
+                flex
+                justify-between
+                items-end
+                pb-4
+                border-b
+                border-white/[0.06]
+              "
+            >
+              <span
+                className="editorial-eyebrow"
+                style={{
+                  opacity: 0.6,
+                }}
+              >
+                {m.label}
+              </span>
+
+              <span
+                className="
+                  font-display
+                  font-bold
+                  text-lg
+                "
+                style={{
+                  color: '#f5f5f5',
+                }}
+              >
+                {m.value}
+              </span>
             </div>
           ))}
-          <div className="flex items-center gap-3">
-            <div className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_10px_rgba(34,211,238,0.8)]" />
-            <span className="font-mono text-[10px] uppercase tracking-[0.3em]" style={{ color: 'rgba(34,211,238,0.8)' }}>System Active</span>
-          </div>
         </div>
       </div>
 
-      {/* Right Content */}
-      <div className="lg:col-span-8 space-y-12">
-        {/* Main Preview */}
-        <div className="relative rounded-3xl overflow-hidden shadow-[0_40px_100px_-20px_rgba(0,0,0,0.9)] border border-blue-900/30">
+      <div className="lg:col-span-8 space-y-10">
+        <div
+          className="
+            relative
+            aspect-video
+            overflow-hidden
+            editorial-panel
+            rounded-[28px]
+          "
+        >
           {project.image ? (
-            <img src={project.image} alt={project.title} className="w-full h-auto" />
+            <img
+              src={project.image}
+              alt={project.title}
+              className="
+                w-full
+                h-full
+                object-cover
+                object-top
+              "
+            />
           ) : (
-            <div className="aspect-video bg-slate-900/60 flex items-center justify-center">
-              <span className="font-display font-black text-9xl opacity-10" style={{ color: project.accent }}>LA</span>
+            <div
+              className="
+                w-full
+                h-full
+                flex
+                items-center
+                justify-center
+              "
+              style={{
+                background: '#0a0a0a',
+              }}
+            >
+              <span className="editorial-num-bg">
+                LA
+              </span>
             </div>
           )}
-          <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-slate-950/80 via-transparent to-transparent" />
         </div>
 
-        {/* Features Grid */}
-        <div className="grid md:grid-cols-2 gap-8">
+        <div className="grid md:grid-cols-2 gap-6">
           {project.features.map((f, i) => (
-            <div key={i} className="flex gap-5 group">
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-transform group-hover:scale-110" style={{ background: 'rgba(59,130,246,0.1)', color: project.accent, border: `1px solid ${project.accent}20` }}>
+            <div
+              key={i}
+              className="
+                flex
+                gap-4
+                editorial-panel
+                p-5
+              "
+            >
+              <div
+                className="
+                  w-10
+                  h-10
+                  flex
+                  items-center
+                  justify-center
+                  shrink-0
+                "
+                style={{
+                  color: 'var(--color-accent)',
+                  border: '1px solid var(--color-border)',
+                }}
+              >
                 {f.icon}
               </div>
-              <p className="font-body text-sm leading-relaxed" style={{ color: 'rgba(122,143,187,0.7)' }}>
+
+              <p className="editorial-body text-sm">
                 {f.text}
               </p>
             </div>
@@ -348,126 +808,152 @@ function DetailView({ project }) {
   );
 }
 
+/* ─── MAIN PROJECTS SECTION ────────────────────────────────── */
+
 export default function Projects() {
   const [current, setCurrent] = useState(0);
-  const [paused, setPaused] = useState(false);
   const [showDetail, setShowDetail] = useState(false);
-  const timerRef = useRef(null);
-  const total = PROJECTS.length;
 
-  const advance = useCallback(() => {
-    if (!showDetail && total > 1) { // Only advance if multiple boxes exist
-      setCurrent((prev) => (prev + 1) % total);
-    }
-  }, [total, showDetail]);
+  const handleKnowMore = useCallback(
+    (idx) => {
+      if (current === idx && showDetail) {
+        setShowDetail(false);
+        return;
+      }
 
-  const goPrev = () => {
-    setCurrent((prev) => (prev - 1 + total) % total);
-    setShowDetail(false);
-    resetTimer();
-  };
+      setCurrent(idx);
+      setShowDetail(true);
 
-  const goNext = () => {
-    advance();
-    setShowDetail(false);
-    resetTimer();
-  };
+      setTimeout(() => {
+        const detailEl = document.getElementById(
+          'project-detail-view'
+        );
 
-  const resetTimer = () => {
-    clearInterval(timerRef.current);
-    if (!paused && !showDetail && total > 1) {
-      timerRef.current = setInterval(advance, AUTO_INTERVAL);
-    }
-  };
-
-  useEffect(() => {
-    if (paused || showDetail || total <= 1) return;
-    timerRef.current = setInterval(advance, AUTO_INTERVAL);
-    return () => clearInterval(timerRef.current);
-  }, [advance, paused, showDetail, total]);
-
-  const goTo = (idx) => {
-    setCurrent(idx);
-    setShowDetail(false);
-    clearInterval(timerRef.current);
-    if (!paused) timerRef.current = setInterval(advance, AUTO_INTERVAL);
-  };
-
-  const offset = -current * (420 + 32); // Card width + Gap
+        if (detailEl) {
+          detailEl.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start',
+          });
+        }
+      }, 100);
+    },
+    [current, showDetail]
+  );
 
   return (
-    <section id="projects" className="section-padding relative overflow-hidden" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}>
-      <div className="glow-orb w-[800px] h-[800px] right-[-20%] top-[-10%] opacity-20" style={{ background: 'radial-gradient(circle, rgba(59,130,246,0.3) 0%, transparent 70%)' }} />
-      <div className="glow-orb w-[600px] h-[600px] left-[-15%] bottom-[0%] opacity-15" style={{ background: 'radial-gradient(circle, rgba(139,92,246,0.2) 0%, transparent 70%)' }} />
+    <section
+      id="projects"
+      className="editorial-section relative"
+    >
+      <div
+        className="
+          editorial-glow
+          w-[560px]
+          h-[560px]
+          left-[-10%]
+          top-[0%]
+          opacity-35
+        "
+      />
 
-      <div className="max-w-[1440px] mx-auto px-6">
-        <div className="mb-24">
-          <motion.div initial={{ opacity: 0, x: -20 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="flex items-center gap-3 mb-8">
-            <div className="w-12 h-px" style={{ background: 'linear-gradient(90deg, #3b82f6, #06b6d4)' }} />
-            <span className="section-eyebrow">My Projects</span>
+      <div className="editorial-container relative z-10">
+        {/* ── Section header ── */}
+        <div
+          className="
+            grid
+            lg:grid-cols-12
+            gap-8
+            items-end
+            mb-8
+            md:mb-10
+          "
+        >
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="lg:col-span-8"
+          >
+            <div className="flex items-center gap-4 mb-5">
+              <div className="w-10 h-px bg-[#00e5ff] opacity-80" />
+
+              <span className="font-mono text-[10px] tracking-[0.38em] uppercase text-[#00e5ff]">
+                MY PROJECTS
+              </span>
+            </div>
+
+            <h2 className="font-display font-black text-5xl md:text-6xl lg:text-[70px] tracking-tight leading-none text-white">
+              My <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#e0e0e0] to-[#808080]">Projects</span>
+            </h2>
           </motion.div>
-          <motion.h2 initial={{ opacity: 0, x: -40 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 1, ease: EXPO }} className="font-display font-black tracking-tighter leading-[0.85]" style={{ fontSize: 'clamp(3.5rem, 9vw, 8rem)', color: '#e8f0ff' }}>
-            My <br />
-            <span className="text-gradient">Projects</span>
-          </motion.h2>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="
+              lg:col-span-4
+              flex
+              items-center
+              justify-end
+            "
+          >
+            <p
+              className="
+                font-mono
+                text-[10px]
+                tracking-[0.2em]
+                uppercase
+                text-white/50
+                whitespace-nowrap
+              "
+            >
+              4 builds · full stack engineering
+            </p>
+          </motion.div>
         </div>
 
-        {/* ── Carousel Track with Nav Controls ── */}
-        <div className="relative group/carousel">
-          {/* Manual Navigation Arrows */}
-          {total > 1 && (
-            <>
-              <button
-                onClick={goPrev}
-                className="absolute left-4 top-1/2 -translate-y-1/2 z-40 w-12 h-12 rounded-full flex items-center justify-center opacity-0 group-hover/carousel:opacity-100 transition-all duration-300 backdrop-blur-xl border border-white/10 hover:border-blue-400/30 bg-blue-900/10"
-                style={{ color: '#e8f0ff' }}
-              >
-                <FiArrowUpRight className="w-5 h-5 rotate-[225deg]" />
-              </button>
-              <button
-                onClick={goNext}
-                className="absolute right-4 top-1/2 -translate-y-1/2 z-40 w-12 h-12 rounded-full flex items-center justify-center opacity-0 group-hover/carousel:opacity-100 transition-all duration-300 backdrop-blur-xl border border-white/10 hover:border-blue-400/30 bg-blue-900/10"
-                style={{ color: '#e8f0ff' }}
-              >
-                <FiArrowUpRight className="w-5 h-5 rotate-[45deg]" />
-              </button>
-            </>
-          )}
+        {/* ── Infinite Scroll Marquee ── */}
+        <div className="relative overflow-hidden w-full py-4 -mx-4 px-4 md:-mx-8 md:px-8">
+          {/* Left and right fade gradients */}
+          <div className="absolute left-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-r from-black to-transparent z-20 pointer-events-none" />
+          <div className="absolute right-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-l from-black to-transparent z-20 pointer-events-none" />
 
-          <div className="relative overflow-visible">
-            <motion.div className="flex" animate={{ x: offset }} transition={{ duration: 0.8, ease: EXPO }} style={{ gap: '32px' }}>
-              {PROJECTS.map((project, idx) => (
-                <ProjectCard
-                  key={project.num}
-                  project={project}
-                  isActive={idx === current}
-                  onKnowMore={() => {
-                    setCurrent(idx);
-                    setShowDetail(true);
-                    // Scroll to detail view
-                    setTimeout(() => {
-                      const detailEl = document.getElementById('project-detail-view');
-                      if (detailEl) detailEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }, 100);
-                  }}
-                />
-              ))}
-            </motion.div>
-          </div>
+          <motion.div
+            className="flex gap-6 shrink-0 w-max"
+            animate={{ x: ["0%", "-50%"] }}
+            transition={{
+              repeat: Infinity,
+              ease: "linear",
+              duration: 30, // Adjust speed
+            }}
+          >
+            {[...PROJECTS, ...PROJECTS].map((project, idx) => {
+              const originalIndex = idx % PROJECTS.length;
 
-          {/* Dots */}
-          <div className="flex items-center justify-center gap-3 mt-16">
-            {PROJECTS.map((_, idx) => (
-              <button key={idx} onClick={() => goTo(idx)} className="transition-all duration-500 rounded-full" style={{ width: idx === current ? '40px' : '10px', height: '10px', background: idx === current ? PROJECTS[current].accent : 'rgba(59,130,246,0.2)', boxShadow: idx === current ? `0 0 20px ${PROJECTS[current].accent}60` : 'none', border: 'none', cursor: 'pointer', padding: 0 }} />
-            ))}
-          </div>
+              return (
+                <div key={`${project.num}-${idx}`} className="w-[320px] md:w-[420px] shrink-0 h-full">
+                  <ProjectRow
+                    project={project}
+                    onKnowMore={() => handleKnowMore(originalIndex)}
+                    isActive={current === originalIndex && showDetail}
+                  />
+                </div>
+              );
+            })}
+          </motion.div>
+        </div>
 
-          {/* Detailed View Section */}
-          <div id="project-detail-view">
-            <AnimatePresence mode="wait">
-              {showDetail && <DetailView key={PROJECTS[current].num} project={PROJECTS[current]} />}
-            </AnimatePresence>
-          </div>
+        {/* ── Detail view ── */}
+        <div id="project-detail-view">
+          <AnimatePresence mode="wait">
+            {showDetail && (
+              <DetailView
+                key={PROJECTS[current].num}
+                project={PROJECTS[current]}
+              />
+            )}
+          </AnimatePresence>
         </div>
       </div>
     </section>

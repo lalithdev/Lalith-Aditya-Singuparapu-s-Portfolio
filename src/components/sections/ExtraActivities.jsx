@@ -34,7 +34,7 @@ export default function ExtraActivities() {
   return (
     <section
       id="extra-activities"
-      className="section-padding relative overflow-hidden"
+      className="editorial-section relative overflow-hidden"
       style={{ borderTop: '1px solid rgba(59,130,246,0.08)' }}
     >
       {/* Orb */}

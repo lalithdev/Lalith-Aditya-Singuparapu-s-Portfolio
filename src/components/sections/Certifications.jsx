@@ -8,7 +8,7 @@ export default function Certifications() {
   const { certifications } = portfolioData;
 
   return (
-    <section id="certifications" className="section-padding relative overflow-hidden">
+    <section id="certifications" className="editorial-section relative overflow-hidden">
       {/* Orb */}
       <div className="glow-orb w-[500px] h-[500px] left-[-10%] top-[10%] opacity-15"
         style={{ background: 'radial-gradient(circle, rgba(6,182,212,0.3) 0%, transparent 70%)' }} />
@@ -35,8 +35,8 @@ export default function Certifications() {
             className="font-display font-black tracking-tighter"
             style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', color: '#e8f0ff', lineHeight: 1.0 }}
           >
-            Enterprise <br />
-            <span className="text-gradient">Validation</span>
+            My <br />
+            <span className="text-gradient">Certifications</span>
           </motion.h2>
         </div>
 

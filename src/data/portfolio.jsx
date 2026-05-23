@@ -1,6 +1,7 @@
-import { FiCode, FiDatabase, FiLayout, FiServer, FiCpu, FiCloud, FiGitBranch, FiTerminal, FiGlobe, FiZap } from 'react-icons/fi';
+import { FiCode, FiDatabase, FiLayout, FiServer, FiCpu, FiCloud, FiGitBranch, FiTerminal, FiGlobe, FiZap, FiBook, FiUsers } from 'react-icons/fi';
 import certifyMeImg from '../assets/images/certifymeprojectimage.png';
 import manageProjectImg from '../assets/images/manageyourprojectprojectimage.png';
+import portfolioImg from '../assets/images/portfolioimage.png';
 
 export const portfolioData = {
   personal: {
@@ -59,28 +60,56 @@ export const portfolioData = {
   ],
 
   skills: {
-    frontend: [
-      { name: "React Architecture", icon: <FiLayout className="w-4 h-4" /> },
-      { name: "Advanced TypeScript", icon: <FiCode className="w-4 h-4" /> },
-      { name: "Framer Motion", icon: <FiLayout className="w-4 h-4" /> },
+    categories: [
+      {
+        title: 'Programming Languages',
+        items: ['Java', 'C', 'JavaScript', 'SQL'],
+        icon: <FiCode className="w-4 h-4" />,
+        accent: '#60a5fa',
+      },
+      {
+        title: 'Web Development',
+        items: ['ReactJS', 'Node.js', 'Spring Boot', 'Hibernate', 'HTML', 'CSS'],
+        icon: <FiLayout className="w-4 h-4" />,
+        accent: '#818cf8',
+      },
+      {
+        title: 'Databases',
+        items: ['MySQL', 'PostgreSQL'],
+        icon: <FiDatabase className="w-4 h-4" />,
+        accent: '#22d3ee',
+      },
+      {
+        title: 'Cloud Technologies',
+        items: ['AWS (EC2, S3 Basics)', 'Oracle Cloud Infrastructure'],
+        icon: <FiCloud className="w-4 h-4" />,
+        accent: '#a78bfa',
+      },
+      {
+        title: 'Developer Tools',
+        items: ['Git/GitHub', 'VS Code', 'Eclipse'],
+        icon: <FiGitBranch className="w-4 h-4" />,
+        accent: '#34d399',
+      },
+      {
+        title: 'Development Practices',
+        items: ['CI/CD Basics', 'Agile Development', 'REST APIs'],
+        icon: <FiZap className="w-4 h-4" />,
+        accent: '#f472b6',
+      },
+      {
+        title: 'Relevant Coursework',
+        items: ['Data Structures', 'OOPs', 'Database Management Systems', 'Operating Systems'],
+        icon: <FiBook className="w-4 h-4" />,
+        accent: '#fb923c',
+      },
+      {
+        title: 'Soft Skills',
+        items: ['Problem Solving', 'Analytical Thinking', 'Teamwork', 'Leadership'],
+        icon: <FiUsers className="w-4 h-4" />,
+        accent: '#38bdf8',
+      },
     ],
-    backend: [
-      { name: "Java Systems", icon: <FiTerminal className="w-4 h-4" /> },
-      { name: "Spring Boot Microservices", icon: <FiServer className="w-4 h-4" /> },
-      { name: "Node.js Architecture", icon: <FiServer className="w-4 h-4" /> },
-      { name: "Distributed APIs", icon: <FiGlobe className="w-4 h-4" /> },
-    ],
-    database: [
-      { name: "PostgreSQL Engineering", icon: <FiDatabase className="w-4 h-4" /> },
-      { name: "Database Design", icon: <FiDatabase className="w-4 h-4" /> },
-      { name: "SQL Optimization", icon: <FiDatabase className="w-4 h-4" /> },
-    ],
-    cloudAndTools: [
-      { name: "AWS Cloud Infrastructure", icon: <FiCloud className="w-4 h-4" /> },
-      { name: "OCI Architecture", icon: <FiCloud className="w-4 h-4" /> },
-      { name: "CI/CD Pipelines", icon: <FiZap className="w-4 h-4" /> },
-      { name: "System Design", icon: <FiCode className="w-4 h-4" /> },
-    ]
   },
 
   flagshipProject: {
@@ -108,6 +137,15 @@ export const portfolioData = {
 
   selectedWork: [
     {
+      title: "BookMyCare: Hospital Appointment System",
+      description: "Production-grade modular monolith for hospital appointment scheduling with JWT + RBAC (Patient, Doctor, Nurse, Admin), DB-level slot locking, Razorpay payments, OTP auth (email + SMS), Flyway migrations, and event-driven notifications.",
+      tech: ["React", "Spring Boot 3.3", "PostgreSQL", "JWT", "Razorpay", "Flyway"],
+      tags: ["Modular Monolith", "Healthcare SaaS"],
+      icon: <FiServer className="w-6 h-6" />,
+      image: null,
+      category: "Full Stack SaaS"
+    },
+    {
       title: "Project Management Portal",
       description: "Engineered a centralized portal for large-scale academic project submission and evaluation. Scaled the system to handle multi-stage workflows and automated teacher-student interactions.",
       tech: ["Node.js", "React", "PostgreSQL"],
@@ -122,7 +160,7 @@ export const portfolioData = {
       tech: ["Framer Motion", "React", "Tailwind"],
       tags: ["Spatial UI", "Design Systems"],
       icon: <FiLayout className="w-6 h-6" />,
-      image: null,
+      image: portfolioImg,
       category: "Identity Design"
     }
   ],

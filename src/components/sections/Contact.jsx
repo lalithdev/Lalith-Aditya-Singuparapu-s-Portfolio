@@ -25,12 +25,12 @@ export default function Contact() {
   ];
 
   return (
-    <section id="contact" className="section-padding relative overflow-hidden">
+    <section id="contact" className="editorial-section relative overflow-hidden">
       {/* Orb */}
       <div className="glow-orb w-[700px] h-[700px] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 opacity-20"
         style={{ background: 'radial-gradient(circle, rgba(59,130,246,0.25) 0%, transparent 70%)' }} />
 
-      <div className="max-w-[1400px] mx-auto px-6 relative z-10">
+      <div className="editorial-container max-w-[1400px] relative z-10">
 
         {/* ── CTA block ── */}
         <div className="text-center mb-28">

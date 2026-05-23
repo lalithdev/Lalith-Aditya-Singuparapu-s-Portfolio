@@ -13,7 +13,7 @@ import CustomCursor from './components/layout/CustomCursor';
 
 function App() {
   return (
-    <div style={{ backgroundColor: '#03050a', minHeight: '100vh', color: '#e8f0ff' }}>
+    <div style={{ backgroundColor: '#050505', minHeight: '100vh', color: '#f5f5f5' }}>
       <Navbar />
       <CustomCursor />
 
