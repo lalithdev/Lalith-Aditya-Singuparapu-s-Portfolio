@@ -37,24 +37,24 @@ export const portfolioData = {
 
   educationTimeline: [
     {
-      degree: "B.Tech Computer Science Engineering",
+      degree: "Bachelors of Technology",
       institution: "K L University, AP",
       period: "2024-2028",
-      achievements: ["9.09 CGPA", "AI Specialization", "Hackathon Finalist"],
+      achievements: ["9.2 CGPA", "Computer Science and Engineering", "Specialization on AI NLP"],
       description: "Focusing on Software Architecture, Distributed Systems, and AI. Developing the technical foundation to build enterprise-grade software."
     },
     {
       degree: "Intermediate",
       institution: "Board of Intermediate Education",
       period: "2022-2024",
-      achievements: ["88.6%", "Science Stream"],
+      achievements: ["88.6%", "MPC(Science) Stream"],
       description: "Focused on Mathematics, Physics, and Chemistry, building a strong analytical foundation for engineering."
     },
     {
-      degree: "Secondary Education (10th)",
+      degree: "Secondary Education (10th grade)",
       institution: "Ravindra Bharathi Public School",
       period: "2021-2022",
-      achievements: ["90% Grade"],
+      achievements: ["89.5% Percentage", "Matriculation"],
       description: "Completed matriculation with a focus on core scientific and mathematical principles."
     }
   ],
@@ -98,7 +98,7 @@ export const portfolioData = {
         accent: '#f472b6',
       },
       {
-        title: 'Relevant Coursework',
+        title: 'Core Concepts',
         items: ['Data Structures', 'OOPs', 'Database Management Systems', 'Operating Systems'],
         icon: <FiBook className="w-4 h-4" />,
         accent: '#fb923c',

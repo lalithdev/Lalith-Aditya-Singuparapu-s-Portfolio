@@ -16,8 +16,8 @@ import {
 } from 'react-icons/fi';
 
 import certifyMeImg from '../../assets/images/certifymeprojectimage.png';
-import portfolioImg from '../../assets/images/portfolioimage.png';
-import manageProjectImg from '../../assets/images/manageyourprojectprojectimage.png';
+import portfolioImg from '../../assets/images/portfolioprojectimage.png';
+import manageProjectImg from '../../assets/images/manageyourprojectimagefinal.png';
 
 const EXPO = [0.16, 1, 0.3, 1];
 
@@ -33,8 +33,8 @@ const PROJECTS = [
     github: 'https://github.com/lalithdev/CertifyMe-Certification-Tracking-Platform.git',
     accent: '#2447FF',
     highlights: [
-      'Production-ready platform for 4000+ students with certification workflows and approval pipelines.',
-      'RBAC for students, faculty, and admins with real-time status updates.',
+      //'Production-ready platform for 4000+ students with certification workflows and approval pipelines.',
+      //'RBAC for students, faculty, and admins with real-time status updates.',
     ],
     context:
       'Built and deployed a production-ready full-stack platform supporting certification workflows and approval pipelines for 4000+ students.',
@@ -74,8 +74,8 @@ const PROJECTS = [
     github: 'https://github.com/lalithdev/BookMyCare-Patient-Appointment-Booking-System.git',
     accent: '#2447FF',
     highlights: [
-      'Scalable appointment system with patient registration, scheduling, and secure role-based workflows.',
-      'Production-oriented Spring Boot + PostgreSQL backend with auth and optimized relationships.',
+      //'Scalable appointment system with patient registration, scheduling, and secure role-based workflows.',
+      //'Production-oriented Spring Boot + PostgreSQL backend with auth and optimized relationships.',
     ],
     context:
       'Built a scalable full-stack patient appointment system with patient registration, doctor/admin modules, appointment scheduling, and secure role-based workflows.',
@@ -115,8 +115,8 @@ const PROJECTS = [
     github: 'https://github.com/lalithdev/FEDF-P35-PROJECT-MANAGEMENT-PORTAL.git',
     accent: '#2447FF',
     highlights: [
-      'Scalable submission and evaluation platform with end-to-end workflow automation.',
-      'Backend APIs for submissions, mentor reviews, faculty approvals, and tracking.',
+      //'Scalable submission and evaluation platform with end-to-end workflow automation.',
+      //'Backend APIs for submissions, mentor reviews, faculty approvals, and tracking.',
     ],
     context:
       'Built a scalable project submission and evaluation platform for students and faculty with end-to-end workflow automation and structured approval pipelines.',
@@ -148,7 +148,7 @@ const PROJECTS = [
   {
     num: '04',
     category: 'Identity Design',
-    title: 'Professional Portfolio',
+    title: 'Personal Portfolio Website: Lalith Dev',
     tech: 'React, Framer Motion, Tailwind, Vite',
     period: '2025 – Present',
     image: portfolioImg,
@@ -156,8 +156,8 @@ const PROJECTS = [
     github: 'https://github.com/lalithdev',
     accent: '#2447FF',
     highlights: [
-      'Interactive portfolio with spatial UI, motion design, and performance-focused React architecture.',
-      'Custom design system with cinematic sections for projects, skills, and certifications.',
+      //'Interactive portfolio with spatial UI, motion design, and performance-focused React architecture.',
+      //'Custom design system with cinematic sections for projects, skills, and certifications.',
     ],
     context:
       'Designed and engineered a high-performance personal portfolio with spatial UI, Framer Motion animations, and a cohesive dark-theme design system.',

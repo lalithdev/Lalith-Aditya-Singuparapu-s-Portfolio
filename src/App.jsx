@@ -13,13 +13,79 @@ import CustomCursor from './components/layout/CustomCursor';
 
 function App() {
   return (
-    <div style={{ backgroundColor: '#050505', minHeight: '100vh', color: '#f5f5f5' }}>
+    <div className="relative min-h-screen text-[#f5f5f5]">
       <Navbar />
       <CustomCursor />
 
       <main>
-        <Hero />
-        <About />
+
+        {/*
+          ── SCENE WORLD ──────────────────────────────────────────
+          Hero and About share ONE continuous cinematic environment.
+          This wrapper provides the global atmospheric background
+          that spans both sections — no hard background reset.
+          ─────────────────────────────────────────────────────────
+        */}
+        <div
+          className="scene-world relative"
+          style={{
+            background: 'linear-gradient(180deg, #020202 0%, #020408 50%, #030510 100%)',
+          }}
+        >
+          {/* Global scene atmosphere — enormous, heavily blurred environmental lights */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 overflow-hidden"
+            style={{ zIndex: 0 }}
+          >
+            {/* Top-right: massive indigo key light — bleeds from Hero into About */}
+            <div
+              style={{
+                position: 'absolute',
+                top: '5%',
+                right: '-15%',
+                width: '90vw',
+                height: '130vh',
+                borderRadius: '50%',
+                background:
+                  'radial-gradient(ellipse, rgba(30,41,120,0.26) 0%, rgba(15,20,70,0.12) 45%, transparent 70%)',
+                filter: 'blur(180px)',
+              }}
+            />
+            {/* Bottom-left: deep midnight fill light */}
+            <div
+              style={{
+                position: 'absolute',
+                top: '40%',
+                left: '-20%',
+                width: '80vw',
+                height: '120vh',
+                borderRadius: '50%',
+                background:
+                  'radial-gradient(ellipse, rgba(20,30,100,0.18) 0%, rgba(10,15,60,0.08) 50%, transparent 70%)',
+                filter: 'blur(160px)',
+              }}
+            />
+            {/* Centre: subtle blue scene diffusion */}
+            <div
+              style={{
+                position: 'absolute',
+                top: '55%',
+                left: '30%',
+                width: '60vw',
+                height: '80vh',
+                borderRadius: '50%',
+                background:
+                  'radial-gradient(ellipse, rgba(79,70,229,0.09) 0%, transparent 70%)',
+                filter: 'blur(120px)',
+              }}
+            />
+          </div>
+
+          <Hero />
+          <About />
+        </div>
+
         <Education />
         <Skills />
         <Projects />

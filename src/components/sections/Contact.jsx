@@ -20,8 +20,8 @@ export default function Contact() {
   const socials = [
     { name: 'LinkedIn',  href: portfolioData.personal.linkedin, icon: <FaLinkedin /> },
     { name: 'GitHub',    href: portfolioData.personal.github,   icon: <FaGithub /> },
-    { name: 'Twitter',   href: '#',                             icon: <FaTwitter /> },
-    { name: 'Instagram', href: '#',                             icon: <FaInstagram /> },
+    { name: 'Gmail',   href: portfolioData.personal.email,                             icon: <FiMail /> },
+    { name: 'Instagram', href: 'https://www.instagram.com/justlalith26/?__pwa=1',                             icon: <FaInstagram /> },
   ];
 
   return (

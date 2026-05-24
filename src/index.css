@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Playfair+Display:ital,wght@0,500;1,500;0,600;1,600&family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&family=JetBrains+Mono:wght@400;500&display=swap');
 @import "tailwindcss";
 @import "./styles/editorial.css";
 
@@ -35,10 +35,10 @@ html { scroll-behavior: smooth; scroll-padding-top: 80px; }
 
 body {
   margin: 0; padding: 0; min-height: 100vh; overflow-x: hidden;
-  background-color: var(--color-bg-deep);
+  background-color: #000000;
   background-image:
-    radial-gradient(ellipse 70% 50% at 8% 0%, var(--color-accent-glow) 0%, transparent 55%),
-    radial-gradient(ellipse 50% 40% at 92% 30%, rgba(36, 71, 255, 0.08) 0%, transparent 50%);
+    radial-gradient(ellipse 110% 110% at 100% 30%, rgba(15, 35, 180, 0.28) 0%, rgba(8, 20, 80, 0.12) 45%, transparent 80%),
+    radial-gradient(circle 800px at 0% 90%, rgba(10, 20, 80, 0.15) 0%, transparent 60%);
   background-attachment: fixed;
 }
 

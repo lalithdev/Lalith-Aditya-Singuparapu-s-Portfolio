@@ -1,33 +1,65 @@
-import { motion } from 'framer-motion';
+import { useRef } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import heroImg from '../../assets/images/lalithheroimgfinal.png';
+import Magnetic from '../common/Magnetic';
 
 const noiseSvg = `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`;
 
 export default function Hero() {
+  const sectionRef = useRef(null);
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start start', 'end start'],
+  });
+
+  // ── Scroll-driven cinematic dissolve ──
+  const imgScale      = useTransform(scrollYProgress, [0, 1], [1, 1.14]);
+  const imgBlur       = useTransform(scrollYProgress, [0, 0.7, 1], [0, 7, 16]);
+  const imgBrightness = useTransform(scrollYProgress, [0, 1], [1, 0.22]);
+
+  // Combine blur + brightness into a single CSS filter string
+  const imgFilter = useTransform(
+    [imgBlur, imgBrightness],
+    ([b, br]) => `blur(${b}px) brightness(${br})`
+  );
+
+  const contentY       = useTransform(scrollYProgress, [0, 1], [0, -55]);
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.55], [1, 0]);
+
+  // Cinematic fog rises from below as hero dissolves
+  const fogOpacity = useTransform(scrollYProgress, [0.12, 0.75], [0, 1]);
+  const fogY       = useTransform(scrollYProgress, [0, 1], [0, -110]);
+
   return (
     <section
+      ref={sectionRef}
       id="hero"
       className="relative h-screen w-full flex flex-col items-center justify-center"
-      style={{ backgroundColor: '#020202', overflow: 'hidden' }}
+      style={{ backgroundColor: '#020408', overflow: 'hidden' }}
     >
-      {/* 1. CINEMATIC BACKGROUND IMAGE */}
-      <img
-        src={heroImg}
-        alt="Cinematic Atmosphere"
-        className="absolute inset-0 w-full h-full object-cover z-0"
+
+      {/* ── CINEMATIC IMAGE — scroll-driven scale + blur + dim ── */}
+      <motion.div
+        className="absolute inset-0 z-0"
+        style={{ scale: imgScale, filter: imgFilter }}
+      >
+        <img
+          src={heroImg}
+          alt="Cinematic Atmosphere"
+          className="w-full h-full object-cover"
+        />
+      </motion.div>
+
+      {/* ── VIGNETTE ── */}
+      <div
+        className="absolute inset-0 z-[1] pointer-events-none"
+        style={{ boxShadow: 'inset 0 0 280px rgba(0,0,0,0.92)' }}
       />
 
-      {/* VIGNETTE TO HIDE EDGES */}
+      {/* ── NOISE TEXTURE ── */}
       <div
-        className="absolute inset-0 z-0 pointer-events-none"
-        style={{
-          boxShadow: 'inset 0 0 250px rgba(0,0,0,0.95)',
-        }}
-      />
-
-      {/* 5. NOISE TEXTURE */}
-      <div
-        className="absolute inset-0 z-0 pointer-events-none"
+        className="absolute inset-0 z-[1] pointer-events-none"
         style={{
           backgroundImage: noiseSvg,
           opacity: 0.06,
@@ -35,27 +67,42 @@ export default function Hero() {
         }}
       />
 
-      {/* BOTTOM FADE — deepens toward digital transition */}
+      {/* ── BOTTOM FADE — dissolves into the About world ── */}
       <div
-        className="absolute bottom-0 left-0 w-full z-[1] pointer-events-none"
+        className="absolute bottom-0 left-0 w-full z-[2] pointer-events-none"
         style={{
-          height: '42%',
-          background: 'linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.2) 35%, rgba(0,0,0,0.88) 100%)',
-          backdropFilter: 'blur(0.4px)',
+          height: '60%',
+          background:
+            'linear-gradient(to bottom, transparent 0%, rgba(2,4,14,0.35) 35%, rgba(2,4,14,0.92) 75%, #020408 100%)',
         }}
       />
 
-      {/* 6. EDITORIAL TYPOGRAPHY */}
-      <div className="relative z-10 w-full max-w-4xl mx-auto px-6 flex flex-col items-center justify-center text-center">
+      {/* ── CINEMATIC FOG — blue haze rises from below on scroll ── */}
+      <motion.div
+        className="absolute inset-0 z-[3] pointer-events-none"
+        style={{
+          y: fogY,
+          opacity: fogOpacity,
+          background:
+            'radial-gradient(ellipse 120% 80% at 50% 100%, rgba(30,41,83,0.65) 0%, rgba(10,15,50,0.38) 55%, transparent 100%)',
+          filter: 'blur(48px)',
+        }}
+      />
+
+      {/* ── EDITORIAL TYPOGRAPHY ── */}
+      <motion.div
+        style={{ y: contentY, opacity: contentOpacity }}
+        className="relative z-10 w-full max-w-4xl mx-auto px-6 flex flex-col items-center justify-center text-center"
+      >
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1.8, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
         >
-          <h1 
+          <h1
             className="font-body text-white/85"
-            style={{ 
-              fontSize: 'clamp(1.8rem, 3.8vw, 4.2rem)', 
+            style={{
+              fontSize: 'clamp(1.8rem, 3.8vw, 4.2rem)',
               fontWeight: 300,
               lineHeight: 1.05,
               letterSpacing: '-0.04em',
@@ -63,56 +110,65 @@ export default function Hero() {
             }}
           >
             Hi, I'm{' '}
-            <span 
-              className="font-serif italic" 
-              style={{ fontSize: '1.05em', letterSpacing: '0', color: 'rgba(255,255,255,0.88)' }}
-            >
+            <span className="text-[1.05em] text-white/88 italic tracking-[-0.02em] [font-family:'Playfair_Display',serif] [font-weight:500] [font-style:italic] [-webkit-font-smoothing:antialiased] [-moz-osx-font-smoothing:grayscale]">
               Lalith.
             </span>
             <br />
             an{' '}
-            <span 
-              className="font-serif italic" 
-              style={{ fontSize: '1.05em', letterSpacing: '0', color: 'rgba(255,255,255,0.88)' }}
-            >
-              AI Full Stack Architect
+            <span className="text-[1.05em] text-white/88 italic tracking-[-0.02em] [font-family:'Playfair_Display',serif] [font-weight:500] [font-style:italic] [-webkit-font-smoothing:antialiased] [-moz-osx-font-smoothing:grayscale]">
+              AI Full Stack Developer
             </span>
             <br />
             based in India. Here you<br />
             can see some of my latest<br />
-            engineering & projects.
+            engineering &amp; projects.
           </h1>
         </motion.div>
-      </div>
+      </motion.div>
 
-      {/* 7. MINIMAL FOOTER METADATA */}
-      <motion.div 
+      {/* ── FOOTER METADATA — fades with content ── */}
+      <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 2, delay: 1 }}
+        style={{
+          opacity: contentOpacity,
+          textShadow: '0 2px 10px rgba(0,0,0,0.9)',
+        }}
         className="absolute bottom-10 left-0 w-full px-8 lg:px-16 flex flex-col md:flex-row justify-between items-center z-10 gap-4"
-        style={{ textShadow: '0 2px 10px rgba(0,0,0,0.9)' }}
       >
-        <a 
-          href="mailto:lalithadityasinguparapu@gmail.com" 
-          className="font-body text-[10px] sm:text-xs text-white/70 hover:text-white tracking-widest uppercase transition-colors text-center"
-        >
-          lalithadityasinguparapu@gmail.com
-        </a>
-        <a 
-          href="https://github.com/lalithdev" 
-          target="_blank" 
-          rel="noreferrer" 
-          className="font-body text-[10px] sm:text-xs text-white/70 hover:text-white tracking-widest uppercase transition-colors text-center"
-        >
-          github.com/lalithdev
-        </a>
-        <span 
-          className="font-body text-[10px] sm:text-xs text-white/70 tracking-widest uppercase text-center"
-        >
-          +91 8341647137
-        </span>
+        <Magnetic>
+          <a
+            href="mailto:lalithadityasinguparapu@gmail.com"
+            className="font-body text-[10px] sm:text-xs text-white/70 hover:text-white tracking-widest transition-colors text-center inline-block p-2"
+          >
+            lalithadityasinguparapu@gmail.com
+          </a>
+        </Magnetic>
+
+        <Magnetic>
+          <a
+            href="https://github.com/lalithdev"
+            target="_blank"
+            rel="noreferrer"
+            className="font-body text-[10px] sm:text-xs text-white/70 hover:text-white tracking-widest transition-colors text-center inline-block p-2"
+          >
+            github.com/lalithdev
+          </a>
+        </Magnetic>
+
+        <Magnetic>
+          <a
+            href="https://linkedin.com/in/lalith-aditya-singuparapu"
+            target="_blank"
+            rel="noreferrer"
+            className="font-body text-[10px] sm:text-xs text-white/70 hover:text-white tracking-widest transition-colors text-center inline-block p-2"
+          >
+            linkedin.com/in/lalith-aditya-singuparapu
+          </a>
+        </Magnetic>
       </motion.div>
+
     </section>
   );
 }
