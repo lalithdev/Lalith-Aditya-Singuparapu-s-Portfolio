@@ -153,7 +153,7 @@ const PROJECTS = [
     period: '2025 – Present',
     image: portfolioImg,
     url: 'https://lalithdevportfolio.vercel.app',
-    github: 'https://github.com/lalithdev',
+    github: 'https://github.com/lalithdev/Lalith-Aditya-Singuparapu-s-Portfolio',
     accent: '#2447FF',
     highlights: [
       //'Interactive portfolio with spatial UI, motion design, and performance-focused React architecture.',
