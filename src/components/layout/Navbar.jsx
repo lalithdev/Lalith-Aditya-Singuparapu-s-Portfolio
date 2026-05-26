@@ -17,8 +17,10 @@ export default function Navbar() {
     const target = document.querySelector(href);
     if (!target) return;
     e.preventDefault();
-    const navOffset = 88;
-    const top = target.getBoundingClientRect().top + window.scrollY - navOffset;
+    // Scroll precisely to the section boundary — no offset.
+    // Each section is self-contained (h-screen / min-h-screen) so
+    // the top of the section is the exact scene boundary.
+    const top = target.getBoundingClientRect().top + window.scrollY;
     window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' });
     window.history.replaceState(null, '', href);
   };

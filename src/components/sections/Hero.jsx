@@ -128,16 +128,19 @@ export default function Hero() {
 
       {/* ── FOOTER METADATA — fades with content ── */}
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 2, delay: 1 }}
         style={{
           opacity: contentOpacity,
           textShadow: '0 2px 10px rgba(0,0,0,0.9)',
         }}
-        className="absolute bottom-10 left-0 w-full px-8 lg:px-16 flex flex-col md:flex-row justify-between items-center z-10 gap-4"
+        className="absolute bottom-10 left-0 w-full px-8 lg:px-16 z-10"
       >
-        <Magnetic>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 2, delay: 1 }}
+          className="flex flex-col md:flex-row justify-between items-center gap-4 w-full"
+        >
+          <Magnetic>
           <a
             href="mailto:lalithadityasinguparapu@gmail.com"
             className="font-body text-[10px] sm:text-xs text-white/70 hover:text-white tracking-widest transition-colors text-center inline-block p-2"
@@ -167,6 +170,7 @@ export default function Hero() {
             linkedin.com/in/lalith-aditya-singuparapu
           </a>
         </Magnetic>
+        </motion.div>
       </motion.div>
 
     </section>
