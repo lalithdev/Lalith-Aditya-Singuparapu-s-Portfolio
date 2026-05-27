@@ -65,15 +65,10 @@ export default function Navbar() {
       initial={{ opacity: 0, y: -12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-      className="fixed top-0 left-0 w-full z-[100]"
+      className="fixed top-0 left-0 w-full z-[100] pointer-events-none"
     >
       <div
-        className="absolute inset-0 transition-opacity duration-500 editorial-nav-bar"
-        style={{ opacity: scrolled ? 0.72 : 0 }}
-      />
-
-      <div
-        className="relative editorial-container max-w-[1400px] flex items-center justify-between"
+        className="relative editorial-container max-w-[1400px] flex items-center justify-between pointer-events-auto"
         style={{ height: scrolled ? '64px' : '80px', transition: 'height 0.4s cubic-bezier(0.76,0,0.24,1)' }}
       >
         <a href="#hero" className="flex items-center no-underline group">

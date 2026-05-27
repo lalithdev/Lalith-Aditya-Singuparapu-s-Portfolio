@@ -5,7 +5,7 @@ const AnimatedText = ({ text, className, style }) => {
   const container = useRef(null);
   const { scrollYProgress } = useScroll({
     target: container,
-    offset: ['start 85%', 'end 50%'],
+    offset: ['start 90%', 'start 55%'],
   });
 
   const words = text.split(' ');

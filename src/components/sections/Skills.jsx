@@ -221,7 +221,7 @@ export default function Skills() {
         className="
           sticky
           bg-[#f8f8f8]
-          rounded-[48px]
+          rounded-t-[48px]
           overflow-hidden
           flex
           flex-col

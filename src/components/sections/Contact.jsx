@@ -44,15 +44,38 @@ export default function Contact() {
           </motion.div>
 
           <motion.h2
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 1, ease: EXPO }}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.3 }}
+            variants={{
+              hidden: {},
+              visible: { transition: { staggerChildren: 0.15 } }
+            }}
             className="font-display font-black tracking-tighter leading-[0.88] mb-12"
             style={{ fontSize: 'clamp(3.5rem, 9vw, 9rem)', color: '#e8f0ff' }}
           >
-            LET'S BUILD THE <br />
-            <span className="text-gradient">FUTURE.</span>
+            {['LET\'S', 'BUILD', 'THE'].map((word, i) => (
+              <motion.span
+                key={i}
+                variants={{
+                  hidden: { opacity: 0, scale: 0.5, y: 40 },
+                  visible: { opacity: 1, scale: 1, y: 0, transition: { duration: 0.8, ease: EXPO } }
+                }}
+                className="inline-block mr-[0.25em]"
+              >
+                {word}
+              </motion.span>
+            ))}
+            <br />
+            <motion.span
+              variants={{
+                hidden: { opacity: 0, scale: 0.5, y: 40 },
+                visible: { opacity: 1, scale: 1, y: 0, transition: { duration: 0.8, ease: EXPO } }
+              }}
+              className="text-gradient inline-block mt-1 sm:mt-2"
+            >
+              FUTURE.
+            </motion.span>
           </motion.h2>
 
           <div className="flex flex-col items-center gap-8">

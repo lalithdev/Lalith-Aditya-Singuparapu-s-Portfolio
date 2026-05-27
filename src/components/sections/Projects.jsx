@@ -1,960 +1,355 @@
-import { motion, AnimatePresence } from 'framer-motion';
-import { useState, useCallback } from 'react';
+import { useRef } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { FiGithub } from 'react-icons/fi';
 
-import {
-  FiArrowUpRight,
-  FiGithub,
-  FiExternalLink,
-  FiServer,
-  FiCpu,
-  FiShield,
-  FiLayout,
-  FiDatabase,
-  FiCloud,
-  FiZap,
-  FiX,
-} from 'react-icons/fi';
+import certifyMe1 from '../../assets/images/certifymeprojectimage1.png';
+import certifyMe2 from '../../assets/images/certifymeprojectimage2.png';
+import certifyMe3 from '../../assets/images/certifymeprojectimage3.png';
 
-import certifyMeImg from '../../assets/images/certifymeprojectimage.png';
-import portfolioImg from '../../assets/images/portfolioprojectimage.png';
-import manageProjectImg from '../../assets/images/manageyourprojectimagefinal.png';
+import manage1 from '../../assets/images/mnpprojectimage1.png';
+import manage2 from '../../assets/images/mnpprojectimage2.png';
+import manage3 from '../../assets/images/mnpprojectimage3.png';
 
-const EXPO = [0.16, 1, 0.3, 1];
+import portfolio1 from '../../assets/images/portfolioprojectimage1.png';
+import portfolio2 from '../../assets/images/portfolioprojectimage2.png';
+import portfolio3 from '../../assets/images/portfolioprojectimage3.png';
+
+import bookMyCare1 from '../../assets/images/bookmycare1.png';
+import bookMyCare2 from '../../assets/images/bookmycare2.png';
+import bookMyCare3 from '../../assets/images/bookmycare3.png';
 
 const PROJECTS = [
   {
-    num: '01',
-    category: 'System Architecture',
-    title: 'CertifyMe: Certification Tracking Platform',
-    tech: 'Spring Boot, ReactJS, PostgreSQL, REST APIs',
-    period: 'Feb 2026 – Present',
-    image: certifyMeImg,
-    url: 'https://certifymeonline.vercel.app/',
-    github: 'https://github.com/lalithdev/CertifyMe-Certification-Tracking-Platform.git',
-    accent: '#2447FF',
-    highlights: [
-      //'Production-ready platform for 4000+ students with certification workflows and approval pipelines.',
-      //'RBAC for students, faculty, and admins with real-time status updates.',
-    ],
-    context:
-      'Built and deployed a production-ready full-stack platform supporting certification workflows and approval pipelines for 4000+ students.',
-    metrics: [
-      { label: 'Status', value: 'Live' },
-      { label: 'Scale', value: '4000+ Users' },
-      { label: 'Role', value: 'Full Stack' },
-    ],
-    features: [
-      {
-        text: 'Role-based access control for students, faculty, and administrators with secure validation and approval tracking.',
-        icon: <FiShield />,
-      },
-      {
-        text: 'Real-time certification status updates across the full approval pipeline.',
-        icon: <FiServer />,
-      },
-      {
-        text: 'Optimized PostgreSQL queries, reporting pipelines, and dashboard performance via indexing and query tuning.',
-        icon: <FiDatabase />,
-      },
-      {
-        text: 'Efficient database workflows for high-volume academic certification monitoring.',
-        icon: <FiCpu />,
-      },
-    ],
+    number: '01',
+    category: 'Full Stack · Production',
+    name: 'CertifyMe',
+    liveUrl: 'https://certifymeonline.vercel.app/',
+    githubUrl:
+      'https://github.com/lalithdev/CertifyMe-Certification-Tracking-Platform.git',
+    col1Image1: certifyMe1,
+    col1Image2: certifyMe2,
+    col2Image: certifyMe3,
   },
-
   {
-    num: '02',
-    category: 'Full Stack SaaS',
-    title: 'BookMyCare: Patient Appointment Booking System',
-    tech: 'Spring Boot, PostgreSQL, ReactJS, REST APIs',
-    period: '2026 – Present',
-    image: null,
-    url: '#',
-    github: 'https://github.com/lalithdev/BookMyCare-Patient-Appointment-Booking-System.git',
-    accent: '#2447FF',
-    highlights: [
-      //'Scalable appointment system with patient registration, scheduling, and secure role-based workflows.',
-      //'Production-oriented Spring Boot + PostgreSQL backend with auth and optimized relationships.',
-    ],
-    context:
-      'Built a scalable full-stack patient appointment system with patient registration, doctor/admin modules, appointment scheduling, and secure role-based workflows.',
-    metrics: [
-      { label: 'Status', value: 'In Development' },
-      { label: 'Stack', value: 'Full Stack' },
-      { label: 'Role', value: 'Architect' },
-    ],
-    features: [
-      {
-        text: 'Patient registration, doctor/admin modules, and structured appointment scheduling.',
-        icon: <FiServer />,
-      },
-      {
-        text: 'Authentication, authorization, and optimized PostgreSQL database relationships.',
-        icon: <FiShield />,
-      },
-      {
-        text: 'Appointment booking logic and admin workflows via REST APIs.',
-        icon: <FiDatabase />,
-      },
-      {
-        text: 'Conflict-free scheduling focused on real-world hospital management.',
-        icon: <FiZap />,
-      },
-    ],
+    number: '02',
+    category: 'Full Stack · SaaS',
+    name: 'BookMyCare',
+    liveUrl: '#',
+    githubUrl:
+      'https://github.com/lalithdev/BookMyCare-Patient-Appointment-Booking-System.git',
+    col1Image1: bookMyCare1,
+    col1Image2: bookMyCare2,
+    col2Image: bookMyCare3,
   },
-
   {
-    num: '03',
+    number: '03',
     category: 'Platform Engineering',
-    title: 'ManageYourProject: Project Management Portal',
-    tech: 'Node.js, ReactJS, PostgreSQL, REST APIs',
-    period: 'Nov 2025 – Present',
-    image: manageProjectImg,
-    url: 'https://manageyourproject.vercel.app',
-    github: 'https://github.com/lalithdev/FEDF-P35-PROJECT-MANAGEMENT-PORTAL.git',
-    accent: '#2447FF',
-    highlights: [
-      //'Scalable submission and evaluation platform with end-to-end workflow automation.',
-      //'Backend APIs for submissions, mentor reviews, faculty approvals, and tracking.',
-    ],
-    context:
-      'Built a scalable project submission and evaluation platform for students and faculty with end-to-end workflow automation and structured approval pipelines.',
-    metrics: [
-      { label: 'Status', value: 'Production' },
-      { label: 'Scale', value: 'Academic' },
-      { label: 'Role', value: 'Full Stack' },
-    ],
-    features: [
-      {
-        text: 'Project submission, mentor reviews, faculty approvals, and evaluation tracking.',
-        icon: <FiLayout />,
-      },
-      {
-        text: 'Academic workflow management through structured REST APIs.',
-        icon: <FiServer />,
-      },
-      {
-        text: 'Normalized PostgreSQL schema for reliable project data modeling.',
-        icon: <FiDatabase />,
-      },
-      {
-        text: 'Optimized backend request handling for faster tracking and reporting.',
-        icon: <FiCloud />,
-      },
-    ],
+    name: 'ManageYourProject',
+    liveUrl: 'https://manageyourproject.vercel.app',
+    githubUrl:
+      'https://github.com/lalithdev/FEDF-P35-PROJECT-MANAGEMENT-PORTAL.git',
+    col1Image1: manage1,
+    col1Image2: manage2,
+    col2Image: manage3,
   },
-
   {
-    num: '04',
-    category: 'Identity Design',
-    title: 'Personal Portfolio Website: Lalith Dev',
-    tech: 'React, Framer Motion, Tailwind, Vite',
-    period: '2025 – Present',
-    image: portfolioImg,
-    url: 'https://lalithdevportfolio.vercel.app',
-    github: 'https://github.com/lalithdev/Lalith-Aditya-Singuparapu-s-Portfolio',
-    accent: '#2447FF',
-    highlights: [
-      //'Interactive portfolio with spatial UI, motion design, and performance-focused React architecture.',
-      //'Custom design system with cinematic sections for projects, skills, and certifications.',
-    ],
-    context:
-      'Designed and engineered a high-performance personal portfolio with spatial UI, Framer Motion animations, and a cohesive dark-theme design system.',
-    metrics: [
-      { label: 'Status', value: 'Live' },
-      { label: 'Deploy', value: 'Vercel' },
-      { label: 'Role', value: 'UI Architect' },
-    ],
-    features: [
-      {
-        text: 'Custom animated backgrounds and scroll-driven section layouts.',
-        icon: <FiCpu />,
-      },
-      {
-        text: 'Framer Motion orchestration for smooth page transitions and micro-interactions.',
-        icon: <FiLayout />,
-      },
-      {
-        text: 'Optimized asset loading for fast first paint and smooth navigation.',
-        icon: <FiZap />,
-      },
-      {
-        text: 'Responsive layouts for projects, skills, and certification showcases.',
-        icon: <FiShield />,
-      },
-    ],
+    number: '04',
+    category: 'Identity · Portfolio',
+    name: 'Lalith Dev',
+    liveUrl: 'https://lalithdevportfolio.vercel.app',
+    githubUrl:
+      'https://github.com/lalithdev/Lalith-Aditya-Singuparapu-s-Portfolio',
+    col1Image1: portfolio1,
+    col1Image2: portfolio2,
+    col2Image: portfolio3,
   },
 ];
 
-function splitProjectTitle(title) {
-  const [primary, secondary] = title.split(/:\s+/, 2);
+function ProjectCard({ project, index, progress, range, targetScale }) {
+  const container = useRef(null);
 
-  return {
-    primary: primary?.trim() || title,
-    secondary: secondary?.trim() || '',
-  };
-}
-
-/* ─── PROJECT CARD ─────────────────────────────────────────── */
-
-function ProjectRow({
-  project,
-  onKnowMore,
-  isActive,
-}) {
-  const [imgHovered, setImgHovered] = useState(false);
+  const scale = useTransform(progress, range, [1, targetScale]);
 
   return (
-    <motion.article
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{
-        duration: 0.7,
-        ease: EXPO,
-      }}
-      className="
-        group
-        relative
-        overflow-hidden
-        rounded-[28px]
-        border
-        border-white/[0.06]
-        bg-[#050816]
-        p-6
-        md:p-7
-        flex
-        flex-col
-        h-full
-        transition-transform
-        duration-500
-        hover:-translate-y-2
-      "
-      style={{
-        background: `
-          linear-gradient(
-            180deg,
-            rgba(11,16,45,0.98) 0%,
-            rgba(7,10,30,0.98) 45%,
-            rgba(3,5,18,1) 100%
-          )
-        `,
-        boxShadow: `
-          0 0 0 1px rgba(36,71,255,0.08),
-          0 30px 80px rgba(0,0,0,0.55),
-          0 0 120px rgba(36,71,255,0.08)
-        `,
-      }}
+    <div
+      ref={container}
+      className="sticky top-24 md:top-32 h-[85vh] w-full"
     >
-      {/* Inner glow overlay */}
-      <div
-        className="
-          absolute
-          inset-0
-          opacity-40
-          pointer-events-none
-          rounded-[28px]
-        "
+      <motion.article
         style={{
-          background: `
-            radial-gradient(
-              circle at top left,
-              rgba(80,120,255,0.18),
-              transparent 40%
-            )
-          `,
+          scale,
+          top: `calc(-5vh + ${index * 25}px)`,
         }}
-      />
-
-      {/* Background number watermark */}
-      <div
         className="
-          absolute
-          -top-4
-          left-4
-          pointer-events-none
-          select-none
-          opacity-20
+          relative
+          origin-top
+          mx-auto
+          h-full
+          w-full
+          flex
+          flex-col
+          gap-4
+          sm:gap-6
+          md:gap-8
+          rounded-[40px]
+          sm:rounded-[50px]
+          md:rounded-[60px]
+          border
+          border-white
+          bg-[#0C0C0C]
+          p-4
+          sm:p-6
+          md:p-8
         "
       >
-        <span className="font-display font-black text-8xl md:text-[120px] leading-none text-transparent"
-              style={{ WebkitTextStroke: '2px rgba(255,255,255,0.3)' }}>
-          {project.num}
-        </span>
-      </div>
+        {/* TOP ROW */}
+        <div className="flex flex-col sm:flex-row items-start sm:justify-between gap-4 sm:gap-6">
 
-      {/* Header: Number + Badge */}
-      <div className="relative z-10 flex items-start justify-between mb-6">
-        <span className="font-display font-black text-5xl md:text-6xl tracking-tighter text-white">
-          {project.num}
-        </span>
+          <div className="flex flex-row items-start gap-3 sm:gap-6 md:gap-10 min-w-0 w-full">
 
-        <div
-          className="
-            px-4
-            py-2
-            rounded-full
-            border
-            border-[#00e5ff]/30
-            text-[10px]
-            uppercase
-            tracking-[0.3em]
-            font-mono
-            text-[#00e5ff]
-            bg-[#00e5ff]/5
-          "
-        >
-          WEB
-        </div>
-      </div>
-
-      {/* Content area */}
-      <div className="relative z-10 flex flex-col flex-1">
-        {(() => {
-          const { primary, secondary } = splitProjectTitle(project.title);
-
-          return (
-            <h3
-              className="
-                max-w-[420px]
-                font-display
-                text-[22px]
-                md:text-[24px]
-                leading-[1.1]
-                font-bold
-                tracking-tight
-                text-white
-                mb-4
-              "
-            >
-              <span className="block">{primary}</span>
-              {secondary ? (
-                <span className="block mt-1 text-[18px] md:text-[20px] text-white/85 leading-[1.15]">
-                  {secondary}
-                </span>
-              ) : null}
-            </h3>
-          );
-        })()}
-
-        <div className="mb-4">
-          <p
-            className="
-              font-mono
-              text-[10px]
-              uppercase
-              tracking-[0.35em]
-              mb-3
-            "
-            style={{
-              color: 'var(--color-accent)',
-            }}
-          >
-            TECHSTACK USED
-          </p>
-
-          <p className="editorial-body text-sm leading-[1.8]">
-            {project.tech}
-          </p>
-        </div>
-
-        <p
-          className="
-            font-mono
-            text-[10px]
-            uppercase
-            tracking-[0.35em]
-            mb-5
-          "
-          style={{
-            color: 'var(--color-accent)',
-          }}
-        >
-          {project.period}
-        </p>
-
-        <ul className="space-y-3 mb-6">
-          {project.highlights.map((line) => (
-            <li
-              key={line}
-              className="
-                editorial-body
-                text-sm
-                pl-5
-                relative
-                leading-[1.7]
-              "
-            >
-              <span
-                className="
-                  absolute
-                  left-0
-                  top-[0.72em]
-                  w-[6px]
-                  h-[6px]
-                  rounded-full
-                  bg-[#36d7ff]
-                "
-              />
-
-              {line}
-            </li>
-          ))}
-        </ul>
-
-        {/* Image — desktop screenshot frame */}
-        <div
-          className="
-            relative
-            mt-auto
-            overflow-hidden
-            rounded-[18px]
-            border
-            border-white/[0.06]
-            cursor-pointer
-            group/img
-          "
-          style={{ aspectRatio: '16 / 9' }}
-          onMouseEnter={() => setImgHovered(true)}
-          onMouseLeave={() => setImgHovered(false)}
-          onClick={() =>
-            project.url &&
-            project.url !== '#' &&
-            window.open(project.url, '_blank', 'noreferrer')
-          }
-        >
-          {project.image ? (
-            <motion.img
-              src={project.image}
-              alt={project.title}
-              className="
-                w-full
-                h-full
-                object-cover
-                object-top
-                grayscale-[20%]
-                group-hover/img:grayscale-0
-                transition-all
-                duration-700
-              "
-              animate={{
-                scale: imgHovered ? 1.04 : 1,
-              }}
-              transition={{
-                duration: 0.7,
-                ease: EXPO,
-              }}
-            />
-          ) : (
+            {/* NUMBER */}
             <div
               className="
-                w-full
-                h-full
-                flex
-                items-center
-                justify-center
+                shrink-0
+                font-display
+                font-black
+                text-[#D7E2EA]
+                leading-none
+                tracking-[-0.08em]
+                select-none
               "
               style={{
-                background: '#0a0a0a',
+                fontSize: 'clamp(2.5rem, 10vw, 140px)',
               }}
             >
-              <span className="editorial-num-bg opacity-40">
-                LA
-              </span>
+              {project.number}
             </div>
-          )}
 
-          <AnimatePresence>
-            {imgHovered && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="
-                  absolute
-                  inset-0
-                  flex
-                  items-center
-                  justify-center
-                  gap-4
-                "
-                style={{
-                  background: 'rgba(5,5,5,0.55)',
-                }}
-              >
-                <a
-                  href={project.github}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="
-                    w-12
-                    h-12
-                    flex
-                    items-center
-                    justify-center
-                    border
-                    border-white/15
-                    backdrop-blur-md
-                    bg-white/[0.04]
-                    rounded-full
-                  "
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <FiGithub className="w-5 h-5 text-white" />
-                </a>
-
-                {project.url !== '#' && (
-                  <a
-                    href={project.url}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="
-                      w-12
-                      h-12
-                      flex
-                      items-center
-                      justify-center
-                      border
-                      border-white/15
-                      backdrop-blur-md
-                      bg-white/[0.04]
-                      rounded-full
-                    "
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    <FiExternalLink className="w-5 h-5 text-white" />
-                  </a>
-                )}
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-
-        {/* Know More — below the image */}
-        <div className="pt-5">
-          <button
-            type="button"
-            onClick={onKnowMore}
-            className="
-              group/km
-              inline-flex
-              items-center
-              gap-3
-              font-display
-              font-bold
-              text-[10px]
-              uppercase
-              tracking-[0.4em]
-              transition-colors
-            "
-            style={{
-              color: 'var(--color-accent)',
-            }}
-          >
-            <span className="relative">
-              {isActive ? 'Close' : 'Know More'}
+            {/* META */}
+            <div className="flex flex-col gap-1 sm:gap-2.5 pt-1.5 sm:pt-3 md:pt-4 min-w-0 flex-1">
 
               <span
                 className="
-                  absolute
-                  -bottom-1
-                  left-0
-                  w-0
-                  h-px
-                  bg-current
-                  transition-all
-                  duration-300
-                  group-hover/km:w-full
+                  font-mono
+                  uppercase
+                  tracking-[0.2em]
+                  text-[#D7E2EA]/60
                 "
-              />
-            </span>
-
-            <motion.span
-              animate={{
-                x: [0, 5, 0],
-              }}
-              transition={{
-                duration: 1.5,
-                repeat: Infinity,
-                ease: 'easeInOut',
-              }}
-            >
-              {isActive ? (
-                <FiX className="w-4 h-4" />
-              ) : (
-                <FiArrowUpRight className="w-4 h-4" />
-              )}
-            </motion.span>
-          </button>
-        </div>
-      </div>
-    </motion.article>
-  );
-}
-
-/* ─── DETAIL VIEW ──────────────────────────────────────────── */
-
-function DetailView({ project }) {
-  if (!project) return null;
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 50 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: 50 }}
-      transition={{ duration: 0.8, ease: EXPO }}
-      className="
-        mt-24
-        rounded-[36px]
-        border
-        border-white/[0.06]
-        p-8
-        md:p-12
-        bg-[#050816]
-        grid
-        lg:grid-cols-12
-        gap-12
-        lg:gap-16
-        items-start
-      "
-      style={{
-        background:
-          'linear-gradient(180deg, rgba(10,15,40,0.98) 0%, rgba(3,6,20,1) 100%)',
-        boxShadow:
-          '0 10px 40px rgba(0,0,0,0.35)',
-      }}
-    >
-      <div className="lg:col-span-4 space-y-10">
-        <div>
-          <span className="editorial-eyebrow block mb-4">
-            System Context
-          </span>
-
-          <h2 className="editorial-heading editorial-heading-md mb-3">
-            {project.title}
-          </h2>
-
-          <p
-            className="
-              font-mono
-              text-[10px]
-              uppercase
-              tracking-widest
-              mb-6
-            "
-            style={{
-              color: 'var(--color-accent)',
-            }}
-          >
-            {project.period}
-          </p>
-
-          <p className="editorial-body text-base">
-            {project.context}
-          </p>
-        </div>
-
-        <div className="flex flex-wrap gap-6">
-          <a
-            href={project.github}
-            target="_blank"
-            rel="noreferrer"
-            className="
-              editorial-link
-              inline-flex
-              items-center
-              gap-2
-            "
-          >
-            <FiGithub className="w-4 h-4" />
-            Repository
-          </a>
-
-          {project.url !== '#' && (
-            <a
-              href={project.url}
-              target="_blank"
-              rel="noreferrer"
-              className="
-                editorial-link
-                inline-flex
-                items-center
-                gap-2
-              "
-            >
-              <FiExternalLink className="w-4 h-4" />
-              Live System
-            </a>
-          )}
-        </div>
-
-        <div className="editorial-panel p-8 space-y-6">
-          {project.metrics.map((m, i) => (
-            <div
-              key={i}
-              className="
-                flex
-                justify-between
-                items-end
-                pb-4
-                border-b
-                border-white/[0.06]
-              "
-            >
-              <span
-                className="editorial-eyebrow"
                 style={{
-                  opacity: 0.6,
+                  fontSize: 'clamp(0.65rem, 1vw, 0.85rem)',
                 }}
               >
-                {m.label}
+                {project.category}
               </span>
 
-              <span
+              <h3
                 className="
                   font-display
                   font-bold
-                  text-lg
+                  uppercase
+                  text-[#D7E2EA]
+                  leading-none
+                  tracking-tight
                 "
                 style={{
-                  color: '#f5f5f5',
+                  fontSize: 'clamp(1.2rem, 2.4vw, 2.3rem)',
                 }}
               >
-                {m.value}
-              </span>
+                {project.name}
+              </h3>
             </div>
-          ))}
-        </div>
-      </div>
+          </div>
 
-      <div className="lg:col-span-8 space-y-10">
-        <div
-          className="
-            relative
-            aspect-video
-            overflow-hidden
-            editorial-panel
-            rounded-[28px]
-          "
-        >
-          {project.image ? (
-            <img
-              src={project.image}
-              alt={project.title}
-              className="
-                w-full
-                h-full
-                object-cover
-                object-top
-              "
-            />
-          ) : (
-            <div
-              className="
-                w-full
-                h-full
-                flex
-                items-center
-                justify-center
-              "
-              style={{
-                background: '#0a0a0a',
-              }}
-            >
-              <span className="editorial-num-bg">
-                LA
-              </span>
-            </div>
-          )}
-        </div>
-
-        <div className="grid md:grid-cols-2 gap-6">
-          {project.features.map((f, i) => (
-            <div
-              key={i}
-              className="
-                flex
-                gap-4
-                editorial-panel
-                p-5
-              "
-            >
-              <div
+          {/* BUTTONS */}
+          <div className="shrink-0 self-start sm:self-auto pt-1 sm:pt-2 md:pt-3 flex flex-row items-center gap-3 w-full sm:w-auto">
+            {project.githubUrl && (
+              <a
+                href={project.githubUrl}
+                target="_blank"
+                rel="noreferrer"
                 className="
-                  w-10
-                  h-10
                   flex
                   items-center
                   justify-center
-                  shrink-0
+                  w-12
+                  h-12
+                  rounded-full
+                  border
+                  border-white
+                  hover:bg-white/5
+                  text-white/70
+                  hover:text-white
+                  transition-all
+                  duration-300
                 "
-                style={{
-                  color: 'var(--color-accent)',
-                  border: '1px solid var(--color-border)',
-                }}
               >
-                {f.icon}
-              </div>
+                <FiGithub className="w-4 h-4" />
+              </a>
+            )}
 
-              <p className="editorial-body text-sm">
-                {f.text}
-              </p>
-            </div>
-          ))}
+            <a
+              href={project.name === 'BookMyCare' ? undefined : project.liveUrl}
+              target={project.name === 'BookMyCare' ? undefined : "_blank"}
+              rel="noreferrer"
+              onClick={(e) => {
+                if (project.name === 'BookMyCare') e.preventDefault();
+              }}
+              className={`
+                inline-flex
+                items-center
+                justify-center
+                px-10
+                py-3.5
+                rounded-full
+                border
+                text-xs
+                font-bold
+                uppercase
+                tracking-wider
+                transition-all
+                duration-300
+                ${project.name === 'BookMyCare'
+                  ? 'border-white/20 text-white/30 cursor-not-allowed'
+                  : 'border-white hover:bg-white/10 text-white'
+                }
+              `}
+            >
+              LIVE PROJECT
+            </a>
+          </div>
         </div>
-      </div>
-    </motion.div>
+
+        {/* IMAGE GRID */}
+        <div className="grid grid-cols-[1fr_2fr] gap-3 sm:gap-4 md:gap-5 flex-1 min-h-0">
+
+          {/* LEFT COLUMN */}
+          <div className="flex flex-col gap-3 sm:gap-4 md:gap-5 h-full min-h-0">
+
+            {/* TOP IMAGE */}
+            <div className="overflow-hidden rounded-[20px] sm:rounded-[24px] md:rounded-[32px] flex-1 w-full relative">
+              <img
+                src={project.col1Image1}
+                alt=""
+                className="absolute inset-0 h-full w-full object-cover object-center"
+                draggable={false}
+              />
+            </div>
+
+            {/* BOTTOM IMAGE */}
+            <div className="overflow-hidden rounded-[20px] sm:rounded-[24px] md:rounded-[32px] flex-1 w-full relative">
+              <img
+                src={project.col1Image2}
+                alt=""
+                className="absolute inset-0 h-full w-full object-cover object-center"
+                draggable={false}
+              />
+            </div>
+          </div>
+
+          {/* RIGHT COLUMN */}
+          <div className="overflow-hidden rounded-[20px] sm:rounded-[24px] md:rounded-[32px] h-full w-full relative">
+            <img
+              src={project.col2Image}
+              alt=""
+              className="absolute inset-0 h-full w-full object-cover object-center"
+              draggable={false}
+            />
+          </div>
+        </div>
+      </motion.article>
+    </div>
   );
 }
 
-/* ─── MAIN PROJECTS SECTION ────────────────────────────────── */
+export default function ProjectsSection() {
+  const container = useRef(null);
 
-export default function Projects() {
-  const [current, setCurrent] = useState(0);
-  const [showDetail, setShowDetail] = useState(false);
-
-  const handleKnowMore = useCallback(
-    (idx) => {
-      if (current === idx && showDetail) {
-        setShowDetail(false);
-        return;
-      }
-
-      setCurrent(idx);
-      setShowDetail(true);
-
-      setTimeout(() => {
-        const detailEl = document.getElementById(
-          'project-detail-view'
-        );
-
-        if (detailEl) {
-          detailEl.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start',
-          });
-        }
-      }, 100);
-    },
-    [current, showDetail]
-  );
+  const { scrollYProgress } = useScroll({
+    target: container,
+    offset: ['start start', 'end end'],
+  });
 
   return (
     <section
       id="projects"
-      className="editorial-section relative"
+      ref={container}
+      className="
+        relative
+        z-10
+        w-full
+        bg-[#0C0C0C]
+        -mt-10
+        sm:-mt-12
+        md:-mt-14
+        rounded-t-[40px]
+        sm:rounded-t-[50px]
+        md:rounded-t-[60px]
+        border-t
+        border-white/10
+        px-4
+        sm:px-6
+        md:px-10
+        pt-24
+        md:pt-32
+        pb-32
+        md:pb-48
+      "
     >
-      <div
+      {/* TITLE */}
+      <motion.h2
+        initial={{
+          opacity: 0,
+          y: 40,
+        }}
+        whileInView={{
+          opacity: 1,
+          y: 0,
+        }}
+        viewport={{ once: true }}
+        transition={{
+          duration: 0.8,
+        }}
         className="
-          editorial-glow
-          w-[560px]
-          h-[560px]
-          left-[-10%]
-          top-[0%]
-          opacity-35
+          text-center
+          font-display
+          font-black
+          tracking-[-0.08em]
+          leading-none
+          mb-16
+          sm:mb-20
+          md:mb-28
+          text-white
+          select-none
         "
-      />
+        style={{
+          fontSize: 'clamp(3.5rem, 9vw, 6.8rem)',
+        }}
+      >
+        My{' '}
+        <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#e0e0e0] to-[#808080]">
+          Projects
+        </span>
+      </motion.h2>
 
-      <div className="editorial-container relative z-10">
-        {/* ── Section header ── */}
-        <div
-          className="
-            grid
-            lg:grid-cols-12
-            gap-8
-            items-end
-            mb-8
-            md:mb-10
-          "
-        >
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="lg:col-span-8"
-          >
-            <div className="flex items-center gap-4 mb-5">
-              <div className="w-10 h-px bg-[#00e5ff] opacity-80" />
+      {/* STACK */}
+      <div className="mx-auto max-w-7xl relative">
+        {PROJECTS.map((project, i) => {
+          const targetScale = 1 - (PROJECTS.length - i) * 0.05;
 
-              <span className="font-mono text-[10px] tracking-[0.38em] uppercase text-[#00e5ff]">
-                MY PROJECTS
-              </span>
-            </div>
-
-            <h2 className="font-display font-black text-5xl md:text-6xl lg:text-[70px] tracking-tight leading-none text-white">
-              My <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#e0e0e0] to-[#808080]">Projects</span>
-            </h2>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="
-              lg:col-span-4
-              flex
-              items-center
-              justify-end
-            "
-          >
-            <p
-              className="
-                font-mono
-                text-[10px]
-                tracking-[0.2em]
-                uppercase
-                text-white/50
-                whitespace-nowrap
-              "
-            >
-              4 builds · full stack engineering
-            </p>
-          </motion.div>
-        </div>
-
-        {/* ── Infinite Scroll Marquee ── */}
-        <div className="relative overflow-hidden w-full py-4 -mx-4 px-4 md:-mx-8 md:px-8">
-          {/* Left and right fade gradients */}
-          <div className="absolute left-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-r from-black to-transparent z-20 pointer-events-none" />
-          <div className="absolute right-0 top-0 bottom-0 w-16 md:w-32 bg-gradient-to-l from-black to-transparent z-20 pointer-events-none" />
-
-          <motion.div
-            className="flex gap-6 shrink-0 w-max"
-            animate={{ x: ["0%", "-50%"] }}
-            transition={{
-              repeat: Infinity,
-              ease: "linear",
-              duration: 30, // Adjust speed
-            }}
-          >
-            {[...PROJECTS, ...PROJECTS].map((project, idx) => {
-              const originalIndex = idx % PROJECTS.length;
-
-              return (
-                <div key={`${project.num}-${idx}`} className="w-[320px] md:w-[420px] shrink-0 h-full">
-                  <ProjectRow
-                    project={project}
-                    onKnowMore={() => handleKnowMore(originalIndex)}
-                    isActive={current === originalIndex && showDetail}
-                  />
-                </div>
-              );
-            })}
-          </motion.div>
-        </div>
-
-        {/* ── Detail view ── */}
-        <div id="project-detail-view">
-          <AnimatePresence mode="wait">
-            {showDetail && (
-              <DetailView
-                key={PROJECTS[current].num}
-                project={PROJECTS[current]}
-              />
-            )}
-          </AnimatePresence>
-        </div>
+          return (
+            <ProjectCard
+              key={project.number}
+              project={project}
+              index={i}
+              progress={scrollYProgress}
+              range={[
+                i * 0.25,
+                1,
+              ]}
+              targetScale={targetScale}
+            />
+          );
+        })}
       </div>
     </section>
   );
