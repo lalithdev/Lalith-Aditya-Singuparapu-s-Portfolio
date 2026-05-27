@@ -4,7 +4,7 @@ import AnimatedText from '../common/AnimatedText';
 import Magnetic from '../common/Magnetic';
 import { portfolioData } from '../../data/portfolio';
 import {
-  FiGithub, FiLinkedin, FiMail, FiFile, FiEye, FiDownload, FiX,
+  FiFile, FiEye, FiDownload, FiX,
 } from 'react-icons/fi';
 import { motion, AnimatePresence } from 'framer-motion';
 import resumePdf from '../../assets/resume/Lalith_Resume_26_05_2026.pdf';
@@ -321,7 +321,7 @@ const About = () => {
   const [viewerOpen, setViewerOpen] = useState(false);
   const closeTimer = useRef(null);
 
-  const { about, personal } = portfolioData;
+  const { about } = portfolioData;
   const ABOUT_TEXT = about.description;
 
   const openPopup = () => {
@@ -334,23 +334,6 @@ const About = () => {
   const handleView = () => {
     setPopupOpen(false);
     setViewerOpen(true);
-  };
-
-  const socials = [
-    { href: personal.github,                   icon: <FiGithub size={18} />,   title: 'GitHub' },
-    { href: personal.linkedin,                 icon: <FiLinkedin size={18} />, title: 'LinkedIn' },
-    { href: `mailto:${personal.email}`,        icon: <FiMail size={18} />,     title: 'Email' },
-  ];
-
-  const iconStyle = {
-    display: 'flex', alignItems: 'center', justifyContent: 'center',
-    width: 44, height: 44, borderRadius: 12,
-    background: 'linear-gradient(135deg, rgba(99,102,241,0.12) 0%, rgba(79,70,229,0.06) 100%)',
-    boxShadow: '0 0 0 1px rgba(99,102,241,0.16) inset',
-    backdropFilter: 'blur(16px)',
-    color: '#818cf8',
-    textDecoration: 'none',
-    transition: 'background 0.25s ease, box-shadow 0.25s ease, color 0.25s ease',
   };
 
   return (
@@ -404,32 +387,7 @@ const About = () => {
               />
 
               <FadeIn delay={0.15}>
-                <div className="flex items-center gap-5 justify-center">
-                  {/* Social icons — magnetic */}
-                  {socials.map((link) => (
-                    <Magnetic key={link.title}>
-                      <a
-                        href={link.href}
-                        target={link.title !== 'Email' ? '_blank' : undefined}
-                        rel="noopener noreferrer"
-                        title={link.title}
-                        style={iconStyle}
-                        onMouseEnter={e => {
-                          e.currentTarget.style.background = 'linear-gradient(135deg, rgba(99,102,241,0.26) 0%, rgba(79,70,229,0.18) 100%)';
-                          e.currentTarget.style.boxShadow = '0 0 0 1px rgba(99,102,241,0.38) inset, 0 8px 28px rgba(99,102,241,0.20)';
-                          e.currentTarget.style.color = '#a5b4fc';
-                        }}
-                        onMouseLeave={e => {
-                          e.currentTarget.style.background = 'linear-gradient(135deg, rgba(99,102,241,0.12) 0%, rgba(79,70,229,0.06) 100%)';
-                          e.currentTarget.style.boxShadow = '0 0 0 1px rgba(99,102,241,0.16) inset';
-                          e.currentTarget.style.color = '#818cf8';
-                        }}
-                      >
-                        {link.icon}
-                      </a>
-                    </Magnetic>
-                  ))}
-
+                <div className="flex items-center justify-center">
                   {/* ── Resume button + popup ── */}
                   <div
                     style={{ position: 'relative', display: 'inline-block' }}
@@ -452,37 +410,41 @@ const About = () => {
                     <Magnetic>
                       <motion.button
                         onClick={() => setPopupOpen(v => !v)}
-                        whileTap={{ scale: 0.93 }}
+                        whileTap={{ scale: 0.95 }}
                         style={{
-                          display: 'inline-flex', alignItems: 'center', gap: 8,
-                          padding: '0 18px',
-                          height: 44,
+                          display: 'inline-flex', alignItems: 'center', gap: 10,
+                          padding: '0 28px',
+                          height: 48,
                           borderRadius: 999,
-                          background: 'linear-gradient(135deg, rgba(99,102,241,0.13) 0%, rgba(79,70,229,0.07) 100%)',
-                          boxShadow: '0 0 0 1px rgba(99,102,241,0.20) inset',
-                          backdropFilter: 'blur(18px)',
-                          border: 'none',
-                          color: '#818cf8',
+                          background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.18) 0%, rgba(168, 85, 247, 0.12) 100%)',
+                          border: '1px solid rgba(99, 102, 241, 0.35)',
+                          boxShadow: '0 0 20px rgba(99, 102, 241, 0.15), 0 4px 12px rgba(0, 0, 0, 0.3)',
+                          backdropFilter: 'blur(20px)',
+                          WebkitBackdropFilter: 'blur(20px)',
+                          color: '#cbd5e1',
                           cursor: 'pointer',
-                          transition: 'background 0.25s ease, box-shadow 0.25s ease, color 0.25s ease',
+                          transition: 'all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1)',
                         }}
                         onMouseEnter={e => {
-                          e.currentTarget.style.background = 'linear-gradient(135deg, rgba(99,102,241,0.24) 0%, rgba(79,70,229,0.16) 100%)';
-                          e.currentTarget.style.boxShadow = '0 0 0 1px rgba(99,102,241,0.38) inset, 0 8px 28px rgba(99,102,241,0.18)';
-                          e.currentTarget.style.color = '#a5b4fc';
+                          e.currentTarget.style.background = 'linear-gradient(135deg, rgba(99, 102, 241, 0.28) 0%, rgba(168, 85, 247, 0.22) 100%)';
+                          e.currentTarget.style.border = '1px solid rgba(129, 140, 248, 0.7)';
+                          e.currentTarget.style.boxShadow = '0 0 30px rgba(99, 102, 241, 0.45), 0 10px 24px rgba(99, 102, 241, 0.2)';
+                          e.currentTarget.style.color = '#ffffff';
                         }}
                         onMouseLeave={e => {
-                          e.currentTarget.style.background = 'linear-gradient(135deg, rgba(99,102,241,0.13) 0%, rgba(79,70,229,0.07) 100%)';
-                          e.currentTarget.style.boxShadow = '0 0 0 1px rgba(99,102,241,0.20) inset';
-                          e.currentTarget.style.color = '#818cf8';
+                          e.currentTarget.style.background = 'linear-gradient(135deg, rgba(99, 102, 241, 0.18) 0%, rgba(168, 85, 247, 0.12) 100%)';
+                          e.currentTarget.style.border = '1px solid rgba(99, 102, 241, 0.35)';
+                          e.currentTarget.style.boxShadow = '0 0 20px rgba(99, 102, 241, 0.15), 0 4px 12px rgba(0, 0, 0, 0.3)';
+                          e.currentTarget.style.color = '#cbd5e1';
                         }}
                       >
-                        <FiFile size={14} />
+                        <FiFile size={15} style={{ color: '#a5b4fc' }} />
                         <span style={{
                           fontFamily: 'Syne, sans-serif',
-                          fontWeight: 600,
-                          fontSize: '0.78rem',
-                          letterSpacing: '0.06em',
+                          fontWeight: 700,
+                          fontSize: '0.82rem',
+                          letterSpacing: '0.08em',
+                          textTransform: 'uppercase',
                         }}>
                           Resume
                         </span>

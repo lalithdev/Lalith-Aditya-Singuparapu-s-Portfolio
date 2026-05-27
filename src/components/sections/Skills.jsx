@@ -1,6 +1,6 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { portfolioData } from '../../data/portfolio';
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 
 const EXPO = [0.16, 1, 0.3, 1];
 
@@ -12,8 +12,78 @@ function hexToRgba(hex, alpha) {
   return `rgba(${r},${g},${b},${alpha})`;
 }
 
-function SkillCard({ cat, idx }) {
+function SkillCard({ cat, idx, scrollYProgress, scrollRange }) {
   const accent = cat.accent || '#6366f1';
+  const [layout, setLayout] = useState({ cardCenter: 0, deltaP: 0.1 });
+
+  useEffect(() => {
+    const calculateCenter = () => {
+      const width = window.innerWidth;
+      let cardWidth = 340;
+      let gap = 28;
+      let paddingLeft = 80;
+
+      if (width < 768) {
+        cardWidth = 280;
+        gap = 28;
+        paddingLeft = 24;
+      } else if (width < 1280) {
+        cardWidth = 310;
+        gap = 28;
+        paddingLeft = 48;
+      }
+
+      const cardStart = paddingLeft + idx * (cardWidth + gap);
+      const cardCenter = cardStart + cardWidth / 2;
+      const deltaP = scrollRange > 0 ? 250 / scrollRange : 0.1;
+
+      setLayout({ cardCenter, deltaP });
+    };
+
+    calculateCenter();
+    window.addEventListener('resize', calculateCenter);
+    return () => window.removeEventListener('resize', calculateCenter);
+  }, [scrollRange, idx]);
+
+  const pCenter = scrollRange > 0 ? (layout.cardCenter - window.innerWidth / 2) / scrollRange : 0.5;
+  const pStart = pCenter - layout.deltaP;
+  const pEnd = pCenter + layout.deltaP;
+
+  const y = useTransform(
+    scrollYProgress,
+    [pStart - 0.05, pStart, pCenter, pEnd, pEnd + 0.05],
+    [0, 0, -42, 0, 0]
+  );
+
+  const scale = useTransform(
+    scrollYProgress,
+    [pStart - 0.05, pStart, pCenter, pEnd, pEnd + 0.05],
+    [1, 1, 1.08, 1, 1]
+  );
+
+  const shadow = useTransform(
+    scrollYProgress,
+    [pStart - 0.05, pStart, pCenter, pEnd, pEnd + 0.05],
+    [
+      '0 2px 10px rgba(0,0,0,0.03)',
+      '0 2px 10px rgba(0,0,0,0.03)',
+      `0 24px 48px rgba(0,0,0,0.12), 0 0 25px ${hexToRgba(accent, 0.12)}`,
+      '0 2px 10px rgba(0,0,0,0.03)',
+      '0 2px 10px rgba(0,0,0,0.03)'
+    ]
+  );
+
+  const border = useTransform(
+    scrollYProgress,
+    [pStart - 0.05, pStart, pCenter, pEnd, pEnd + 0.05],
+    [
+      '1px solid rgba(0,0,0,0.06)',
+      '1px solid rgba(0,0,0,0.06)',
+      `1px solid ${hexToRgba(accent, 0.35)}`,
+      '1px solid rgba(0,0,0,0.06)',
+      '1px solid rgba(0,0,0,0.06)'
+    ]
+  );
 
   return (
     <motion.div
@@ -22,102 +92,90 @@ function SkillCard({ cat, idx }) {
       whileInView={{ opacity: 1, y: 0, scale: 1 }}
       viewport={{ once: true, amount: 0.15 }}
       transition={{ delay: idx * 0.06, duration: 0.7, ease: EXPO }}
-      whileHover={{ y: -6, transition: { duration: 0.35, ease: EXPO } }}
-      className="group relative rounded-2xl overflow-hidden"
-      style={{
-        // Glass morphism — no opaque background, deep diffusion
-        background: `linear-gradient(135deg,
-          rgba(8,12,28,0.72) 0%,
-          rgba(6,10,24,0.60) 50%,
-          rgba(10,14,32,0.68) 100%)`,
-        backdropFilter: 'blur(28px) saturate(160%)',
-        WebkitBackdropFilter: 'blur(28px) saturate(160%)',
-        // Inset edge lighting — uses the card's accent colour
-        boxShadow: `
-          0 0 0 1px rgba(255,255,255,0.04) inset,
-          0 1px 0 0 ${hexToRgba(accent, 0.18)} inset,
-          0 24px 48px rgba(0,0,0,0.45),
-          0 4px 12px rgba(0,0,0,0.3)
-        `,
-      }}
+      className="shrink-0"
     >
-      {/* Top edge accent line */}
-      <div
-        className="absolute top-0 left-4 right-4 h-px pointer-events-none"
+      <motion.div
+        className="
+          group
+          relative
+          rounded-[28px]
+          bg-white/70
+          p-6
+          w-[280px]
+          sm:w-[310px]
+          md:w-[340px]
+          h-[230px]
+          sm:h-[250px]
+          md:h-[270px]
+        "
         style={{
-          background: `linear-gradient(90deg, transparent, ${hexToRgba(accent, 0.55)}, transparent)`,
+          border,
+          boxShadow: shadow,
+          y,
+          scale,
         }}
-      />
+      >
+        <div className="relative z-10 flex flex-col h-full">
+          {/* Card header */}
+          <div className="flex items-center gap-3 mb-5">
+            {/* Icon container */}
+            <div
+              className="
+                w-11
+                h-11
+                rounded-full
+                bg-black
+                text-white
+                flex
+                items-center
+                justify-center
+                shrink-0
+              "
+            >
+              {cat.icon}
+            </div>
 
-      {/* Corner accent glow — top-left, very subtle */}
-      <div
-        className="absolute -top-10 -left-10 w-28 h-28 rounded-full pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-        style={{
-          background: `radial-gradient(circle, ${hexToRgba(accent, 0.16)} 0%, transparent 70%)`,
-          filter: 'blur(16px)',
-        }}
-      />
-
-      <div className="relative z-10 p-5">
-        {/* Card header */}
-        <div className="flex items-center gap-3 mb-4">
-          {/* Icon container — glass pill with accent glow */}
-          <div
-            className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 transition-all duration-300 group-hover:scale-110"
-            style={{
-              background: `linear-gradient(135deg, ${hexToRgba(accent, 0.20)} 0%, ${hexToRgba(accent, 0.08)} 100%)`,
-              boxShadow: `0 0 0 1px ${hexToRgba(accent, 0.22)} inset, 0 4px 12px ${hexToRgba(accent, 0.14)}`,
-              color: accent,
-            }}
-          >
-            {cat.icon}
+            <h3
+              className="
+                text-[1.05rem]
+                font-[700]
+                uppercase
+                tracking-[-0.03em]
+                text-[#111827]
+              "
+            >
+              {cat.title}
+            </h3>
           </div>
 
-          <h3
-            className="font-display font-semibold text-sm tracking-tight"
-            style={{ color: '#e2e8f0' }}
-          >
-            {cat.title}
-          </h3>
-        </div>
+          {/* Divider */}
+          <div
+            className="mb-5 h-px bg-black/5"
+          />
 
-        {/* Divider — thin accent line */}
-        <div
-          className="mb-4 h-px"
-          style={{
-            background: `linear-gradient(90deg, ${hexToRgba(accent, 0.28)}, transparent)`,
-          }}
-        />
-
-        {/* Skill pills */}
-        <div className="flex flex-wrap gap-1.5">
-          {cat.items.map((skill) => (
-            <span
-              key={skill}
-              className="font-body text-[0.7rem] px-2.5 py-1 rounded-lg transition-all duration-300
-                         group-hover:border-opacity-30"
-              style={{
-                color: '#94a3b8',
-                background: 'rgba(255,255,255,0.03)',
-                border: `1px solid rgba(255,255,255,0.06)`,
-                backdropFilter: 'blur(8px)',
-              }}
-              onMouseEnter={e => {
-                e.currentTarget.style.color = accent;
-                e.currentTarget.style.background = hexToRgba(accent, 0.08);
-                e.currentTarget.style.border = `1px solid ${hexToRgba(accent, 0.25)}`;
-              }}
-              onMouseLeave={e => {
-                e.currentTarget.style.color = '#94a3b8';
-                e.currentTarget.style.background = 'rgba(255,255,255,0.03)';
-                e.currentTarget.style.border = '1px solid rgba(255,255,255,0.06)';
-              }}
-            >
-              {skill}
-            </span>
-          ))}
+          {/* Skill pills */}
+          <div className="flex flex-wrap gap-1.5 overflow-y-auto pr-1">
+            {cat.items.map((skill) => (
+              <span
+                key={skill}
+                className="
+                  px-4
+                  py-2
+                  rounded-xl
+                  text-[0.82rem]
+                  font-medium
+                  border
+                  border-black/5
+                  bg-[#f3f4f6]
+                  text-[#4b5563]
+                "
+              >
+                {skill}
+              </span>
+            ))}
+          </div>
         </div>
-      </div>
+      </motion.div>
     </motion.div>
   );
 }
@@ -125,163 +183,118 @@ function SkillCard({ cat, idx }) {
 export default function Skills() {
   const { skills } = portfolioData;
   const categories = skills.categories ?? [];
-  const sectionRef = useRef(null);
+  const containerRef = useRef(null);
+  const sliderRef = useRef(null);
+  const [scrollRange, setScrollRange] = useState(0);
+
+  useEffect(() => {
+    const calculateRange = () => {
+      if (sliderRef.current) {
+        const range = sliderRef.current.scrollWidth - window.innerWidth;
+        setScrollRange(range > 0 ? range : 0);
+      }
+    };
+
+    const timer = setTimeout(calculateRange, 100);
+    window.addEventListener('resize', calculateRange);
+
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('resize', calculateRange);
+    };
+  }, [categories.length]);
 
   const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start end', 'end start'],
+    target: containerRef,
+    offset: ['start start', 'end end'],
   });
 
-  // Parallax speeds for depth layering
-  const orb1Y  = useTransform(scrollYProgress, [0, 1], [-30, 50]);
-  const orb2Y  = useTransform(scrollYProgress, [0, 1], [20, -40]);
-  const gridY  = useTransform(scrollYProgress, [0, 1], [-10, 20]);
+  const x = useTransform(scrollYProgress, [0, 1], [0, -scrollRange]);
 
   return (
-    <section
-      ref={sectionRef}
+    <div
+      ref={containerRef}
       id="skills"
-      className="editorial-section relative overflow-hidden"
-      style={{ backgroundColor: '#030510' }}
+      className="relative h-[220vh]"
     >
-
-      {/* ── DEPTH LAYER 0 — GLOBAL ATMOSPHERIC LIGHTS ── */}
-      <motion.div
-        style={{ y: orb1Y }}
-        className="absolute inset-0 pointer-events-none z-0"
-        aria-hidden
-      >
-        {/* Top-right: blue environmental key light */}
-        <div style={{
-          position: 'absolute',
-          top: '-5%', right: '-10%',
-          width: '70vw', height: '70vw',
-          maxWidth: 900, maxHeight: 900,
-          borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(37,99,235,0.18) 0%, rgba(17,50,120,0.09) 45%, transparent 70%)',
-          filter: 'blur(140px)',
-        }} />
-      </motion.div>
-
-      <motion.div
-        style={{ y: orb2Y }}
-        className="absolute inset-0 pointer-events-none z-0"
-        aria-hidden
-      >
-        {/* Bottom-left: indigo fill light */}
-        <div style={{
-          position: 'absolute',
-          bottom: '-10%', left: '-8%',
-          width: '55vw', height: '55vw',
-          maxWidth: 750, maxHeight: 750,
-          borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(79,70,229,0.14) 0%, rgba(20,15,80,0.07) 50%, transparent 70%)',
-          filter: 'blur(130px)',
-        }} />
-      </motion.div>
-
-      {/* ── DEPTH LAYER 1 — ENGINEERING GRID ── */}
-      <motion.div
-        style={{ y: gridY }}
-        className="absolute inset-0 pointer-events-none z-[1]"
-        aria-hidden
-      >
-        <div style={{
-          position: 'absolute',
-          inset: '-5%',
-          opacity: 0.022,
-          backgroundImage: `
-            linear-gradient(to right, rgba(99,102,241,0.8) 1px, transparent 1px),
-            linear-gradient(to bottom, rgba(99,102,241,0.8) 1px, transparent 1px)
-          `,
-          backgroundSize: '60px 60px',
-          maskImage: 'radial-gradient(ellipse 85% 85% at 50% 50%, black 30%, transparent 100%)',
-        }} />
-      </motion.div>
-
-      {/* ── VIGNETTE ── */}
-      <div
-        className="absolute inset-0 pointer-events-none z-[2]"
+      <section
+        className="
+          sticky
+          bg-[#f8f8f8]
+          rounded-[48px]
+          overflow-hidden
+          flex
+          flex-col
+          justify-center
+          py-6
+          md:py-12
+        "
         style={{
-          background: 'radial-gradient(ellipse 110% 110% at 50% 50%, transparent 55%, rgba(0,0,0,0.5) 100%)',
+          top: '64px',
+          height: 'calc(100vh - 64px)',
         }}
-        aria-hidden
-      />
-
-      {/* ── NOISE TEXTURE ── */}
-      <div
-        className="absolute inset-0 pointer-events-none z-[2]"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
-          opacity: 0.025,
-          mixBlendMode: 'overlay',
-        }}
-        aria-hidden
-      />
-
-      {/* ── CONTENT ── */}
-      <div className="editorial-container relative z-10">
-
-        {/* Section header */}
-        <div className="grid lg:grid-cols-12 gap-10 lg:gap-16 items-end mb-12 md:mb-16">
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, ease: EXPO }}
-            className="lg:col-span-7"
-          >
-            <div className="flex items-center gap-4 mb-5">
-              <div
-                className="w-10 h-px"
-                style={{ background: 'linear-gradient(90deg, #6366f1, #818cf8)' }}
-              />
-              <span
-                className="section-eyebrow"
-                style={{ color: '#818cf8', letterSpacing: '0.38em' }}
-              >
-                Skills &amp; Expertise
-              </span>
-            </div>
-            <h2
-              className="editorial-heading editorial-heading-lg"
-              style={{ color: '#f0f4f8' }}
+      >
+        {/* CONTENT */}
+        <div className="w-full relative z-10">
+          
+          {/* Section header */}
+          <div className="flex flex-col items-center text-center px-6 md:px-12 lg:px-20 pt-8 md:pt-16 lg:pt-20">
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, ease: EXPO }}
             >
-              My{' '}
-              <span
+              <h2
+                className="
+                  font-display
+                  text-center
+                  uppercase
+                  font-black
+                  tracking-[-0.08em]
+                  leading-none
+                  text-[#050505]
+                  select-none
+                "
                 style={{
-                  fontFamily: 'var(--font-serif)',
-                  fontStyle: 'italic',
-                  background: 'linear-gradient(135deg, #818cf8 0%, #6366f1 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundClip: 'text',
+                  fontSize: 'clamp(5rem, 14vw, 10rem)',
                 }}
               >
-                Skills
-              </span>
-            </h2>
-          </motion.div>
+                SKILLS
+              </h2>
+            </motion.div>
+          </div>
 
-          <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2, duration: 0.8, ease: EXPO }}
-            className="lg:col-span-5 font-body text-sm md:text-base lg:text-right lg:max-w-sm lg:ml-auto"
-            style={{ color: '#64748b', lineHeight: 1.7 }}
-          >
-            Full stack across backend systems, web interfaces, and cloud-ready deployment.
-          </motion.p>
-        </div>
+          {/* Top Divider Line */}
+          <div className="px-6 md:px-12 lg:px-20">
+            <div className="w-full h-px bg-black/5 mt-6 mb-6 md:mt-10 md:mb-10 lg:mt-14 lg:mb-14" />
+          </div>
 
-        {/* ── SKILL CARDS GRID ── */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
-          {categories.map((cat, idx) => (
-            <SkillCard key={cat.title} cat={cat} idx={idx} />
-          ))}
+          {/* SKILL CARDS HORIZONTAL SLIDER */}
+          <div className="overflow-hidden w-full pt-32 pb-24 -mt-32 -mb-24">
+            <motion.div
+              ref={sliderRef}
+              style={{ x }}
+              className="flex gap-7 px-6 md:px-12 lg:px-20 w-max"
+            >
+              {categories.map((cat, idx) => (
+                <SkillCard
+                  key={cat.title}
+                  cat={cat}
+                  idx={idx}
+                  scrollYProgress={scrollYProgress}
+                  scrollRange={scrollRange}
+                />
+              ))}
+            </motion.div>
+          </div>
+
+          {/* Bottom Divider Line */}
+          <div className="px-6 md:px-12 lg:px-20">
+            <div className="w-full h-px bg-black/5 mt-6 mb-6 md:mt-10 md:mb-10 lg:mt-14 lg:mb-14" />
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </div>
   );
 }
