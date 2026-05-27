@@ -2,21 +2,21 @@ import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { FiGithub } from 'react-icons/fi';
 
-import certifyMe1 from '../../assets/images/certifymeprojectimage1.png';
-import certifyMe2 from '../../assets/images/certifymeprojectimage2.png';
-import certifyMe3 from '../../assets/images/certifymeprojectimage3.png';
+import certifyMe1 from '../../assets/images/Project/CertifyMe/certifymeprojectimage1.png';
+import certifyMe2 from '../../assets/images/Project/CertifyMe/certifymeprojectimage2.png';
+import certifyMe3 from '../../assets/images/Project/CertifyMe/certifymeprojectimage3.png';
 
-import manage1 from '../../assets/images/mnpprojectimage1.png';
-import manage2 from '../../assets/images/mnpprojectimage2.png';
-import manage3 from '../../assets/images/mnpprojectimage3.png';
+import manage1 from '../../assets/images/Project/ManageYourProject/mnpprojectimage1.png';
+import manage2 from '../../assets/images/Project/ManageYourProject/mnpprojectimage2.png';
+import manage3 from '../../assets/images/Project/ManageYourProject/mnpprojectimage3.png';
 
-import portfolio1 from '../../assets/images/portfolioprojectimage1.png';
-import portfolio2 from '../../assets/images/portfolioprojectimage2.png';
-import portfolio3 from '../../assets/images/portfolioprojectimage3.png';
+import portfolio1 from '../../assets/images/Project/Portfolio/portfolioprojectimage1.png';
+import portfolio2 from '../../assets/images/Project/Portfolio/portfolioprojectimage2.png';
+import portfolio3 from '../../assets/images/Project/Portfolio/portfolioprojectimage3.png';
 
-import bookMyCare1 from '../../assets/images/bookmycare1.png';
-import bookMyCare2 from '../../assets/images/bookmycare2.png';
-import bookMyCare3 from '../../assets/images/bookmycare3.png';
+import bookMyCare1 from '../../assets/images/Project/BookMyCare/bookmycare1.png';
+import bookMyCare2 from '../../assets/images/Project/BookMyCare/bookmycare2.png';
+import bookMyCare3 from '../../assets/images/Project/BookMyCare/bookmycare3.png';
 
 const PROJECTS = [
   {

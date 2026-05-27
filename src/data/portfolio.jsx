@@ -1,7 +1,7 @@
 import { FiCode, FiDatabase, FiLayout, FiServer, FiCpu, FiCloud, FiGitBranch, FiTerminal, FiGlobe, FiZap, FiBook, FiUsers } from 'react-icons/fi';
-import certifyMeImg from '../assets/images/certifymeprojectimage.png';
-import manageProjectImg from '../assets/images/mnpprojectimage1.png';
-import portfolioImg from '../assets/images/portfolioprojectimage3.png';
+import certifyMeImg from '../assets/images/Project/CertifyMe/certifymeprojectimage1.png';
+import manageProjectImg from '../assets/images/Project/ManageYourProject/mnpprojectimage1.png';
+import portfolioImg from '../assets/images/Project/Portfolio/portfolioprojectimage3.png';
 
 export const portfolioData = {
   personal: {
