@@ -210,22 +210,26 @@ export const portfolioData = {
 
   testimonials: [
     {
-      name: "Michael T., Tech Innovators",
+      name: "Michael T.",
+      role: "Product Manager",
       text: "Lalith brought our product concept to life in a way we never thought possible. The architecture was so detailed and realistic; it helped us secure investors and streamline the manufacturing process! Highly recommend!",
       image: "https://randomuser.me/api/portraits/men/32.jpg"
     },
     {
-      name: "David K., Apex Interactive",
+      name: "David K.",
+      role: "Engineering Lead",
       text: "Lalith's backend architecture designs exceeded all expectations. The level of detail, creativity, responsiveness throughout the project was outstanding. Our platform wouldn't be the same without their contributions.",
       image: "https://randomuser.me/api/portraits/men/46.jpg"
     },
     {
-      name: "Rachel M., MetaForm Solutions",
+      name: "Rachel M.",
+      role: "CEO, MetaForm",
       text: "Lalith's unique system designs made our project a huge success. The code was breathtaking, and their professionalism made the entire process smooth and enjoyable. Looking forward to collaborating again!",
       image: "https://randomuser.me/api/portraits/women/44.jpg"
     },
     {
-      name: "Dr. Amanda R., MedTech Visuals",
+      name: "Dr. Amanda R.",
+      role: "Project Supervisor",
       text: "Lalith created detailed API models for our medical training program, and the quality was outstanding. The models were precise, realistic, and incredibly useful for our team. We're thrilled with the outcome.",
       image: "https://randomuser.me/api/portraits/women/68.jpg"
     }
