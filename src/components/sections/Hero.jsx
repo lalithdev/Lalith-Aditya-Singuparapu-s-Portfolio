@@ -96,7 +96,8 @@ export default function Hero() {
       >
         <motion.div
           initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: false, amount: 0.1 }}
           transition={{ duration: 1.8, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
         >
           <h1
@@ -136,7 +137,8 @@ export default function Hero() {
       >
         <motion.div
           initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: false, amount: 0.1 }}
           transition={{ duration: 2, delay: 1 }}
           className="flex flex-col md:flex-row justify-between items-center gap-4 w-full"
         >

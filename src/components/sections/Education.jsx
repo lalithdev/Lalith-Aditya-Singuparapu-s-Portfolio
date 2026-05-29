@@ -39,20 +39,41 @@ export default function Education() {
           >
             Education
           </motion.p>
-          <motion.h2
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            className="font-display font-black tracking-tighter leading-none"
-            style={{ fontSize: 'clamp(3rem, 7vw, 5.5rem)' }}
+          <motion.div
+            initial={{
+              opacity: 0,
+              y: 120,
+              scale: 0.85,
+              filter: 'blur(10px)',
+            }}
+            whileInView={{
+              opacity: 1,
+              y: 0,
+              scale: 1,
+              filter: 'blur(0px)',
+            }}
+            viewport={{
+              once: false,
+              amount: 0.4,
+            }}
+            transition={{
+              duration: 1.4,
+              ease: [0.22, 1, 0.36, 1],
+            }}
           >
-            <span className="text-white">Academic</span>{' '}
-            <span
-              className="text-gradient"
-              style={{ background: 'linear-gradient(to right, #06b6d4, #22d3ee)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}
+            <h2
+              className="font-display font-black tracking-tighter leading-none"
+              style={{ fontSize: 'clamp(3rem, 7vw, 5.5rem)' }}
             >
-              Timeline
-            </span>
-          </motion.h2>
+              <span className="text-white">Academic</span>{' '}
+              <span
+                className="text-gradient"
+                style={{ background: 'linear-gradient(to right, #06b6d4, #22d3ee)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}
+              >
+                Timeline
+              </span>
+            </h2>
+          </motion.div>
         </div>
 
         <div className="relative">

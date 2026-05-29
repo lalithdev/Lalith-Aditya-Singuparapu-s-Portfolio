@@ -369,14 +369,35 @@ const About = () => {
 
         {/* ── Center content ── */}
         <div className="relative z-10 flex flex-col items-center gap-10 sm:gap-14 md:gap-16 text-center max-w-5xl mx-auto">
-          <FadeIn delay={0} y={40}>
+          <motion.div
+            initial={{
+              opacity: 0,
+              y: 120,
+              scale: 0.85,
+              filter: 'blur(10px)',
+            }}
+            whileInView={{
+              opacity: 1,
+              y: 0,
+              scale: 1,
+              filter: 'blur(0px)',
+            }}
+            viewport={{
+              once: false,
+              amount: 0.4,
+            }}
+            transition={{
+              duration: 1.4,
+              ease: [0.22, 1, 0.36, 1],
+            }}
+          >
             <h2
               className="font-display font-black tracking-tighter leading-[0.88] uppercase"
               style={{ fontSize: 'clamp(3.5rem, 9vw, 9rem)', color: '#e8f0ff' }}
             >
               ABOUT <span className="text-gradient">ME.</span>
             </h2>
-          </FadeIn>
+          </motion.div>
 
           <div className="flex flex-col items-center gap-14 sm:gap-16 md:gap-20 w-full">
             <div className="flex flex-col items-center gap-8">

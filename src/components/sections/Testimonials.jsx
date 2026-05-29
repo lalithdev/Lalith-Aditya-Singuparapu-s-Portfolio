@@ -1,11 +1,11 @@
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { portfolioData } from '../../data/portfolio';
+import { supabase } from '../../lib/supabase';
 import { FiX } from 'react-icons/fi';
 
 export default function Testimonials() {
-const { testimonials } = portfolioData;
-
+const [testimonials, setTestimonials] = useState([]);
 const sectionRef = useRef(null);
 const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -16,37 +16,44 @@ rating: 5,
 message: '',
 });
 
-const handleSubmit = (e) => {
-e.preventDefault();
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
+  try {
+    const { error } = await supabase
+      .from('testimonials')
+      .insert([
+        {
+          name: formData.name,
+          role: formData.role,
+          rating: formData.rating,
+          message: formData.message,
+          approved: false,
+        },
+      ]);
 
-const subject = encodeURIComponent(
-  `Testimonial from ${formData.name}`
-);
+    if (error) {
+      console.error(error);
+      alert('Failed to submit testimonial. Please try again.');
+      return;
+    }
 
-const body = encodeURIComponent(
-  `Name: ${formData.name}
+    setIsModalOpen(false);
 
+    setFormData({
+      name: '',
+      role: '',
+      rating: 5,
+      message: '',
+    });
 
-Role: ${formData.role}
-Rating: ${formData.rating} Stars
+    alert(
+      'Thank you! Your testimonial has been submitted for review.'
+    );
 
-Testimonial:
-${formData.message}`
-);
-
-
-window.location.href = `mailto:${portfolioData.personal.email}?subject=${subject}&body=${body}`;
-
-setIsModalOpen(false);
-
-setFormData({
-  name: '',
-  role: '',
-  rating: 5,
-  message: '',
-});
-
+  } catch (err) {
+    console.error(err);
+  }
 };
 
 /*
@@ -72,7 +79,7 @@ scrollYProgress,
 const scale = useTransform(
 scrollYProgress,
 [0, 1],
-[0.94, 1]
+[0.96, 1]
 );
 
 // top project closing effect
@@ -93,31 +100,71 @@ const clipPath = useTransform(
 scrollYProgress,
 [0, 1],
 [
-'inset(18% 0% 0% 0% round 60px)',
-'inset(0% 0% 0% 0% round 60px)',
+  'inset(18% 0% 0% 0% round 60px)',
+  'inset(0% 0% 0% 0% round 60px)',
 ]
 );
 
 /*
 ============================================
-INFINITE MARQUEE
+MARQUEE LOGIC
 ============================================
 */
 
-const row1 = [...testimonials, ...testimonials];
+const row1Base = testimonials;
 
 const row2Base = [...testimonials].reverse();
 
+const row1 = [...row1Base, ...row1Base];
 const row2 = [...row2Base, ...row2Base];
+useEffect(() => {
+  fetchTestimonials();
+}, []);
 
+const fetchTestimonials = async () => {
+  const { data, error } = await supabase
+    .from('testimonials')
+    .select('*')
+    .eq('approved', true)
+    .order('created_at', {
+      ascending: false,
+    });
+
+  if (!error && data) {
+    // DB uses 'message', local renderer expects 'text', map it
+    const formattedData = data.map(item => ({
+      ...item,
+      text: item.message,
+    }));
+    setTestimonials(formattedData);
+  }
+};
+useEffect(() => {
+  const channel = supabase
+    .channel('testimonials-live')
+    .on(
+      'postgres_changes',
+      {
+        event: '*',
+        schema: 'public',
+        table: 'testimonials',
+      },
+      () => {
+        fetchTestimonials();
+      }
+    )
+    .subscribe();
+
+  return () => {
+    supabase.removeChannel(channel);
+  };
+}, []);
 return (
 <motion.section
 ref={sectionRef}
 id="testimonials"
 style={{
 y,
-opacity,
-scale,
 clipPath,
 }}
 className="
@@ -227,7 +274,7 @@ w-full
         amount: 0.4,
       }}
       transition={{
-        duration: 1.4,
+        duration: 0.8,
         ease: [0.22, 1, 0.36, 1],
       }}
       className="relative flex flex-col items-center"
@@ -430,7 +477,10 @@ w-full
 
             <div className="w-10 h-10 rounded-full overflow-hidden bg-white/10 shrink-0">
               <img
-                src={testimonial.image}
+                src={
+                  testimonial.image ||
+                  'https://i.pravatar.cc/150?img=3'
+                }
                 alt={testimonial.name}
                 className="w-full h-full object-cover"
               />
@@ -518,7 +568,10 @@ w-full
 
             <div className="w-10 h-10 rounded-full overflow-hidden bg-white/10 shrink-0">
               <img
-                src={testimonial.image}
+                src={
+                  testimonial.image ||
+                  'https://i.pravatar.cc/150?img=3'
+                }
                 alt={testimonial.name}
                 className="w-full h-full object-cover"
               />

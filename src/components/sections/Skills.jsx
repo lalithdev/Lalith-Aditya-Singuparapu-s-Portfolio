@@ -52,7 +52,7 @@ function SkillCard({ cat, idx, scrollYProgress, scrollRange }) {
   const y = useTransform(
     scrollYProgress,
     [pStart - 0.05, pStart, pCenter, pEnd, pEnd + 0.05],
-    [0, 0, -42, 0, 0]
+    [0, 0, -20, 0, 0]
   );
 
   const scale = useTransform(
@@ -215,7 +215,7 @@ export default function Skills() {
     <div
       ref={containerRef}
       id="skills"
-      className="relative h-[220vh]"
+      className="relative h-[300vh]"
     >
       <section
         className="
@@ -240,10 +240,24 @@ export default function Skills() {
           {/* Section header */}
           <div className="flex flex-col items-center text-center px-6 md:px-12 lg:px-20 pt-8 md:pt-16 lg:pt-20">
             <motion.div
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, ease: EXPO }}
+              initial={{
+                opacity: 0,
+                y: 120,
+                scale: 0.85,
+              }}
+              whileInView={{
+                opacity: 1,
+                y: 0,
+                scale: 1,
+              }}
+              viewport={{
+                once: true,
+                amount: 0.4,
+              }}
+              transition={{
+                duration: 1.4,
+                ease: [0.22, 1, 0.36, 1],
+              }}
             >
               <h2
                 className="

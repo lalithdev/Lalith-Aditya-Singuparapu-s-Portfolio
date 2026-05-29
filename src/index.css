@@ -36,10 +36,6 @@ html { scroll-behavior: smooth; }
 body {
   margin: 0; padding: 0; min-height: 100vh; overflow-x: hidden;
   background-color: #000000;
-  background-image:
-    radial-gradient(ellipse 110% 110% at 100% 30%, rgba(15, 35, 180, 0.28) 0%, rgba(8, 20, 80, 0.12) 45%, transparent 80%),
-    radial-gradient(circle 800px at 0% 90%, rgba(10, 20, 80, 0.15) 0%, transparent 60%);
-  background-attachment: fixed;
 }
 
 body::before {
