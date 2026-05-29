@@ -3,21 +3,29 @@ import { useRef, useState, useEffect } from 'react';
 import { portfolioData } from '../../data/portfolio';
 import { supabase } from '../../lib/supabase';
 import { FiX } from 'react-icons/fi';
+import Magnetic from '../common/Magnetic';
 
 export default function Testimonials() {
 const [testimonials, setTestimonials] = useState([]);
 const sectionRef = useRef(null);
 const [isModalOpen, setIsModalOpen] = useState(false);
+const [statusMessage, setStatusMessage] = useState(null);
+const [hoverRating, setHoverRating] = useState(0);
 
 const [formData, setFormData] = useState({
 name: '',
 role: '',
-rating: 5,
+rating: 0,
 message: '',
 });
 
 const handleSubmit = async (e) => {
   e.preventDefault();
+
+  if (formData.rating === 0) {
+    setStatusMessage({ type: 'error', text: 'Please select a rating (stars) before submitting.' });
+    return;
+  }
 
   try {
     const { error } = await supabase
@@ -28,31 +36,39 @@ const handleSubmit = async (e) => {
           role: formData.role,
           rating: formData.rating,
           message: formData.message,
-          approved: false,
+          approved: true,
         },
       ]);
 
     if (error) {
       console.error(error);
-      alert('Failed to submit testimonial. Please try again.');
+      setStatusMessage({ type: 'error', text: 'Failed to submit testimonial. Please try again.' });
       return;
     }
-
-    setIsModalOpen(false);
 
     setFormData({
       name: '',
       role: '',
-      rating: 5,
+      rating: 0,
       message: '',
     });
 
-    alert(
-      'Thank you! Your testimonial has been submitted for review.'
-    );
+    // Explicitly fetch testimonials again to update the UI immediately
+    fetchTestimonials();
+
+    setStatusMessage({ type: 'success', text: 'Thank you! Your testimonial has been added.' });
+
+    setTimeout(() => {
+      setIsModalOpen(false);
+      setStatusMessage(null);
+      if (sectionRef.current) {
+        sectionRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 1500);
 
   } catch (err) {
     console.error(err);
+    setStatusMessage({ type: 'error', text: 'An unexpected error occurred. Please try again.' });
   }
 };
 
@@ -459,12 +475,17 @@ w-full
 
           <div className="flex flex-col items-center gap-1 mb-1">
             <div className="flex items-center gap-2 text-white">
-              <div className="flex gap-1 text-lg tracking-widest">
-                ☆☆☆☆☆
+              <div
+                className="text-lg tracking-widest relative inline-block bg-clip-text text-transparent"
+                style={{
+                  backgroundImage: `linear-gradient(to right, #FFD700 ${(testimonial.rating / 5) * 100}%, rgba(255,255,255,0.2) ${(testimonial.rating / 5) * 100}%)`
+                }}
+              >
+                ★★★★★
               </div>
 
               <span className="font-bold text-sm">
-                5.0
+                {Number(testimonial.rating).toFixed(1)}
               </span>
             </div>
           </div>
@@ -550,12 +571,17 @@ w-full
 
           <div className="flex flex-col items-center gap-1 mb-1">
             <div className="flex items-center gap-2 text-white">
-              <div className="flex gap-1 text-lg tracking-widest">
-                ☆☆☆☆☆
+              <div
+                className="text-lg tracking-widest relative inline-block bg-clip-text text-transparent"
+                style={{
+                  backgroundImage: `linear-gradient(to right, #FFD700 ${(testimonial.rating / 5) * 100}%, rgba(255,255,255,0.2) ${(testimonial.rating / 5) * 100}%)`
+                }}
+              >
+                ★★★★★
               </div>
 
               <span className="font-bold text-sm">
-                5.0
+                {Number(testimonial.rating).toFixed(1)}
               </span>
             </div>
           </div>
@@ -592,463 +618,235 @@ w-full
     </motion.div>
   </div>
 
+  {/* =
   {/* ================================= */}
-  {/* LUXURY CTA */}
+  {/* LUXURY CTA (Split Layout)         */}
   {/* ================================= */}
 
-  <div className="relative mt-16 md:mt-24 mb-10 w-full flex flex-col items-center justify-center z-30 overflow-hidden">
+  <div className="relative mt-16 md:mt-24 mb-20 w-full max-w-7xl mx-auto px-6 z-30 overflow-hidden min-h-[500px] flex items-center justify-center">
 
     {/* ambient glow */}
     <div className="absolute w-[500px] h-[500px] bg-white/[0.03] blur-[140px] rounded-full pointer-events-none" />
 
-    {/* floating icon */}
-    <motion.div
-      initial={{
-        scale: 0.5,
-        opacity: 0,
-      }}
-      whileInView={{
-        scale: 1,
-        opacity: 1,
-      }}
-      viewport={{
-        once: false,
-      }}
-      transition={{
-        type: 'spring',
-        stiffness: 100,
-        damping: 20,
-      }}
-      className="relative mb-10"
-    >
-
-      <motion.div
-        animate={{
-          y: [0, -12, 0],
-        }}
-        transition={{
-          duration: 4,
-          repeat: Infinity,
-          ease: 'easeInOut',
-        }}
-        className="
-          text-[90px]
-          md:text-[130px]
-
-          leading-none
-          select-none
-
-          drop-shadow-[0_0_40px_rgba(255,255,255,0.15)]
-        "
-      >
-        🤝
-      </motion.div>
-    </motion.div>
-
-    {/* content */}
-    <motion.div
-      initial={{
-        opacity: 0,
-        y: 40,
-      }}
-      whileInView={{
-        opacity: 1,
-        y: 0,
-      }}
-      viewport={{
-        once: true,
-      }}
-      transition={{
-        duration: 1,
-      }}
-      className="flex flex-col items-center text-center px-6"
-    >
-
-      <h3
-        className="
-          text-white
-          font-display
-          font-black
-          tracking-[-0.04em]
-          leading-none
-        "
-        style={{
-          fontSize: 'clamp(2rem,5vw,4rem)',
-        }}
-      >
-        Share Your
-        <br />
-
-        <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-white/40">
-          Experience
-        </span>
-      </h3>
-
-      <p className="mt-5 text-white/50 max-w-xl text-sm md:text-base leading-relaxed">
-        Your words help shape meaningful collaborations and inspire future work experiences.
-      </p>
-
-      {/* CTA BUTTON */}
-      <motion.button
-        onClick={() => setIsModalOpen(true)}
-        whileHover={{
-          scale: 1.04,
-          y: -2,
-        }}
-        whileTap={{
-          scale: 0.98,
-        }}
-        className="
-          group
-          relative
-          mt-10
-
-          inline-flex
-          items-center
-          justify-center
-
-          px-8
-          md:px-10
-          py-4
-
-          rounded-full
-
-          border
-          border-white/10
-
-          bg-white/[0.06]
-          backdrop-blur-xl
-
-          overflow-hidden
-
-          transition-all
-          duration-500
-
-          hover:border-white/30
-          hover:bg-white/[0.09]
-
-          cursor-pointer
-        "
-      >
-
-        {/* animated glow */}
-        <div
-          className="
-            absolute
-            inset-0
-
-            opacity-0
-            group-hover:opacity-100
-
-            transition-opacity
-            duration-700
-
-            bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.18),transparent_70%)]
-          "
-        />
-
-        <span
-          className="
-            relative
-            z-10
-
-            text-white
-            font-bold
-            uppercase
-
-            tracking-[0.2em]
-
-            text-[11px]
-            md:text-xs
-          "
+    <motion.div layout className="w-full flex flex-col lg:flex-row items-center justify-center gap-10 lg:gap-24 xl:gap-32">
+      
+      {/* LEFT SIDE (Content) */}
+      <motion.div layout className="flex flex-col items-center text-center max-w-md w-full">
+        
+        {/* floating icon */}
+        <motion.div
+          initial={{ scale: 0.5, opacity: 0 }}
+          whileInView={{ scale: 1, opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ type: 'spring', stiffness: 100, damping: 20 }}
+          className="relative mb-8"
         >
-          Share your experience working with me
-        </span>
-      </motion.button>
+          <motion.div
+            animate={{ y: [0, -12, 0] }}
+            transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+            className="text-[70px] md:text-[100px] leading-none select-none drop-shadow-[0_0_40px_rgba(255,255,255,0.15)]"
+          >
+            🤝
+          </motion.div>
+        </motion.div>
+
+        <h3
+          className="text-white font-display font-black tracking-[-0.04em] leading-none"
+          style={{ fontSize: 'clamp(2rem,5vw,3.5rem)' }}
+        >
+          Share Your<br />
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-white/40">
+            Experience
+          </span>
+        </h3>
+
+        <p className="mt-5 text-white/50 max-w-md text-sm md:text-base leading-relaxed">
+          Your words help shape meaningful collaborations and inspire future work experiences.
+        </p>
+
+        <AnimatePresence mode="popLayout">
+          {!isModalOpen && (
+            <Magnetic>
+              <motion.button
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.9 }}
+                onClick={() => setIsModalOpen(true)}
+                whileHover={{ scale: 1.04, y: -2 }}
+                whileTap={{ scale: 0.98 }}
+                className="
+                  group relative mt-10 inline-flex items-center justify-center
+                  px-8 md:px-10 py-4 rounded-full border border-white/20
+                  bg-gradient-to-b from-white/[0.08] to-white/[0.01]
+                  backdrop-blur-xl overflow-hidden
+                  transition-all duration-500 hover:border-white/40 hover:from-white/[0.12] hover:to-white/[0.02] cursor-pointer
+                  shadow-[0_4px_30px_rgba(0,0,0,0.1)]
+                "
+              >
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.18),transparent_70%)]" />
+                <span className="relative z-10 text-white font-bold uppercase tracking-[0.2em] text-[11px] md:text-xs">
+                  SHARE YOUR EXPERIENCE WORKING WITH ME
+                </span>
+              </motion.button>
+            </Magnetic>
+          )}
+        </AnimatePresence>
+      </motion.div>
+
+      {/* RIGHT SIDE (Form) */}
+      <AnimatePresence mode="popLayout">
+        {isModalOpen && (
+          <motion.div
+            initial={{ opacity: 0, x: 40, filter: 'blur(10px)' }}
+            animate={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
+            exit={{ opacity: 0, x: 40, filter: 'blur(10px)' }}
+            transition={{ duration: 0.5, ease: 'easeOut' }}
+            className="w-full max-w-lg lg:w-1/2"
+          >
+            <div className="relative w-full bg-[#0C0C0C] border border-white/10 rounded-[32px] p-6 sm:p-8 shadow-2xl z-10">
+              <button
+                onClick={() => {
+                  setIsModalOpen(false);
+                  setStatusMessage(null);
+                }}
+                className="absolute top-6 right-6 text-white/50 hover:text-white transition-colors cursor-pointer"
+              >
+                <FiX className="w-6 h-6" />
+              </button>
+
+              <h3 className="text-2xl md:text-3xl font-display font-bold text-white mb-6">
+                Share Your Experience
+              </h3>
+
+              <form
+                onSubmit={handleSubmit}
+                className="flex flex-col gap-4"
+              >
+
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-white/70 text-xs font-bold uppercase tracking-wider">
+                    Your Name
+                  </label>
+                  <input
+                    required
+                    type="text"
+                    value={formData.name}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        name: e.target.value,
+                      })
+                    }
+                    className="w-full bg-[#111] border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-white/30 transition-colors"
+                    placeholder="You are?"
+                  />
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-white/70 text-xs font-bold uppercase tracking-wider">
+                    Role
+                  </label>
+                  <input
+                    required
+                    type="text"
+                    value={formData.role}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        role: e.target.value,
+                      })
+                    }
+                    className="w-full bg-[#111] border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-white/30 transition-colors"
+                    placeholder="What are you to lalith?"
+                  />
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-white/70 text-xs font-bold uppercase tracking-wider">
+                    Rating
+                  </label>
+                  <div className="flex gap-2">
+                    {[1, 2, 3, 4, 5].map((star) => {
+                      const activeRating = hoverRating || formData.rating;
+                      return (
+                        <div
+                          key={star}
+                          className="relative text-3xl cursor-pointer"
+                          onMouseLeave={() => setHoverRating(0)}
+                        >
+                          {/* Background (Empty) */}
+                          <span className="text-white/20">★</span>
+                          
+                          {/* Left Half Click Area */}
+                          <div 
+                            className="absolute top-0 left-0 w-1/2 h-full z-10"
+                            onMouseEnter={() => setHoverRating(star - 0.5)}
+                            onClick={() => setFormData({ ...formData, rating: star - 0.5 })}
+                          />
+                          
+                          {/* Right Half Click Area */}
+                          <div 
+                            className="absolute top-0 right-0 w-1/2 h-full z-10"
+                            onMouseEnter={() => setHoverRating(star)}
+                            onClick={() => setFormData({ ...formData, rating: star })}
+                          />
+                          
+                          {/* Foreground (Filled) */}
+                          <div 
+                            className="absolute top-0 left-0 h-full overflow-hidden pointer-events-none text-[#FFD700] transition-all"
+                            style={{ 
+                              width: activeRating >= star ? '100%' : activeRating >= star - 0.5 ? '50%' : '0%' 
+                            }}
+                          >
+                            ★
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-white/70 text-xs font-bold uppercase tracking-wider">
+                    Your Message
+                  </label>
+                  <textarea
+                    required
+                    rows={4}
+                    value={formData.message}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        message: e.target.value,
+                      })
+                    }
+                    className="w-full bg-[#111] border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-white/30 transition-colors resize-none"
+                    placeholder="Working with Lalith was..."
+                  />
+                </div>
+
+                {statusMessage && (
+                  <div className={`mt-2 p-3 rounded-xl text-sm font-medium ${statusMessage.type === 'error' ? 'bg-red-500/10 text-red-400 border border-red-500/20' : 'bg-green-500/10 text-green-400 border border-green-500/20'}`}>
+                    {statusMessage.text}
+                  </div>
+                )}
+
+                <button
+                  type="submit"
+                  className="mt-4 w-full bg-white text-black font-bold uppercase tracking-wider py-4 rounded-xl hover:bg-gray-200 transition-colors cursor-pointer"
+                >
+                  Submit Testimonial
+                </button>
+              </form>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
     </motion.div>
   </div>
 
-  {/* ================================= */}
-  {/* MODAL */}
-  {/* ================================= */}
-
-  <AnimatePresence>
-
-    {isModalOpen && (
-
-      <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-
-        {/* overlay */}
-        <motion.div
-          initial={{
-            opacity: 0,
-          }}
-          animate={{
-            opacity: 1,
-          }}
-          exit={{
-            opacity: 0,
-          }}
-          className="
-            absolute
-            inset-0
-
-            bg-black/60
-            backdrop-blur-sm
-          "
-          onClick={() => setIsModalOpen(false)}
-        />
-
-        {/* modal */}
-        <motion.div
-          initial={{
-            opacity: 0,
-            scale: 0.95,
-            y: 20,
-          }}
-          animate={{
-            opacity: 1,
-            scale: 1,
-            y: 0,
-          }}
-          exit={{
-            opacity: 0,
-            scale: 0.95,
-            y: 20,
-          }}
-          className="
-            relative
-            w-full
-            max-w-lg
-
-            bg-[#0C0C0C]
-
-            border
-            border-white/10
-
-            rounded-[32px]
-
-            p-6
-            sm:p-8
-
-            shadow-2xl
-
-            z-10
-          "
-        >
-
-          <button
-            onClick={() => setIsModalOpen(false)}
-            className="
-              absolute
-              top-6
-              right-6
-
-              text-white/50
-              hover:text-white
-
-              transition-colors
-              cursor-pointer
-            "
-          >
-            <FiX className="w-6 h-6" />
-          </button>
-
-          <h3 className="text-2xl md:text-3xl font-display font-bold text-white mb-6">
-            Share Your Experience
-          </h3>
-
-          <form
-            onSubmit={handleSubmit}
-            className="flex flex-col gap-4"
-          >
-
-            <div className="flex flex-col gap-1.5">
-
-              <label className="text-white/70 text-xs font-bold uppercase tracking-wider">
-                Your Name
-              </label>
-
-              <input
-                required
-                type="text"
-                value={formData.name}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    name: e.target.value,
-                  })
-                }
-                className="
-                  w-full
-
-                  bg-[#111]
-
-                  border
-                  border-white/10
-
-                  rounded-xl
-
-                  px-4
-                  py-3
-
-                  text-white
-
-                  focus:outline-none
-                  focus:border-white/30
-
-                  transition-colors
-                "
-                placeholder="You are?"
-              />
-            </div>
-
-            <div className="flex flex-col gap-1.5">
-
-              <label className="text-white/70 text-xs font-bold uppercase tracking-wider">
-                Role
-              </label>
-
-              <input
-                required
-                type="text"
-                value={formData.role}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    role: e.target.value,
-                  })
-                }
-                className="
-                  w-full
-
-                  bg-[#111]
-
-                  border
-                  border-white/10
-
-                  rounded-xl
-
-                  px-4
-                  py-3
-
-                  text-white
-
-                  focus:outline-none
-                  focus:border-white/30
-
-                  transition-colors
-                "
-                placeholder="What are you to lalith?"
-              />
-            </div>
-
-            <div className="flex flex-col gap-1.5">
-
-              <label className="text-white/70 text-xs font-bold uppercase tracking-wider">
-                Rating
-              </label>
-
-              <div className="flex gap-2">
-
-                {[1, 2, 3, 4, 5].map((star) => (
-
-                  <button
-                    key={star}
-                    type="button"
-                    onClick={() =>
-                      setFormData({
-                        ...formData,
-                        rating: star,
-                      })
-                    }
-                    className={`text-3xl transition-colors cursor-pointer ${
-                      formData.rating >= star
-                        ? 'text-[#FFD700]'
-                        : 'text-white/20 hover:text-white/50'
-                    }`}
-                  >
-                    ★
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-1.5">
-
-              <label className="text-white/70 text-xs font-bold uppercase tracking-wider">
-                Your Message
-              </label>
-
-              <textarea
-                required
-                rows={4}
-                value={formData.message}
-                onChange={(e) =>
-                  setFormData({
-                    ...formData,
-                    message: e.target.value,
-                  })
-                }
-                className="
-                  w-full
-
-                  bg-[#111]
-
-                  border
-                  border-white/10
-
-                  rounded-xl
-
-                  px-4
-                  py-3
-
-                  text-white
-
-                  focus:outline-none
-                  focus:border-white/30
-
-                  transition-colors
-
-                  resize-none
-                "
-                placeholder="Working with Lalith was..."
-              />
-            </div>
-
-            <button
-              type="submit"
-              className="
-                mt-4
-
-                w-full
-
-                bg-white
-                text-black
-
-                font-bold
-                uppercase
-                tracking-wider
-
-                py-4
-
-                rounded-xl
-
-                hover:bg-gray-200
-
-                transition-colors
-                cursor-pointer
-              "
-            >
-              Submit Testimonial
-            </button>
-          </form>
-        </motion.div>
-      </div>
-    )}
-  </AnimatePresence>
 </motion.section>
 
-
-);
+  );
 }
