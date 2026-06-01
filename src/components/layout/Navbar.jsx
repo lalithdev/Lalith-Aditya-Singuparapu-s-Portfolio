@@ -37,14 +37,11 @@ export default function Navbar() {
 
     const observer = new IntersectionObserver(
       (entries) => {
-        // Find the section that is most in view (highest intersection ratio)
-        const mostVisibleEntry = entries.reduce((max, entry) => {
-          return entry.intersectionRatio > (max?.intersectionRatio || 0) ? entry : max;
-        }, null);
-
-        if (mostVisibleEntry && mostVisibleEntry.isIntersecting) {
-          setActiveSection(mostVisibleEntry.target.id);
-        }
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id);
+          }
+        });
       },
       {
         rootMargin: '-40% 0px -40% 0px', // trigger when section is in the middle 20% of viewport

@@ -1,153 +1,193 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import FadeIn from '../common/FadeIn';
 import AnimatedText from '../common/AnimatedText';
 import Magnetic from '../common/Magnetic';
 import { portfolioData } from '../../data/portfolio';
 import {
-  FiFile, FiEye, FiDownload, FiX,
+  FiFile, FiEye, FiDownload, FiX, FiMinus, FiPlus
 } from 'react-icons/fi';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, LayoutGroup } from 'framer-motion';
 import resumePdf from '../../assets/resume/Lalith_Resume_26_05_2026.pdf';
 
 /* ─────────────────────────────────────────
    RESUME POPUP  (image-2 style card)
 ───────────────────────────────────────── */
-const ResumePopup = ({ onView }) => (
+const ResumePopup = ({ onView, layoutId }) => (
   <motion.div
-    initial={{ opacity: 0, scale: 0.88, y: 10 }}
+    layoutId={layoutId}
+    initial={{ opacity: 0, scale: 0.9, y: 15 }}
     animate={{ opacity: 1, scale: 1, y: 0 }}
-    exit={{ opacity: 0, scale: 0.88, y: 10 }}
-    transition={{ type: 'spring', stiffness: 380, damping: 26, mass: 0.8 }}
+    transition={{ type: 'spring', stiffness: 400, damping: 25 }}
     style={{
       position: 'absolute',
-      bottom: 'calc(100% + 14px)',
-      left: '50%',
-      transform: 'translateX(-50%)',
-      width: 230,
-      background: 'linear-gradient(160deg, rgba(8,13,30,0.85) 0%, rgba(5,9,22,0.90) 100%)',
-      backdropFilter: 'blur(16px)',
-      WebkitBackdropFilter: 'blur(16px)',
-      border: '1px solid rgba(99,102,241,0.24)',
-      borderRadius: 12, // Matched to social buttons
+      width: 250,
+      background: 'linear-gradient(160deg, rgba(18, 22, 38, 0.65) 0%, rgba(10, 14, 28, 0.85) 100%)',
+      backdropFilter: 'blur(32px) saturate(140%)',
+      WebkitBackdropFilter: 'blur(32px) saturate(140%)',
+      border: '1px solid rgba(255, 255, 255, 0.08)',
+      borderTop: '1px solid rgba(255, 255, 255, 0.15)',
+      borderRadius: 16,
       boxShadow:
-        '0 0 0 1px rgba(99,102,241,0.07) inset,' +
-        '0 20px 60px rgba(0,0,0,0.80),' +
-        '0 0 50px rgba(79,70,229,0.14)',
+        'inset 0 1px 1px rgba(255, 255, 255, 0.15),' +
+        '0 24px 64px rgba(0, 0, 0, 0.8),' +
+        '0 0 30px rgba(99, 102, 241, 0.15)',
       overflow: 'hidden',
       zIndex: 200,
     }}
   >
+    {/* Ambient Glow */}
+    <div style={{
+      position: 'absolute',
+      top: -20, left: -20, right: -20, height: 80,
+      background: 'radial-gradient(ellipse at top, rgba(99,102,241,0.15), transparent 70%)',
+      pointerEvents: 'none'
+    }} />
+
+    {/* iOS Window Controls */}
+    <div style={{ display: 'flex', gap: 7, padding: '14px 16px 0', position: 'relative' }}>
+      <div style={{ width: 10, height: 10, borderRadius: '50%', backgroundColor: '#ff5f56', boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.3)' }} />
+      <div style={{ width: 10, height: 10, borderRadius: '50%', backgroundColor: '#ffbd2e', boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.3)' }} />
+      <div style={{ width: 10, height: 10, borderRadius: '50%', backgroundColor: '#27c93f', boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.3)' }} />
+    </div>
+
     {/* Name + doc icon row */}
     <div style={{
       display: 'flex',
-      alignItems: 'flex-start',
+      alignItems: 'center',
       justifyContent: 'space-between',
-      padding: '14px 14px 10px',
+      padding: '12px 16px 12px',
+      position: 'relative'
     }}>
       <div>
-        <div style={{
-          fontFamily: 'Syne, sans-serif',
-          fontWeight: 800,
-          fontSize: '1.0rem',
-          color: '#eef2ff',
-          lineHeight: 1.15,
-        }}>
+        <motion.div
+          layoutId="resume-text-morph"
+          style={{
+            fontFamily: 'Syne, sans-serif',
+            fontWeight: 800,
+            fontSize: '0.92rem',
+            letterSpacing: '-0.02em',
+            background: 'linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            lineHeight: 1.15,
+            whiteSpace: 'nowrap',
+          }}
+        >
           Lalith Aditya
-        </div>
-        <div style={{
-          fontFamily: 'Syne, sans-serif',
-          fontWeight: 600,
-          fontSize: '0.58rem',
-          letterSpacing: '0.13em',
-          textTransform: 'uppercase',
-          color: '#6366f1',
-          marginTop: 5,
-        }}>
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          style={{
+            fontFamily: 'Syne, sans-serif',
+            fontWeight: 700,
+            fontSize: '0.52rem',
+            letterSpacing: '0.1em',
+            textTransform: 'uppercase',
+            color: '#818cf8',
+            marginTop: 6,
+            whiteSpace: 'nowrap',
+          }}
+        >
           AI Full Stack Developer
-        </div>
+        </motion.div>
       </div>
 
-      {/* Doc icon button */}
-      <button style={{
-        width: 34, height: 34, borderRadius: 10, flexShrink: 0,
-        background: 'rgba(99,102,241,0.15)',
-        border: '1px solid rgba(99,102,241,0.25)',
-        color: '#818cf8',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        cursor: 'default',
-      }}>
-        <FiFile size={15} />
-      </button>
+      {/* Doc icon */}
+      <motion.div
+        layoutId="resume-icon-morph"
+        style={{
+          width: 38, height: 38, borderRadius: 12, flexShrink: 0,
+          background: 'linear-gradient(135deg, rgba(99,102,241,0.2) 0%, rgba(168,85,247,0.1) 100%)',
+          border: '1px solid rgba(129,140,248,0.3)',
+          boxShadow: '0 4px 15px rgba(99,102,241,0.2), inset 0 2px 4px rgba(255,255,255,0.1)',
+          color: '#a5b4fc',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+        }}
+      >
+        <FiFile size={18} style={{ filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.5))' }} />
+      </motion.div>
     </div>
 
     {/* Separator */}
     <div style={{
       height: 1,
-      background: 'linear-gradient(90deg, transparent, rgba(99,102,241,0.18), transparent)',
-      margin: '0 10px',
+      background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent)',
+      margin: '4px 16px',
     }} />
 
-    {/* View Resume + Download row */}
-    <div style={{ display: 'flex', gap: 8, padding: '10px 12px 14px' }}>
-      {/* View Resume */}
+    {/* View + Download row */}
+    <div style={{ display: 'flex', gap: 10, padding: '12px 16px 16px', position: 'relative' }}>
+      {/* View */}
       <button
         onClick={onView}
         style={{
           flex: 1,
-          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7,
-          padding: '9px 0',
-          borderRadius: 8,
-          background: 'rgba(10,16,38,0.85)',
-          border: '1px solid rgba(99,102,241,0.20)',
-          color: '#94a3b8',
+          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+          padding: '10px 0',
+          borderRadius: 10,
+          background: 'linear-gradient(135deg, rgba(79,70,229,0.25) 0%, rgba(124,58,237,0.2) 100%)',
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
+          border: '1px solid rgba(129,140,248,0.3)',
+          boxShadow: '0 4px 15px rgba(79,70,229,0.2), inset 0 1px 1px rgba(255,255,255,0.1)',
+          color: '#ffffff',
           fontFamily: 'Syne, sans-serif',
-          fontWeight: 600,
-          fontSize: '0.72rem',
+          fontWeight: 700,
+          fontSize: '0.75rem',
           cursor: 'pointer',
-          transition: 'all 0.18s ease',
+          transition: 'all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1)',
         }}
         onMouseEnter={e => {
-          e.currentTarget.style.background = 'rgba(99,102,241,0.18)';
-          e.currentTarget.style.borderColor = 'rgba(99,102,241,0.40)';
-          e.currentTarget.style.color = '#c7d2fe';
+          e.currentTarget.style.transform = 'translateY(-2px)';
+          e.currentTarget.style.boxShadow = '0 6px 20px rgba(79,70,229,0.4), inset 0 1px 1px rgba(255,255,255,0.2)';
+          e.currentTarget.style.background = 'linear-gradient(135deg, rgba(79,70,229,0.35) 0%, rgba(124,58,237,0.3) 100%)';
+          e.currentTarget.style.borderColor = 'rgba(129,140,248,0.5)';
         }}
         onMouseLeave={e => {
-          e.currentTarget.style.background = 'rgba(10,16,38,0.85)';
-          e.currentTarget.style.borderColor = 'rgba(99,102,241,0.20)';
-          e.currentTarget.style.color = '#94a3b8';
+          e.currentTarget.style.transform = 'none';
+          e.currentTarget.style.boxShadow = '0 4px 15px rgba(79,70,229,0.2), inset 0 1px 1px rgba(255,255,255,0.1)';
+          e.currentTarget.style.background = 'linear-gradient(135deg, rgba(79,70,229,0.25) 0%, rgba(124,58,237,0.2) 100%)';
+          e.currentTarget.style.borderColor = 'rgba(129,140,248,0.3)';
         }}
       >
-        <FiEye size={13} />
-        View Resume
+        <FiEye size={14} style={{ strokeWidth: 2.5 }} />
+        View
       </button>
 
-      {/* Download icon */}
+      {/* Download */}
       <a
         href={resumePdf}
         download="Lalith_Aditya_Resume.pdf"
+        title="Download PDF"
         style={{
-          width: 38,
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          borderRadius: 8,
-          background: 'rgba(10,16,38,0.85)',
-          border: '1px solid rgba(99,102,241,0.20)',
-          color: '#94a3b8',
+          flex: 1,
+          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+          padding: '10px 0',
+          borderRadius: 10,
+          background: 'rgba(255,255,255,0.05)',
+          border: '1px solid rgba(255,255,255,0.1)',
+          color: '#e2e8f0',
+          fontFamily: 'Syne, sans-serif',
+          fontWeight: 700,
+          fontSize: '0.75rem',
           textDecoration: 'none',
-          transition: 'all 0.18s ease',
-          flexShrink: 0,
+          transition: 'all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1)',
         }}
         onMouseEnter={e => {
-          e.currentTarget.style.background = 'rgba(99,102,241,0.18)';
-          e.currentTarget.style.borderColor = 'rgba(99,102,241,0.40)';
-          e.currentTarget.style.color = '#c7d2fe';
+          e.currentTarget.style.background = 'rgba(255,255,255,0.1)';
+          e.currentTarget.style.borderColor = 'rgba(255,255,255,0.2)';
+          e.currentTarget.style.transform = 'translateY(-2px)';
         }}
         onMouseLeave={e => {
-          e.currentTarget.style.background = 'rgba(10,16,38,0.85)';
-          e.currentTarget.style.borderColor = 'rgba(99,102,241,0.20)';
-          e.currentTarget.style.color = '#94a3b8';
+          e.currentTarget.style.background = 'rgba(255,255,255,0.05)';
+          e.currentTarget.style.borderColor = 'rgba(255,255,255,0.1)';
+          e.currentTarget.style.transform = 'none';
         }}
       >
-        <FiDownload size={14} />
+        <FiDownload size={14} style={{ strokeWidth: 2.5 }} />
+        Download
       </a>
     </div>
   </motion.div>
@@ -156,7 +196,30 @@ const ResumePopup = ({ onView }) => (
 /* ─────────────────────────────────────────
    RESUME VIEWER  (image-1 style full modal)
 ───────────────────────────────────────── */
-const ResumeViewer = ({ isOpen, onClose }) => (
+const ResumeViewer = ({ isOpen, onClose }) => {
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [zoomLevel, setZoomLevel] = useState(1);
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleClose = () => {
+    setIsFullscreen(false);
+    setZoomLevel(1);
+    onClose();
+  };
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        handleClose();
+      }
+    };
+    if (isOpen) {
+      window.addEventListener('keydown', handleKeyDown);
+    }
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
+  return (
   <AnimatePresence>
     {isOpen && (
       <>
@@ -167,7 +230,7 @@ const ResumeViewer = ({ isOpen, onClose }) => (
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.24 }}
-          onClick={onClose}
+          onClick={handleClose}
           style={{
             position: 'fixed', inset: 0, zIndex: 9998,
             background: 'rgba(2,4,10,0.45)', // Changed from 0.88 for glass effect
@@ -176,73 +239,103 @@ const ResumeViewer = ({ isOpen, onClose }) => (
           }}
         />
 
-        {/* Panel */}
+        {/* Panel Wrapper */}
         <motion.div
-          key="rv-panel"
-          initial={{ opacity: 0, scale: 0.93, y: 36 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.93, y: 36 }}
-          transition={{ type: 'spring', stiffness: 300, damping: 28, mass: 0.9 }}
+          key="rv-panel-wrapper"
+          initial={{ opacity: 1 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0, transition: { duration: 0.2 } }}
+          onClick={handleClose}
           style={{
             position: 'fixed', inset: 0, zIndex: 9999,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
             padding: '24px',
           }}
         >
-          <div style={{
+          <motion.div 
+            layoutId="resume-morph"
+            initial={{ opacity: 1 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 1 }}
+            onClick={(e) => e.stopPropagation()}
+            style={{
             position: 'relative',
             width: '100%',
-            maxWidth: '920px',
-            height: 'min(90vh, 880px)',
+            maxWidth: isFullscreen ? '100%' : `${920 * zoomLevel}px`,
+            height: isFullscreen ? '100vh' : `min(${90 * Math.max(0.5, zoomLevel)}vh, ${880 * zoomLevel}px)`,
             display: 'flex',
             flexDirection: 'column',
-            background: 'linear-gradient(160deg, rgba(7,12,28,0.55) 0%, rgba(4,8,20,0.65) 100%)', // Increased transparency
-            backdropFilter: 'blur(24px)',
-            WebkitBackdropFilter: 'blur(24px)',
-            border: '1px solid rgba(99,102,241,0.22)',
-            borderRadius: '12px', // Changed from 18px to match social buttons
+            background: 'linear-gradient(160deg, rgba(18, 22, 38, 0.65) 0%, rgba(10, 14, 28, 0.85) 100%)',
+            backdropFilter: 'blur(32px) saturate(140%)',
+            WebkitBackdropFilter: 'blur(32px) saturate(140%)',
+            border: '1px solid rgba(255, 255, 255, 0.08)',
+            borderTop: '1px solid rgba(255, 255, 255, 0.15)',
+            borderRadius: isFullscreen ? '0px' : '16px',
             boxShadow:
-              '0 0 0 1px rgba(99,102,241,0.08) inset,' +
-              '0 56px 160px rgba(0,0,0,0.92),' +
-              '0 0 120px rgba(79,70,229,0.16)',
+              'inset 0 1px 1px rgba(255, 255, 255, 0.15),' +
+              '0 24px 64px rgba(0, 0, 0, 0.8),' +
+              '0 0 30px rgba(99, 102, 241, 0.15)',
             overflow: 'hidden',
           }}>
             {/* ── Header ── */}
             <div style={{
-              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-              padding: '13px 18px',
-              borderBottom: '1px solid rgba(99,102,241,0.13)',
-              background: 'linear-gradient(90deg, rgba(99,102,241,0.06) 0%, rgba(79,70,229,0.03) 100%)',
+              position: 'relative',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              padding: '8px 18px',
+              borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+              background: 'linear-gradient(90deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%)',
               flexShrink: 0,
             }}>
-              {/* Left: icon + title */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: 11 }}>
-                <div style={{
-                  width: 32, height: 32, borderRadius: 8,
-                  background: 'linear-gradient(135deg, rgba(99,102,241,0.30) 0%, rgba(79,70,229,0.18) 100%)',
-                  border: '1px solid rgba(99,102,241,0.32)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                }}>
-                  <FiFile size={14} color="#818cf8" />
+              {/* Left: iOS Window Controls */}
+              <div 
+                style={{ position: 'absolute', left: 18, display: 'flex', gap: 8 }}
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+              >
+                <div 
+                  onClick={handleClose}
+                  style={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: '#ff5f56', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#660000' }} 
+                >
+                  {isHovered && <FiX size={8} />}
                 </div>
-                <div>
-                  <div style={{
-                    fontFamily: 'Syne, sans-serif', fontWeight: 600,
-                    fontSize: '0.84rem', color: '#e2e8f0', lineHeight: 1.2,
-                  }}>
-                    Lalith Aditya — Resume
-                  </div>
-                  <div style={{
-                    fontFamily: 'JetBrains Mono, monospace', fontSize: '0.57rem',
-                    letterSpacing: '0.28em', textTransform: 'uppercase', color: '#3a4568', marginTop: 2,
-                  }}>
-                    PDF Document · 2026
-                  </div>
+                <div 
+                  onClick={() => {
+                    if (isFullscreen) {
+                      setIsFullscreen(false);
+                      setZoomLevel(1);
+                    } else {
+                      setZoomLevel(prev => Math.max(prev - 0.25, 0.5));
+                    }
+                  }}
+                  style={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: '#ffbd2e', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#885500' }} 
+                >
+                  {isHovered && <FiMinus size={8} />}
+                </div>
+                <div 
+                  onClick={() => {
+                    if (zoomLevel < 1 && !isFullscreen) {
+                      setZoomLevel(prev => Math.min(prev + 0.25, 1));
+                    } else {
+                      setIsFullscreen(!isFullscreen);
+                      setZoomLevel(1);
+                    }
+                  }}
+                  style={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: '#27c93f', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#004400' }} 
+                >
+                  {isHovered && <FiPlus size={8} />}
                 </div>
               </div>
 
-              {/* Right: download + close */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+              {/* Middle: Title */}
+              <div className="flex items-center justify-center gap-3">
+                <FiFile size={22} color="#8b5cf6" style={{ strokeWidth: 2 }} />
+                <span className="font-display font-bold text-2xl text-white leading-tight tracking-tight">
+                  Resume
+                </span>
+              </div>
+
+              {/* Right: download btn */}
+              <div style={{ position: 'absolute', right: 18, display: 'flex', alignItems: 'center' }}>
                 <a
                   href={resumePdf}
                   download="Lalith_Aditya_Resume.pdf"
@@ -250,68 +343,48 @@ const ResumeViewer = ({ isOpen, onClose }) => (
                   style={{
                     width: 34, height: 34, borderRadius: 8,
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    background: 'rgba(99,102,241,0.11)',
-                    border: '1px solid rgba(99,102,241,0.22)',
-                    color: '#818cf8',
+                    background: 'rgba(255, 255, 255, 0.08)',
+                    backdropFilter: 'blur(12px)',
+                    WebkitBackdropFilter: 'blur(12px)',
+                    border: '1px solid rgba(255, 255, 255, 0.15)',
+                    boxShadow: '0 4px 16px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.2)',
+                    color: '#e2e8f0',
                     textDecoration: 'none',
-                    transition: 'all 0.18s ease',
+                    transition: 'all 0.2s ease',
                   }}
                   onMouseEnter={e => {
-                    e.currentTarget.style.background = 'rgba(99,102,241,0.24)';
-                    e.currentTarget.style.borderColor = 'rgba(99,102,241,0.44)';
-                    e.currentTarget.style.color = '#a5b4fc';
+                    e.currentTarget.style.background = 'rgba(255, 255, 255, 0.15)';
+                    e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.25)';
+                    e.currentTarget.style.boxShadow = '0 6px 20px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.3)';
+                    e.currentTarget.style.transform = 'translateY(-1px)';
                   }}
                   onMouseLeave={e => {
-                    e.currentTarget.style.background = 'rgba(99,102,241,0.11)';
-                    e.currentTarget.style.borderColor = 'rgba(99,102,241,0.22)';
-                    e.currentTarget.style.color = '#818cf8';
+                    e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)';
+                    e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.15)';
+                    e.currentTarget.style.boxShadow = '0 4px 16px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.2)';
+                    e.currentTarget.style.transform = 'none';
                   }}
                 >
                   <FiDownload size={14} />
                 </a>
-
-                <button
-                  onClick={onClose}
-                  title="Close"
-                  style={{
-                    width: 34, height: 34, borderRadius: 8,
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    background: 'rgba(255,255,255,0.04)',
-                    border: '1px solid rgba(255,255,255,0.09)',
-                    color: '#48556e',
-                    cursor: 'pointer',
-                    transition: 'all 0.18s ease',
-                  }}
-                  onMouseEnter={e => {
-                    e.currentTarget.style.background = 'rgba(239,68,68,0.14)';
-                    e.currentTarget.style.borderColor = 'rgba(239,68,68,0.34)';
-                    e.currentTarget.style.color = '#f87171';
-                  }}
-                  onMouseLeave={e => {
-                    e.currentTarget.style.background = 'rgba(255,255,255,0.04)';
-                    e.currentTarget.style.borderColor = 'rgba(255,255,255,0.09)';
-                    e.currentTarget.style.color = '#48556e';
-                  }}
-                >
-                  <FiX size={14} />
-                </button>
               </div>
             </div>
 
             {/* ── PDF viewer — edge-to-edge ── */}
-            <div style={{ flex: 1, minHeight: 0, background: 'rgba(14,18,32,0.8)', overflow: 'hidden' }}>
+            <div style={{ flex: 1, minHeight: 0, background: 'transparent', overflow: 'hidden' }}>
               <iframe
-                src={`${resumePdf}#toolbar=0&navpanes=0&scrollbar=1&view=FitH`}
+                src={`${resumePdf}#toolbar=0&navpanes=0&scrollbar=0&view=FitH`}
                 title="Lalith Aditya Resume"
-                style={{ width: '100%', height: '100%', border: 'none', display: 'block' }}
+                style={{ width: 'calc(100% + 18px)', height: '100%', border: 'none', display: 'block' }}
               />
             </div>
-          </div>
+          </motion.div>
         </motion.div>
       </>
     )}
   </AnimatePresence>
-);
+  );
+};
 
 /* ─────────────────────────────────────────
    ABOUT SECTION
@@ -337,7 +410,7 @@ const About = () => {
   };
 
   return (
-    <>
+    <LayoutGroup>
       <ResumeViewer isOpen={viewerOpen} onClose={() => setViewerOpen(false)} />
 
       <section
@@ -411,66 +484,65 @@ const About = () => {
                 <div className="flex items-center justify-center">
                   {/* ── Resume button + popup ── */}
                   <div
-                    style={{ position: 'relative', display: 'inline-block' }}
+                    style={{ position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'center', minWidth: 160, height: 48 }}
                     onMouseEnter={openPopup}
                     onMouseLeave={scheduleClose}
                   >
-                    {/* Popup card (Image 2 style) */}
-                    <AnimatePresence>
-                      {popupOpen && (
-                        <div
-                          onMouseEnter={openPopup}
-                          onMouseLeave={scheduleClose}
+                    <AnimatePresence mode="wait">
+                      {popupOpen ? (
+                        <ResumePopup key="resume-popup" onView={handleView} layoutId="resume-morph" />
+                      ) : viewerOpen ? null : (
+                        <motion.button
+                          key="resume-btn"
+                          layoutId="resume-morph"
+                          onClick={() => setPopupOpen(v => !v)}
+                          whileTap={{ scale: 0.95 }}
+                          style={{
+                            display: 'inline-flex', alignItems: 'center', gap: 10,
+                            padding: '0 28px',
+                            height: 48,
+                            borderRadius: 999,
+                            background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.18) 0%, rgba(168, 85, 247, 0.12) 100%)',
+                            border: '1px solid rgba(99, 102, 241, 0.35)',
+                            boxShadow: '0 0 20px rgba(99, 102, 241, 0.15), 0 4px 12px rgba(0, 0, 0, 0.3)',
+                            backdropFilter: 'blur(20px)',
+                            WebkitBackdropFilter: 'blur(20px)',
+                            color: '#cbd5e1',
+                            cursor: 'pointer',
+                            transition: 'all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1)',
+                            zIndex: 10,
+                          }}
+                          onMouseEnter={e => {
+                            e.currentTarget.style.background = 'linear-gradient(135deg, rgba(99, 102, 241, 0.28) 0%, rgba(168, 85, 247, 0.22) 100%)';
+                            e.currentTarget.style.border = '1px solid rgba(129, 140, 248, 0.7)';
+                            e.currentTarget.style.boxShadow = '0 0 30px rgba(99, 102, 241, 0.45), 0 10px 24px rgba(99, 102, 241, 0.2)';
+                            e.currentTarget.style.color = '#ffffff';
+                          }}
+                          onMouseLeave={e => {
+                            e.currentTarget.style.background = 'linear-gradient(135deg, rgba(99, 102, 241, 0.18) 0%, rgba(168, 85, 247, 0.12) 100%)';
+                            e.currentTarget.style.border = '1px solid rgba(99, 102, 241, 0.35)';
+                            e.currentTarget.style.boxShadow = '0 0 20px rgba(99, 102, 241, 0.15), 0 4px 12px rgba(0, 0, 0, 0.3)';
+                            e.currentTarget.style.color = '#cbd5e1';
+                          }}
                         >
-                          <ResumePopup onView={handleView} />
-                        </div>
+                          <motion.div layoutId="resume-icon-morph" style={{ display: 'flex' }}>
+                            <FiFile size={15} style={{ color: '#a5b4fc' }} />
+                          </motion.div>
+                          <motion.span
+                            layoutId="resume-text-morph"
+                            style={{
+                              fontFamily: 'Syne, sans-serif',
+                              fontWeight: 700,
+                              fontSize: '0.82rem',
+                              letterSpacing: '0.08em',
+                              textTransform: 'uppercase',
+                            }}
+                          >
+                            Resume
+                          </motion.span>
+                        </motion.button>
                       )}
                     </AnimatePresence>
-
-                    {/* Resume pill button */}
-                    <Magnetic>
-                      <motion.button
-                        onClick={() => setPopupOpen(v => !v)}
-                        whileTap={{ scale: 0.95 }}
-                        style={{
-                          display: 'inline-flex', alignItems: 'center', gap: 10,
-                          padding: '0 28px',
-                          height: 48,
-                          borderRadius: 999,
-                          background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.18) 0%, rgba(168, 85, 247, 0.12) 100%)',
-                          border: '1px solid rgba(99, 102, 241, 0.35)',
-                          boxShadow: '0 0 20px rgba(99, 102, 241, 0.15), 0 4px 12px rgba(0, 0, 0, 0.3)',
-                          backdropFilter: 'blur(20px)',
-                          WebkitBackdropFilter: 'blur(20px)',
-                          color: '#cbd5e1',
-                          cursor: 'pointer',
-                          transition: 'all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1)',
-                        }}
-                        onMouseEnter={e => {
-                          e.currentTarget.style.background = 'linear-gradient(135deg, rgba(99, 102, 241, 0.28) 0%, rgba(168, 85, 247, 0.22) 100%)';
-                          e.currentTarget.style.border = '1px solid rgba(129, 140, 248, 0.7)';
-                          e.currentTarget.style.boxShadow = '0 0 30px rgba(99, 102, 241, 0.45), 0 10px 24px rgba(99, 102, 241, 0.2)';
-                          e.currentTarget.style.color = '#ffffff';
-                        }}
-                        onMouseLeave={e => {
-                          e.currentTarget.style.background = 'linear-gradient(135deg, rgba(99, 102, 241, 0.18) 0%, rgba(168, 85, 247, 0.12) 100%)';
-                          e.currentTarget.style.border = '1px solid rgba(99, 102, 241, 0.35)';
-                          e.currentTarget.style.boxShadow = '0 0 20px rgba(99, 102, 241, 0.15), 0 4px 12px rgba(0, 0, 0, 0.3)';
-                          e.currentTarget.style.color = '#cbd5e1';
-                        }}
-                      >
-                        <FiFile size={15} style={{ color: '#a5b4fc' }} />
-                        <span style={{
-                          fontFamily: 'Syne, sans-serif',
-                          fontWeight: 700,
-                          fontSize: '0.82rem',
-                          letterSpacing: '0.08em',
-                          textTransform: 'uppercase',
-                        }}>
-                          Resume
-                        </span>
-                      </motion.button>
-                    </Magnetic>
                   </div>
                 </div>
               </FadeIn>
@@ -478,7 +550,7 @@ const About = () => {
           </div>
         </div>
       </section>
-    </>
+    </LayoutGroup>
   );
 };
 
