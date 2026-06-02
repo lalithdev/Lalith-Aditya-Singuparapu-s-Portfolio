@@ -6,43 +6,20 @@ export default function Footer() {
 
   return (
     <footer
-      className="py-8 relative"
-      style={{ borderTop: '1px solid rgba(59,130,246,0.08)', background: 'rgba(3,5,10,0.80)' }}
+      className="py-5 relative bg-[#050505] flex flex-row flex-wrap items-center justify-center gap-3 md:gap-4"
     >
-      <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
-
-        <div className="flex items-center gap-2">
-          <span className="font-display font-black text-xl" style={{ color: '#60a5fa', letterSpacing: '-0.02em' }}>L</span>
-          <span className="font-display font-light text-xl" style={{ color: '#818cf8', letterSpacing: '-0.02em' }}>A</span>
-          <span className="font-mono text-xs ml-2" style={{ color: '#2a3a5a' }}>© {currentYear}</span>
-        </div>
-
-        <p className="font-mono text-[10px] uppercase tracking-widest" style={{ color: '#2a3a5a' }}>
-          Architected with React & Framer Motion
-        </p>
-
-        <div className="flex gap-5">
-          <a
-            href={portfolioData.personal.github}
-            target="_blank"
-            rel="noreferrer"
-            className="btn-icon"
-            aria-label="GitHub"
-          >
-            <FaGithub />
-          </a>
-          <a
-            href={portfolioData.personal.linkedin}
-            target="_blank"
-            rel="noreferrer"
-            className="btn-icon"
-            aria-label="LinkedIn"
-          >
-            <FaLinkedin />
-          </a>
-        </div>
-
+      <div className="text-white/60 text-[15px] md:text-base font-body tracking-wide flex items-center">
+        All Rights Reserved By
+        <span className="font-display leading-none select-none ml-2" style={{ letterSpacing: '-0.03em' }}>
+          <span style={{ fontWeight: 600, color: '#f5f5f5' }}>Lalith</span>
+          <span className="editorial-accent-serif" style={{ fontSize: '1.05em', marginLeft: '0.08em', color: 'var(--color-accent)' }}>
+            Dev
+          </span>
+        </span>
       </div>
+      <p className="text-white/60 text-[13px] md:text-sm font-body tracking-widest">
+        &copy; {currentYear}
+      </p>
     </footer>
   );
 }

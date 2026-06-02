@@ -70,7 +70,7 @@ function ProjectCard({ project, index, progress, range, targetScale }) {
 
   // Stacking scale used while cards are scrolling normally
   const stackingScale = useTransform(progress, range, [1, targetScale]);
-  
+
   // Cinematic closing animations applied individually to each card
   // This allows us to avoid transforming the parent wrapper which would break sticky
   const closeScale = useTransform(progress, [0.75, 1], [1, 0.92]);
@@ -314,7 +314,7 @@ export default function ProjectsSection() {
 
   return (
     <section id="projects" ref={sectionRef} className="relative w-full -mt-10 sm:-mt-12 md:-mt-14">
-      
+
       {/* 
         STICKY ANIMATED BACKGROUND 
         This is a h-screen background that stays stuck on the screen as you scroll through the section.

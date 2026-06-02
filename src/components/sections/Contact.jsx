@@ -18,14 +18,14 @@ export default function Contact() {
   };
 
   const socials = [
-    { name: 'LinkedIn',  href: portfolioData.personal.linkedin, icon: <FaLinkedin /> },
-    { name: 'GitHub',    href: portfolioData.personal.github,   icon: <FaGithub /> },
-    { name: 'Gmail',   href: portfolioData.personal.email,                             icon: <FiMail /> },
-    { name: 'Instagram', href: 'https://www.instagram.com/justlalith26/?__pwa=1',                             icon: <FaInstagram /> },
+    { name: 'LinkedIn', href: portfolioData.personal.linkedin, icon: <FaLinkedin /> },
+    { name: 'GitHub', href: portfolioData.personal.github, icon: <FaGithub /> },
+    { name: 'Gmail', href: portfolioData.personal.email, icon: <FiMail /> },
+    { name: 'Instagram', href: 'https://www.instagram.com/justlalith26/?__pwa=1', icon: <FaInstagram /> },
   ];
 
   return (
-    <section id="contact" className="editorial-section relative overflow-hidden">
+    <section id="contact" className="editorial-section relative overflow-hidden rounded-t-[40px] rounded-b-[40px] border-t border-b border-white/10 bg-[#050505]">
       {/* Orb */}
       <div className="glow-orb w-[700px] h-[700px] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 opacity-20"
         style={{ background: 'radial-gradient(circle, rgba(59,130,246,0.25) 0%, transparent 70%)' }} />
@@ -40,7 +40,7 @@ export default function Contact() {
             viewport={{ once: true }}
             className="mb-6"
           >
-            <span className="section-eyebrow">Initialize Protocol</span>
+            <span className="section-eyebrow">Let's Collaborate</span>
           </motion.div>
 
           <motion.h2
@@ -119,7 +119,7 @@ export default function Contact() {
           {/* Social links */}
           <div>
             <h4 className="font-mono text-[9px] uppercase tracking-[0.4em] mb-8" style={{ color: '#2a3a5a' }}>
-              Digital Ecosystem
+              Social Media
             </h4>
             <ul className="grid grid-cols-2 gap-5">
               {socials.map((link) => (
@@ -145,14 +145,14 @@ export default function Contact() {
             </ul>
           </div>
 
-          {/* Status */}
+          {/* Core Expertise */}
           <div>
             <h4 className="font-mono text-[9px] uppercase tracking-[0.4em] mb-8" style={{ color: '#2a3a5a' }}>
-              System Status
+              Core Expertise
             </h4>
             <div className="flex flex-wrap gap-3">
-              <span className="badge">Available for Q2 2026</span>
-              <span className="badge">Global Remote</span>
+              <span className="badge">Full-Stack Development</span>
+              <span className="badge">UI/UX Design</span>
             </div>
           </div>
         </div>
