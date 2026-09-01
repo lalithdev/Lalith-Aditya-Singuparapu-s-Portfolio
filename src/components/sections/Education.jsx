@@ -1,6 +1,7 @@
 import { motion, useScroll, useSpring } from 'framer-motion';
 import { portfolioData } from '../../data/portfolio';
 import { useRef } from 'react';
+import { FiCalendar, FiCheckCircle } from 'react-icons/fi';
 
 const EXPO = [0.16, 1, 0.3, 1];
 
@@ -8,67 +9,76 @@ export default function Education() {
   const { educationTimeline } = portfolioData;
   const containerRef = useRef(null);
 
+  // Strict Chronological order: 10th (2021-2022) -> 12th/Intermediate (2022-2024) -> BTech (2024-2028)
+  const tenthData = educationTimeline.find(item => item.period.includes('2021') || item.degree.toLowerCase().includes('10th') || item.degree.toLowerCase().includes('secondary')) || educationTimeline[2];
+  const interData = educationTimeline.find(item => item.period.includes('2022') || item.degree.toLowerCase().includes('intermediate')) || educationTimeline[1];
+  const btechData = educationTimeline.find(item => item.period.includes('2024') || item.degree.toLowerCase().includes('bachelor') || item.degree.toLowerCase().includes('b.tech')) || educationTimeline[0];
+
+  const orderedTimeline = [
+    {
+      color: '#06b6d4',
+      bgGlow: 'rgba(6, 182, 212, 0.25)',
+      data: tenthData
+    },
+    {
+      color: '#ec4899',
+      bgGlow: 'rgba(236, 72, 153, 0.25)',
+      data: interData
+    },
+    {
+      color: '#f59e0b',
+      bgGlow: 'rgba(245, 158, 11, 0.25)',
+      data: btechData
+    }
+  ];
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start end", "end end"]
+    offset: ['start 60%', 'end 40%'],
   });
 
-  const scaleY = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
+  const lineScaleY = useSpring(scrollYProgress, {
+    stiffness: 80,
+    damping: 24,
     restDelta: 0.001
   });
 
   return (
     <section
-      id="education"
       ref={containerRef}
-      className="editorial-section relative overflow-hidden"
+      id="education"
+      className="editorial-section relative overflow-hidden py-24 md:py-36 bg-[#020408]"
     >
-      {/* Background Grid */}
-      <div className="absolute inset-0 bg-grid opacity-10 pointer-events-none" />
+      {/* Ambient Background Glow */}
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-radial from-[#06b6d4]/10 via-[#ec4899]/5 to-transparent blur-3xl pointer-events-none" />
 
-      <div className="max-w-[1200px] mx-auto px-6 relative z-10">
-
-        {/* Header */}
-        <div className="text-center mb-32">
+      <div className="max-w-[1240px] mx-auto px-6 relative z-10">
+        
+        {/* ── TOP HEADER BLOCK ── */}
+        <div className="text-center mb-24 md:mb-32">
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            className="font-mono text-[10px] uppercase tracking-[0.5em] text-[#4a5a80] mb-6"
+            className="font-mono text-xs uppercase tracking-[0.5em] text-[#06b6d4] mb-3"
           >
             Education
           </motion.p>
           <motion.div
-            initial={{
-              opacity: 0,
-              y: 120,
-              scale: 0.85,
-              filter: 'blur(10px)',
-            }}
-            whileInView={{
-              opacity: 1,
-              y: 0,
-              scale: 1,
-              filter: 'blur(0px)',
-            }}
-            viewport={{
-              once: false,
-              amount: 0.4,
-            }}
-            transition={{
-              duration: 1.4,
-              ease: [0.22, 1, 0.36, 1],
-            }}
+            initial={{ opacity: 0, y: 40, scale: 0.92 }}
+            whileInView={{ opacity: 1, y: 0, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1.0, ease: EXPO }}
           >
-            <h2
-              className="font-display font-black tracking-tighter leading-none"
-              style={{ fontSize: 'clamp(3rem, 7vw, 5.5rem)' }}
-            >
-              <span className="text-white">Academic</span>{' '}
+            <h2 className="font-display font-black tracking-tighter leading-none text-white text-4xl sm:text-5xl md:text-6xl lg:text-7xl">
+              Academic{' '}
               <span
                 className="text-gradient"
-                style={{ background: 'linear-gradient(to right, #06b6d4, #22d3ee)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}
+                style={{
+                  background: 'linear-gradient(135deg, #06b6d4 0%, #ec4899 50%, #f59e0b 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text'
+                }}
               >
                 Timeline
               </span>
@@ -76,81 +86,211 @@ export default function Education() {
           </motion.div>
         </div>
 
-        <div className="relative">
-          {/* Vertical Center Line (Base) */}
-          <div className="absolute left-1/2 top-0 bottom-0 w-px bg-white/10 -translate-x-1/2" />
-
-          {/* Vertical Center Line (Animated) */}
-          <motion.div
-            style={{ scaleY, originY: 0 }}
-            className="absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-[#ec4899] via-[#8b5cf6] to-[#06b6d4] -translate-x-1/2 z-10"
-          />
-
-          <div className="space-y-40 md:space-y-48">
-            {educationTimeline.map((item, idx) => {
-              const isEven = idx % 2 === 0;
-              return (
-                <div key={idx} className="relative flex items-center justify-center w-full">
-                  {/* Node Marker */}
-                  <div
-                    className="absolute left-1/2 w-2.5 h-2.5 rounded-full border-2 border-[#ec4899] bg-black z-20 -translate-x-1/2"
-                    style={{ top: '0px' }}
-                  />
-
-                  <div className="grid md:grid-cols-2 w-full gap-10 md:gap-20 items-start">
-
-                    {/* Content Block */}
-                    <div className={`${isEven ? 'md:order-1 md:text-right' : 'md:order-2 md:text-left'} flex flex-col items-center ${isEven ? 'md:items-end' : 'md:items-start'}`}>
-                      <motion.div
-                        initial={{ opacity: 0, y: 40 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true, amount: 0.3 }}
-                        transition={{ duration: 0.9, ease: EXPO }}
-                        className="w-full max-w-[480px]"
-                      >
-                        {/* Year Text */}
-                        <div
-                          className="font-display font-black text-5xl md:text-7xl text-white/10 mb-6 tracking-tighter leading-none"
-                        >
-                          {item.period}
-                        </div>
-
-                        {/* The Card */}
-                        <div
-                          className="relative p-8 rounded-3xl bg-[#080c14] border border-white/5 backdrop-blur-xl group hover:border-[#8b5cf6]/30 transition-all duration-500 shadow-2xl"
-                        >
-                          {/* Decorative Corner Glow */}
-                          <div className="absolute -top-4 -right-4 w-24 h-24 bg-[#8b5cf6]/5 blur-3xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
-
-                          <h3 className="font-display font-bold text-2xl text-white mb-2 leading-tight tracking-tight">
-                            {item.degree}
-                          </h3>
-                          <p className="font-mono text-[10px] uppercase tracking-[0.25em] text-[#8b5cf6] mb-6 font-semibold">
-                            {item.institution}
-                          </p>
-
-                          <div className={`flex flex-wrap gap-2 ${isEven ? 'md:justify-end' : 'md:justify-start'}`}>
-                            {item.achievements?.map((ach, i) => (
-                              <span
-                                key={i}
-                                className="px-3 py-1.5 rounded-lg bg-white/[0.03] border border-white/5 font-mono text-[9px] uppercase tracking-wider text-[#7a8fbb] group-hover:border-white/10 group-hover:text-white/60 transition-colors"
-                              >
-                                {ach}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-                      </motion.div>
-                    </div>
-
-                    {/* Empty Slot for Alternating */}
-                    <div className={`${isEven ? 'md:order-2' : 'md:order-1'} hidden md:block`} />
-
-                  </div>
-                </div>
-              );
-            })}
+        {/* ── CENTRAL AXIS TIMELINE GRID CONTAINER ── */}
+        <div className="relative max-w-[1050px] mx-auto">
+          
+          {/* Central Vertical Axis Line */}
+          <div className="absolute left-1/2 top-0 bottom-0 -translate-x-1/2 w-[3px] bg-white/10 z-0 rounded-full">
+            <motion.div
+              style={{ scaleY: lineScaleY, originY: 0 }}
+              className="w-full h-full bg-gradient-to-b from-[#06b6d4] via-[#ec4899] to-[#f59e0b] shadow-[0_0_20px_#06b6d4] rounded-full"
+            />
           </div>
+
+          {/* Timeline Items List */}
+          <div className="space-y-24 md:space-y-36 relative z-10">
+            
+            {/* ── ITEM 01: 10TH GRADE (RIGHT SIDE) ── */}
+            <div className="relative flex flex-col md:flex-row items-center">
+              
+              {/* Left Empty Space */}
+              <div className="w-full md:w-1/2 pr-0 md:pr-16 hidden md:block" />
+
+              {/* Central Node Marker */}
+              <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20 hidden md:flex items-center justify-center">
+                <div
+                  className="w-10 h-10 rounded-full bg-[#020408] border-2 flex items-center justify-center transition-all duration-500"
+                  style={{
+                    borderColor: orderedTimeline[0].color,
+                    boxShadow: `0 0 25px ${orderedTimeline[0].bgGlow}`
+                  }}
+                >
+                  <div
+                    className="w-4 h-4 rounded-full animate-pulse"
+                    style={{ backgroundColor: orderedTimeline[0].color }}
+                  />
+                </div>
+              </div>
+
+              {/* Right Side Content Card */}
+              <div className="w-full md:w-1/2 pl-0 md:pl-16 relative">
+                
+                {/* Horizontal Stem Line Connecting Node to Card */}
+                <div
+                  className="hidden md:block absolute top-1/2 left-0 -translate-y-1/2 h-[2px] w-16"
+                  style={{ backgroundColor: orderedTimeline[0].color }}
+                />
+
+                <motion.div
+                  initial={{ opacity: 0, x: 50 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, amount: 0.3 }}
+                  transition={{ duration: 0.8, ease: EXPO }}
+                  className="relative p-6 sm:p-8 rounded-3xl bg-[#080d1a]/95 border border-white/15 backdrop-blur-2xl shadow-2xl group hover:border-[#06b6d4]/60 transition-all duration-500"
+                >
+                  <div className="flex items-center gap-2 mb-3 font-mono text-xs font-bold text-[#06b6d4]">
+                    <FiCalendar className="w-4 h-4 text-[#06b6d4]" />
+                    <span>{orderedTimeline[0].data.period}</span>
+                  </div>
+
+                  <h3 className="font-display font-black text-2xl sm:text-3xl text-white mb-2 leading-tight">
+                    {orderedTimeline[0].data.degree}
+                  </h3>
+                  
+                  <p className="font-mono text-xs uppercase tracking-[0.18em] text-[#94a3b8] font-semibold mb-6">
+                    {orderedTimeline[0].data.institution}
+                  </p>
+
+                  <ul className="space-y-2.5 pt-4 border-t border-white/10">
+                    {orderedTimeline[0].data.achievements?.map((ach, i) => (
+                      <li key={i} className="flex items-center gap-3 text-sm text-[#cbd5e1]">
+                        <FiCheckCircle className="w-4 h-4 shrink-0 text-[#06b6d4]" />
+                        <span className="font-medium">{ach}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </motion.div>
+              </div>
+            </div>
+
+            {/* ── ITEM 02: INTERMEDIATE / 12TH (LEFT SIDE) ── */}
+            <div className="relative flex flex-col md:flex-row items-center">
+              
+              {/* Left Side Content Card */}
+              <div className="w-full md:w-1/2 pr-0 md:pr-16 text-left relative">
+                
+                {/* Horizontal Stem Line Connecting Card to Node */}
+                <div
+                  className="hidden md:block absolute top-1/2 right-0 -translate-y-1/2 h-[2px] w-16"
+                  style={{ backgroundColor: orderedTimeline[1].color }}
+                />
+
+                <motion.div
+                  initial={{ opacity: 0, x: -50 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, amount: 0.3 }}
+                  transition={{ duration: 0.8, ease: EXPO }}
+                  className="relative p-6 sm:p-8 rounded-3xl bg-[#080d1a]/95 border border-white/15 backdrop-blur-2xl shadow-2xl group hover:border-[#ec4899]/60 transition-all duration-500"
+                >
+                  <div className="flex items-center gap-2 mb-3 font-mono text-xs font-bold text-[#ec4899]">
+                    <FiCalendar className="w-4 h-4 text-[#ec4899]" />
+                    <span>{orderedTimeline[1].data.period}</span>
+                  </div>
+
+                  <h3 className="font-display font-black text-2xl sm:text-3xl text-white mb-2 leading-tight">
+                    {orderedTimeline[1].data.degree}
+                  </h3>
+                  
+                  <p className="font-mono text-xs uppercase tracking-[0.18em] text-[#94a3b8] font-semibold mb-6">
+                    {orderedTimeline[1].data.institution}
+                  </p>
+
+                  <ul className="space-y-2.5 pt-4 border-t border-white/10">
+                    {orderedTimeline[1].data.achievements?.map((ach, i) => (
+                      <li key={i} className="flex items-center gap-3 text-sm text-[#cbd5e1]">
+                        <FiCheckCircle className="w-4 h-4 shrink-0 text-[#ec4899]" />
+                        <span className="font-medium">{ach}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </motion.div>
+              </div>
+
+              {/* Central Node Marker */}
+              <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20 hidden md:flex items-center justify-center">
+                <div
+                  className="w-10 h-10 rounded-full bg-[#020408] border-2 flex items-center justify-center transition-all duration-500"
+                  style={{
+                    borderColor: orderedTimeline[1].color,
+                    boxShadow: `0 0 25px ${orderedTimeline[1].bgGlow}`
+                  }}
+                >
+                  <div
+                    className="w-4 h-4 rounded-full animate-pulse"
+                    style={{ backgroundColor: orderedTimeline[1].color }}
+                  />
+                </div>
+              </div>
+
+              {/* Right Empty Space */}
+              <div className="w-full md:w-1/2 pl-0 md:pl-16 hidden md:block" />
+            </div>
+
+            {/* ── ITEM 03: B.TECH (RIGHT SIDE) ── */}
+            <div className="relative flex flex-col md:flex-row items-center">
+              
+              {/* Left Empty Space */}
+              <div className="w-full md:w-1/2 pr-0 md:pr-16 hidden md:block" />
+
+              {/* Central Node Marker */}
+              <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-20 hidden md:flex items-center justify-center">
+                <div
+                  className="w-10 h-10 rounded-full bg-[#020408] border-2 flex items-center justify-center transition-all duration-500"
+                  style={{
+                    borderColor: orderedTimeline[2].color,
+                    boxShadow: `0 0 25px ${orderedTimeline[2].bgGlow}`
+                  }}
+                >
+                  <div
+                    className="w-4 h-4 rounded-full animate-pulse"
+                    style={{ backgroundColor: orderedTimeline[2].color }}
+                  />
+                </div>
+              </div>
+
+              {/* Right Side Content Card */}
+              <div className="w-full md:w-1/2 pl-0 md:pl-16 relative">
+                
+                {/* Horizontal Stem Line Connecting Node to Card */}
+                <div
+                  className="hidden md:block absolute top-1/2 left-0 -translate-y-1/2 h-[2px] w-16"
+                  style={{ backgroundColor: orderedTimeline[2].color }}
+                />
+
+                <motion.div
+                  initial={{ opacity: 0, x: 50 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, amount: 0.3 }}
+                  transition={{ duration: 0.8, ease: EXPO }}
+                  className="relative p-6 sm:p-8 rounded-3xl bg-[#080d1a]/95 border border-white/15 backdrop-blur-2xl shadow-2xl group hover:border-[#f59e0b]/60 transition-all duration-500"
+                >
+                  <div className="flex items-center gap-2 mb-3 font-mono text-xs font-bold text-[#f59e0b]">
+                    <FiCalendar className="w-4 h-4 text-[#f59e0b]" />
+                    <span>{orderedTimeline[2].data.period}</span>
+                  </div>
+
+                  <h3 className="font-display font-black text-2xl sm:text-3xl text-white mb-2 leading-tight">
+                    {orderedTimeline[2].data.degree}
+                  </h3>
+                  
+                  <p className="font-mono text-xs uppercase tracking-[0.18em] text-[#94a3b8] font-semibold mb-6">
+                    {orderedTimeline[2].data.institution}
+                  </p>
+
+                  <ul className="space-y-2.5 pt-4 border-t border-white/10">
+                    {orderedTimeline[2].data.achievements?.map((ach, i) => (
+                      <li key={i} className="flex items-center gap-3 text-sm text-[#cbd5e1]">
+                        <FiCheckCircle className="w-4 h-4 shrink-0 text-[#f59e0b]" />
+                        <span className="font-medium">{ach}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </motion.div>
+              </div>
+            </div>
+
+          </div>
+
         </div>
 
       </div>

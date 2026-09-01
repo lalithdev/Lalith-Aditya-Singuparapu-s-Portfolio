@@ -65,41 +65,37 @@ const PROJECTS = [
   },
 ];
 
-function ProjectCard({ project, index, progress, range, targetScale }) {
+function ProjectCard({ project, index, progress, range, targetScale, isLast }) {
   const container = useRef(null);
 
   // Stacking scale used while cards are scrolling normally
   const stackingScale = useTransform(progress, range, [1, targetScale]);
 
   // Cinematic closing animations applied individually to each card
-  // This allows us to avoid transforming the parent wrapper which would break sticky
-  const closeScale = useTransform(progress, [0.75, 1], [1, 0.92]);
   const closeY = useTransform(progress, [0.75, 1], [0, -180]);
   const closeOpacity = useTransform(progress, [0.8, 1], [1, 0]);
 
   return (
     <div
       ref={container}
-      className="sticky top-24 md:top-32 h-[85vh] w-full"
+      className={`sticky top-24 md:top-32 w-full ${isLast ? 'h-auto pb-4 md:pb-6' : 'h-[85vh]'}`}
     >
       <motion.div
         style={{
-          scale: closeScale,
           y: closeY,
           opacity: closeOpacity,
         }}
-        className="h-full w-full"
+        className={isLast ? 'w-full' : 'h-full w-full'}
       >
         <motion.article
           style={{
             scale: stackingScale,
             top: `calc(-5vh + ${index * 25}px)`,
           }}
-          className="
+          className={`
             relative
             origin-top
             mx-auto
-            h-full
             w-full
             flex
             flex-col
@@ -115,7 +111,8 @@ function ProjectCard({ project, index, progress, range, targetScale }) {
             p-4
             sm:p-6
             md:p-8
-          "
+            ${isLast ? 'h-[75vh] sm:h-[78vh] md:h-[82vh]' : 'h-full'}
+          `}
         >
           {/* TOP ROW */}
           <div className="flex flex-col sm:flex-row items-start sm:justify-between gap-4 sm:gap-6">
@@ -285,65 +282,36 @@ export default function ProjectsSection() {
     offset: ["start start", "end end"],
   });
 
-  const scale = useTransform(
-    sectionProgress,
-    [0.75, 1],
-    [1, 0.92]
-  );
-
   const y = useTransform(
     sectionProgress,
-    [0.75, 1],
+    [0.92, 1],
     [0, -180]
   );
 
   const opacity = useTransform(
     sectionProgress,
-    [0.8, 1],
+    [0.94, 1],
     [1, 0]
   );
 
-  const clipPath = useTransform(
-    sectionProgress,
-    [0.75, 1],
-    [
-      "inset(0% 0% 0% 0% round 40px)",
-      "inset(18% 0% 0% 0% round 40px)",
-    ]
-  );
-
   return (
-    <section id="projects" ref={sectionRef} className="relative w-full -mt-10 sm:-mt-12 md:-mt-14">
-
-      {/* 
-        STICKY ANIMATED BACKGROUND 
-        This is a h-screen background that stays stuck on the screen as you scroll through the section.
-        When sectionProgress hits 0.75, it scales down visually without breaking any inner sticky cards!
-      */}
-      <div className="absolute inset-0 pointer-events-none z-0">
-        <div className="sticky top-0 h-[100vh] w-full overflow-hidden">
-          <motion.div
-            style={{
-              scale,
-              y,
-              opacity,
-              clipPath,
-            }}
-            className="
-              w-full
-              h-full
-              bg-[#0C0C0C]
-              rounded-t-[40px]
-              sm:rounded-t-[50px]
-              md:rounded-t-[60px]
-              border-t
-              border-white/10
-            "
-          />
-        </div>
-      </div>
-
-      <div className="relative z-10 w-full px-4 sm:px-6 md:px-10 pt-24 md:pt-32">
+    <section
+      id="projects"
+      ref={sectionRef}
+      className="
+        relative
+        z-20
+        w-full
+        -mt-[100vh]
+        bg-[#0C0C0C]
+        rounded-[40px]
+        sm:rounded-[50px]
+        md:rounded-[60px]
+        border
+        border-white/10
+      "
+    >
+      <div className="relative z-10 w-full px-4 sm:px-6 md:px-10 pt-24 md:pt-32 pb-12 md:pb-16">
         {/* TITLE */}
         <motion.div style={{ opacity, y }}>
           <motion.h2
@@ -391,7 +359,7 @@ export default function ProjectsSection() {
         </motion.div>
 
         {/* STACK */}
-        <div className="mx-auto max-w-7xl relative pb-[100vh]">
+        <div className="mx-auto max-w-7xl relative pb-4 md:pb-6">
           {PROJECTS.map((project, i) => {
             const targetScale = 1 - (PROJECTS.length - i) * 0.05;
 
@@ -406,6 +374,7 @@ export default function ProjectsSection() {
                   1,
                 ]}
                 targetScale={targetScale}
+                isLast={i === PROJECTS.length - 1}
               />
             );
           })}

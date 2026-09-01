@@ -23,7 +23,7 @@ export const portfolioData = {
   },
 
   about: {
-    description: "I'm a CSE student who enjoys building practical full stack and AI projects that solve real problems. Most of my work is with React, Spring Boot, and PostgreSQL, and I learn best by shipping features, fixing bugs, and improving performance through hands-on project experience.",
+    description: "I'm a Computer Science undergraduate focused on building practical, reliable software that solves real-world problems. My primary interests lie in backend engineering, full-stack development, scalable application design, and AI-powered solutions. I enjoy turning ideas into functional products, working across APIs, databases, and application architecture, while continuously strengthening my problem-solving, system design, and software engineering skills.",
     stats: [
       { value: "99.9%", label: "Stability Focus" },
       { value: "High", label: "System Throughput" }

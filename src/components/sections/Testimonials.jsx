@@ -4,6 +4,7 @@ import { portfolioData } from '../../data/portfolio';
 import { supabase } from '../../lib/supabase';
 import { FiX } from 'react-icons/fi';
 import Magnetic from '../common/Magnetic';
+import IosEmoji from '../common/IosEmoji';
 
 export default function Testimonials() {
   const [testimonials, setTestimonials] = useState([]);
@@ -181,7 +182,6 @@ export default function Testimonials() {
       id="testimonials"
       style={{
         y,
-        clipPath,
       }}
       className="
 relative
@@ -189,7 +189,7 @@ z-20
 w-full
     bg-[#050505]
 
-    -mt-[100vh]
+    mt-0
 
     pt-16
     md:pt-24
@@ -199,6 +199,7 @@ w-full
     rounded-t-[40px]
     sm:rounded-t-[50px]
     md:rounded-t-[60px]
+    rounded-b-none
 
     border-t
     border-white/10
@@ -297,6 +298,7 @@ w-full
 
           <h2
             className="
+          relative
           text-center
           font-display
           font-black
@@ -331,19 +333,18 @@ w-full
             className="
           absolute
           -right-4
-          md:right-20
-          top-0
-          md:top-10
-
-          text-5xl
-          md:text-7xl
-
-          z-0
+          md:right-10
+          lg:right-32
+          -top-10
+          md:-top-16
+          opacity-50
+          md:opacity-100
+          z-[-1]
           hidden
           sm:block
         "
           >
-            😍
+            <IosEmoji emoji="😍" size={160} />
           </motion.div>
 
           {/* floating emoji left */}
@@ -361,19 +362,18 @@ w-full
             className="
           absolute
           -left-4
-          md:left-20
-          bottom-0
-          md:-bottom-10
-
-          text-5xl
-          md:text-7xl
-
-          z-0
+          md:left-10
+          lg:left-32
+          -bottom-10
+          md:-bottom-16
+          opacity-50
+          md:opacity-100
+          z-[-1]
           hidden
           sm:block
         "
           >
-            😲
+            <IosEmoji emoji="😲" size={140} />
           </motion.div>
         </motion.div>
       </div>
@@ -643,9 +643,9 @@ w-full
               <motion.div
                 animate={{ y: [0, -12, 0] }}
                 transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-                className="text-[70px] md:text-[100px] leading-none select-none drop-shadow-[0_0_40px_rgba(255,255,255,0.15)]"
+                className="leading-none select-none drop-shadow-[0_0_40px_rgba(255,255,255,0.15)] flex items-center justify-center"
               >
-                🤝
+                <IosEmoji emoji="🤝" size={180} />
               </motion.div>
             </motion.div>
 

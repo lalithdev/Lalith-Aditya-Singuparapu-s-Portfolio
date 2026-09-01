@@ -476,7 +476,7 @@ const About = () => {
             <div className="flex flex-col items-center gap-8">
               <AnimatedText
                 text={ABOUT_TEXT}
-                className="font-medium leading-relaxed text-[#D7E2EA] max-w-[680px]"
+                className="font-medium leading-relaxed text-[#D7E2EA] max-w-[880px]"
                 style={{ fontSize: 'clamp(1rem, 2vw, 1.35rem)' }}
               />
 

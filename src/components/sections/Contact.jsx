@@ -25,7 +25,7 @@ export default function Contact() {
   ];
 
   return (
-    <section id="contact" className="editorial-section relative overflow-hidden rounded-t-[40px] rounded-b-[40px] border-t border-b border-white/10 bg-[#050505]">
+    <section id="contact" className="editorial-section relative overflow-hidden rounded-[40px] sm:rounded-[50px] md:rounded-[60px] border border-white/10 bg-[#050505]">
       {/* Orb */}
       <div className="glow-orb w-[700px] h-[700px] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 opacity-20"
         style={{ background: 'radial-gradient(circle, rgba(59,130,246,0.25) 0%, transparent 70%)' }} />

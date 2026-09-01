@@ -209,19 +209,27 @@ export default function Skills() {
     offset: ['start start', 'end end'],
   });
 
-  const x = useTransform(scrollYProgress, [0, 1], [0, -scrollRange]);
+  // Map horizontal slider progress to finish completely at 45% of section scroll
+  // This guarantees skills is 100% scrolled to the end BEFORE Projects section starts rising up
+  // and keeps Skills locked in place for the full duration of Projects takeover
+  const horizontalProgress = useTransform(scrollYProgress, [0, 0.45], [0, 1], { clamp: true });
+  const x = useTransform(horizontalProgress, [0, 1], [0, -scrollRange]);
 
   return (
     <div
       ref={containerRef}
       id="skills"
-      className="relative h-[300vh]"
+      className="relative h-[500vh] z-10"
     >
       <section
         className="
           sticky
           bg-[#f8f8f8]
-          rounded-t-[48px]
+          rounded-[40px]
+          sm:rounded-[50px]
+          md:rounded-[60px]
+          border
+          border-black/5
           overflow-hidden
           flex
           flex-col
@@ -296,7 +304,7 @@ export default function Skills() {
                   key={cat.title}
                   cat={cat}
                   idx={idx}
-                  scrollYProgress={scrollYProgress}
+                  scrollYProgress={horizontalProgress}
                   scrollRange={scrollRange}
                 />
               ))}
