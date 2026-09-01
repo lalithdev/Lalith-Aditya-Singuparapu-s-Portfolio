@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import Navbar from './components/layout/Navbar';
 import Hero from './components/sections/Hero';
 import About from './components/sections/About';
@@ -8,11 +9,28 @@ import Testimonials from './components/sections/Testimonials';
 import Contact from './components/sections/Contact';
 import Footer from './components/sections/Footer';
 import CustomCursor from './components/layout/CustomCursor';
+import GoogleIntro from './components/GoogleIntro/GoogleIntro';
 
 function App() {
+  const [showIntro, setShowIntro] = useState(true);
+
+  // Prevent scrolling while intro is active
+  useEffect(() => {
+    if (showIntro) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [showIntro]);
+
   return (
     <div className="relative min-h-screen text-[#f5f5f5]">
-      <Navbar />
+      {showIntro && <GoogleIntro onComplete={() => setShowIntro(false)} />}
+
+      {!showIntro && <Navbar />}
       <CustomCursor />
 
       <main>
