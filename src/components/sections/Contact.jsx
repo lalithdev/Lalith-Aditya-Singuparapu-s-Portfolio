@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
-import { portfolioData } from '../../data/portfolio';
+import { personalData } from '../../data/personal';
 import { FiCopy, FiArrowUpRight, FiCheck, FiMail, FiMapPin } from 'react-icons/fi';
-import { FaGithub, FaLinkedin, FaTwitter, FaInstagram } from 'react-icons/fa';
+import { FaGithub, FaLinkedin, FaInstagram } from 'react-icons/fa';
 import { useState } from 'react';
 import Magnetic from '../common/Magnetic';
 
@@ -9,7 +9,7 @@ const EXPO = [0.16, 1, 0.3, 1];
 
 export default function Contact() {
   const [copied, setCopied] = useState(false);
-  const email = portfolioData.personal.email;
+  const email = personalData.email;
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(email);
@@ -18,10 +18,10 @@ export default function Contact() {
   };
 
   const socials = [
-    { name: 'LinkedIn', href: portfolioData.personal.linkedin, icon: <FaLinkedin /> },
-    { name: 'GitHub', href: portfolioData.personal.github, icon: <FaGithub /> },
-    { name: 'Gmail', href: portfolioData.personal.email, icon: <FiMail /> },
-    { name: 'Instagram', href: 'https://www.instagram.com/justlalith26/?__pwa=1', icon: <FaInstagram /> },
+    { name: 'LinkedIn', href: personalData.linkedin, icon: <FaLinkedin /> },
+    { name: 'GitHub', href: personalData.github, icon: <FaGithub /> },
+    { name: 'Gmail', href: personalData.email, icon: <FiMail /> },
+    { name: 'Instagram', href: personalData.instagram, icon: <FaInstagram /> },
   ];
 
   return (
@@ -109,7 +109,7 @@ export default function Contact() {
           <div className="space-y-6">
             <div className="flex items-center gap-3" style={{ color: '#7a8fbb' }}>
               <FiMapPin className="w-4 h-4" style={{ color: '#3b82f6' }} />
-              <span className="font-body text-sm font-medium">{portfolioData.personal.location}</span>
+              <span className="font-body text-sm font-medium">{personalData.location}</span>
             </div>
             <p className="font-body text-sm leading-relaxed max-w-xs" style={{ color: '#4a5a80' }}>
               Open for world-class engineering opportunities and strategic product partnerships.

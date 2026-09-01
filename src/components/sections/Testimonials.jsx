@@ -1,6 +1,5 @@
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import { useRef, useState, useEffect } from 'react';
-import { portfolioData } from '../../data/portfolio';
 import { supabase } from '../../lib/supabase';
 import { FiX } from 'react-icons/fi';
 import Magnetic from '../common/Magnetic';

@@ -2,12 +2,13 @@ import React, { useState, useRef, useEffect } from 'react';
 import FadeIn from '../common/FadeIn';
 import AnimatedText from '../common/AnimatedText';
 import Magnetic from '../common/Magnetic';
-import { portfolioData } from '../../data/portfolio';
+import { aboutData } from '../../data/about';
+import { personalData } from '../../data/personal';
 import {
   FiFile, FiEye, FiDownload, FiX, FiMinus, FiPlus
 } from 'react-icons/fi';
 import { motion, AnimatePresence, LayoutGroup } from 'framer-motion';
-import resumePdf from '../../assets/resume/Lalith_Resume_26_05_2026.pdf';
+import resumePdf from '../../assets/resume/Lalith_Universal_Resume_Template_06_08_2026.pdf';
 
 /* ─────────────────────────────────────────
    RESUME POPUP  (image-2 style card)
@@ -73,7 +74,7 @@ const ResumePopup = ({ onView, layoutId }) => (
             whiteSpace: 'nowrap',
           }}
         >
-          Lalith Aditya
+          {personalData.displayName}
         </motion.div>
         <motion.div
           initial={{ opacity: 0 }}
@@ -90,7 +91,7 @@ const ResumePopup = ({ onView, layoutId }) => (
             whiteSpace: 'nowrap',
           }}
         >
-          AI Full Stack Developer
+          {personalData.role}
         </motion.div>
       </div>
 
@@ -159,7 +160,7 @@ const ResumePopup = ({ onView, layoutId }) => (
       {/* Download */}
       <a
         href={resumePdf}
-        download="Lalith_Aditya_Resume.pdf"
+        download="Resume.pdf"
         title="Download PDF"
         style={{
           flex: 1,
@@ -338,7 +339,7 @@ const ResumeViewer = ({ isOpen, onClose }) => {
               <div style={{ position: 'absolute', right: 18, display: 'flex', alignItems: 'center' }}>
                 <a
                   href={resumePdf}
-                  download="Lalith_Aditya_Resume.pdf"
+                  download="Resume.pdf"
                   title="Download"
                   style={{
                     width: 34, height: 34, borderRadius: 8,
@@ -394,8 +395,7 @@ const About = () => {
   const [viewerOpen, setViewerOpen] = useState(false);
   const closeTimer = useRef(null);
 
-  const { about } = portfolioData;
-  const ABOUT_TEXT = about.description;
+  const ABOUT_TEXT = aboutData.description;
 
   const openPopup = () => {
     clearTimeout(closeTimer.current);

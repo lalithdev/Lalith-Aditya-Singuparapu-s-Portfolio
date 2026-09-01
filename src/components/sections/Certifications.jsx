@@ -1,12 +1,17 @@
 import { motion } from 'framer-motion';
-import { portfolioData } from '../../data/portfolio';
-import { FiShield, FiArrowUpRight } from 'react-icons/fi';
+import { certificationsData as certifications } from '../../data/certifications';
+import { FiShield, FiArrowUpRight, FiCpu, FiCloud } from 'react-icons/fi';
+
+const getCertIcon = (title) => {
+  if (title?.toLowerCase().includes('aws') || title?.toLowerCase().includes('cloud')) {
+    return <FiCloud className="w-5 h-5 text-indigo-400" />;
+  }
+  return <FiCpu className="w-5 h-5 text-indigo-400" />;
+};
 
 const EXPO = [0.16, 1, 0.3, 1];
 
 export default function Certifications() {
-  const { certifications } = portfolioData;
-
   return (
     <section id="certifications" className="editorial-section relative overflow-hidden">
       {/* Orb */}
@@ -70,7 +75,7 @@ export default function Certifications() {
                     boxShadow: '0 0 20px rgba(6,182,212,0.08)',
                   }}
                 >
-                  {cert.icon}
+                  {cert.icon || getCertIcon(cert.title)}
                 </div>
                 <div>
                   <h3

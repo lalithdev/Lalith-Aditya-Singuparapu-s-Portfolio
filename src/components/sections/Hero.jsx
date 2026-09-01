@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import heroImg from '../../assets/images/Hero/lalithheroimgfinal.png';
 import Magnetic from '../common/Magnetic';
+import { personalData } from '../../data/personal';
 
 const noiseSvg = `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`;
 
@@ -112,15 +113,15 @@ export default function Hero() {
           >
             Hi, I'm{' '}
             <span className="text-[1.05em] text-white/88 italic tracking-[-0.02em] [font-family:'Playfair_Display',serif] [font-weight:500] [font-style:italic] [-webkit-font-smoothing:antialiased] [-moz-osx-font-smoothing:grayscale]">
-              Lalith.
+              {personalData.shortName}.
             </span>
             <br />
             an{' '}
             <span className="text-[1.05em] text-white/88 italic tracking-[-0.02em] [font-family:'Playfair_Display',serif] [font-weight:500] [font-style:italic] [-webkit-font-smoothing:antialiased] [-moz-osx-font-smoothing:grayscale]">
-              AI Full Stack Developer
+              {personalData.role}
             </span>
             <br />
-            based in India. Here you<br />
+            based in {personalData.country}. Here you<br />
             can see some of my latest<br />
             engineering &amp; projects.
           </h1>
@@ -144,32 +145,32 @@ export default function Hero() {
         >
           <Magnetic>
           <a
-            href="mailto:lalithadityasinguparapu@gmail.com"
+            href={`mailto:${personalData.email}`}
             className="font-body text-[10px] sm:text-xs text-white/70 hover:text-white tracking-widest transition-colors text-center inline-block p-2"
           >
-            lalithadityasinguparapu@gmail.com
+            {personalData.email}
           </a>
         </Magnetic>
 
         <Magnetic>
           <a
-            href="https://github.com/lalithdev"
+            href={personalData.github}
             target="_blank"
             rel="noreferrer"
             className="font-body text-[10px] sm:text-xs text-white/70 hover:text-white tracking-widest transition-colors text-center inline-block p-2"
           >
-            github.com/lalithdev
+            {personalData.github.replace('https://', '')}
           </a>
         </Magnetic>
 
         <Magnetic>
           <a
-            href="https://linkedin.com/in/lalith-aditya-singuparapu"
+            href={personalData.linkedin}
             target="_blank"
             rel="noreferrer"
             className="font-body text-[10px] sm:text-xs text-white/70 hover:text-white tracking-widest transition-colors text-center inline-block p-2"
           >
-            linkedin.com/in/lalith-aditya-singuparapu
+            {personalData.linkedin.replace('https://', '')}
           </a>
         </Magnetic>
         </motion.div>

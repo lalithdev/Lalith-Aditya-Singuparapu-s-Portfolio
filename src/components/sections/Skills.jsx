@@ -1,6 +1,27 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { portfolioData } from '../../data/portfolio';
+import { skillsData } from '../../data/skills';
 import { useRef, useState, useEffect } from 'react';
+import {
+  FiCode,
+  FiDatabase,
+  FiLayout,
+  FiCloud,
+  FiGitBranch,
+  FiZap,
+  FiBook,
+  FiUsers,
+} from 'react-icons/fi';
+
+const CATEGORY_UI = {
+  'Programming Languages': { icon: <FiCode className="w-4 h-4" />, accent: '#60a5fa' },
+  'Web Development': { icon: <FiLayout className="w-4 h-4" />, accent: '#818cf8' },
+  'Databases': { icon: <FiDatabase className="w-4 h-4" />, accent: '#22d3ee' },
+  'Cloud Technologies': { icon: <FiCloud className="w-4 h-4" />, accent: '#a78bfa' },
+  'Developer Tools': { icon: <FiGitBranch className="w-4 h-4" />, accent: '#34d399' },
+  'Development Practices': { icon: <FiZap className="w-4 h-4" />, accent: '#f472b6' },
+  'Core Concepts': { icon: <FiBook className="w-4 h-4" />, accent: '#fb923c' },
+  'Soft Skills': { icon: <FiUsers className="w-4 h-4" />, accent: '#38bdf8' },
+};
 
 const EXPO = [0.16, 1, 0.3, 1];
 
@@ -13,7 +34,9 @@ function hexToRgba(hex, alpha) {
 }
 
 function SkillCard({ cat, idx, scrollYProgress, scrollRange }) {
-  const accent = cat.accent || '#6366f1';
+  const ui = CATEGORY_UI[cat.title] || {};
+  const accent = cat.accent || ui.accent || '#6366f1';
+  const icon = cat.icon || ui.icon || <FiCode className="w-4 h-4" />;
   const [layout, setLayout] = useState({ cardCenter: 0, deltaP: 0.1 });
 
   useEffect(() => {
@@ -132,7 +155,7 @@ function SkillCard({ cat, idx, scrollYProgress, scrollRange }) {
                 shrink-0
               "
             >
-              {cat.icon}
+              {icon}
             </div>
 
             <h3
@@ -181,8 +204,7 @@ function SkillCard({ cat, idx, scrollYProgress, scrollRange }) {
 }
 
 export default function Skills() {
-  const { skills } = portfolioData;
-  const categories = skills.categories ?? [];
+  const categories = skillsData.categories ?? [];
   const containerRef = useRef(null);
   const sliderRef = useRef(null);
   const [scrollRange, setScrollRange] = useState(0);

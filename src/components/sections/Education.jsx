@@ -1,18 +1,17 @@
 import { motion, useScroll, useSpring } from 'framer-motion';
-import { portfolioData } from '../../data/portfolio';
+import { educationTimeline } from '../../data/education';
 import { useRef } from 'react';
 import { FiCalendar, FiCheckCircle } from 'react-icons/fi';
 
 const EXPO = [0.16, 1, 0.3, 1];
 
 export default function Education() {
-  const { educationTimeline } = portfolioData;
   const containerRef = useRef(null);
 
   // Strict Chronological order: 10th (2021-2022) -> 12th/Intermediate (2022-2024) -> BTech (2024-2028)
-  const tenthData = educationTimeline.find(item => item.period.includes('2021') || item.degree.toLowerCase().includes('10th') || item.degree.toLowerCase().includes('secondary')) || educationTimeline[2];
+  const tenthData = educationTimeline.find(item => item.period.includes('2021') || item.degree.toLowerCase().includes('10th') || item.degree.toLowerCase().includes('secondary')) || educationTimeline[0];
   const interData = educationTimeline.find(item => item.period.includes('2022') || item.degree.toLowerCase().includes('intermediate')) || educationTimeline[1];
-  const btechData = educationTimeline.find(item => item.period.includes('2024') || item.degree.toLowerCase().includes('bachelor') || item.degree.toLowerCase().includes('b.tech')) || educationTimeline[0];
+  const btechData = educationTimeline.find(item => item.period.includes('2024') || item.degree.toLowerCase().includes('bachelor') || item.degree.toLowerCase().includes('b.tech')) || educationTimeline[2];
 
   const orderedTimeline = [
     {

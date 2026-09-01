@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { personalData } from '../../data/personal';
 
 const NAV_LINKS = [
   { name: 'Hero', href: '#hero', visible: false },
@@ -70,9 +71,9 @@ export default function Navbar() {
       >
         <a href="#hero" className="flex items-center no-underline group">
           <span className="font-display leading-none select-none" style={{ fontSize: 'clamp(1.05rem, 2vw, 1.3rem)', letterSpacing: '-0.03em' }}>
-            <span style={{ fontWeight: 600, color: '#f5f5f5' }}>Lalith</span>
+            <span style={{ fontWeight: 600, color: '#f5f5f5' }}>{personalData.brandName.first}</span>
             <span className="editorial-accent-serif" style={{ fontSize: '1.05em', marginLeft: '0.12em', color: 'var(--color-accent)' }}>
-              Dev
+              {personalData.brandName.last}
             </span>
           </span>
         </a>
